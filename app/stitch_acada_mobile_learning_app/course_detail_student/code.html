@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=375, initial-scale=1.0" name="viewport"/>
+<title>Course Detail | Acada</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Space_Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#3c3650",
+                        "inverse-surface": "#070e1d",
+                        "on-secondary-fixed-variant": "#5b5b5f",
+                        "on-error-container": "#752121",
+                        "surface-bright": "#f9f9ff",
+                        "on-error": "#fff7f6",
+                        "on-tertiary": "#fdf7ff",
+                        "inverse-primary": "#618bff",
+                        "on-surface": "#19315d",
+                        "error": "#9f403d",
+                        "surface-dim": "#ccdaff",
+                        "surface-container-high": "#e1e8ff",
+                        "on-secondary-container": "#515155",
+                        "error-container": "#fe8983",
+                        "on-primary": "#f8f7ff",
+                        "background": "#f9f9ff",
+                        "tertiary": "#625b77",
+                        "tertiary-fixed": "#dfd5f7",
+                        "inverse-on-surface": "#969db0",
+                        "tertiary-container": "#dfd5f7",
+                        "on-secondary": "#faf8fc",
+                        "surface-container-low": "#f1f3ff",
+                        "secondary": "#5f5f62",
+                        "on-background": "#19315d",
+                        "secondary-container": "#e4e2e6",
+                        "surface": "#f9f9ff",
+                        "primary-container": "#dbe1ff",
+                        "on-surface-variant": "#485f8d",
+                        "on-primary-container": "#0048bf",
+                        "surface-variant": "#d8e2ff",
+                        "on-primary-fixed-variant": "#0050d4",
+                        "error-dim": "#4e0309",
+                        "on-tertiary-fixed-variant": "#59526e",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container": "#e9edff",
+                        "secondary-dim": "#535356",
+                        "secondary-fixed": "#e4e2e6",
+                        "primary-fixed-dim": "#c7d3ff",
+                        "tertiary-dim": "#564f6b",
+                        "outline-variant": "#9bb2e5",
+                        "primary": "#0053db",
+                        "secondary-fixed-dim": "#d5d3d8",
+                        "tertiary-fixed-dim": "#d0c7e8",
+                        "on-secondary-fixed": "#3f3f43",
+                        "on-primary-fixed": "#003798",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#4f4964",
+                        "outline": "#647aab",
+                        "surface-tint": "#0053db",
+                        "surface-container-highest": "#d8e2ff",
+                        "primary-dim": "#0048c1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Manrope"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { width: 375px; margin: 0 auto; overflow-x: hidden; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface-container-low z-50 shadow-none">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<button class="active:scale-95 duration-200 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-[#2563EB]">arrow_back</span>
+</button>
+<h1 class="text-xl font-black text-[#2563EB] tracking-tighter font-headline">Acada</h1>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img alt="Student Profile" data-alt="Portrait of a young male student in a library setting with soft natural window lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnOCD47GZktGzng42M_YxQPEFq7l8YIaIiOfd7oyKnqIWzeKm9U5pYayUbwqKlOqDIDNYIu44keRVwV7g6BcLY9-VDr8BWSvzSEpIKvPHUExevyqpZAd4mVaAc7228P58fOtUCIUCSA-7Bm4NKkEiezArORzBJHFnErbzqchOOEGIN42JGfIkrYrf-blpb3tf2V84yDdAt8WOxUP9XwY0wtJ7tpxa5SbocvLrvwhNc7PLMrmyN7yuGBCubfX1soEImUHcCJe9y4A"/>
+</div>
+</div>
+</header>
+<main class="pb-24">
+<!-- Hero Course Section -->
+<section class="p-6">
+<div class="mb-6">
+<span class="font-label text-[10px] uppercase tracking-widest text-[#2563EB] mb-2 block">Advanced Certification</span>
+<h2 class="text-3xl font-extrabold tracking-tight font-headline leading-tight">Decentralized Finance Architecture</h2>
+</div>
+<div class="relative w-full aspect-video rounded-xl overflow-hidden mb-6 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Abstract 3D digital visualization of interconnected blue nodes and lines representing a decentralized network" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoHht9WrDQCHwsL6Uo9DhsjOKYyPYyHZ9xjkF8m7G6t3yhK6U45MjfAgv00qZGe_vg1KC9En41bgbefCLASnmLFmVO1ZrTAaWtcxfPfkJubZPmZr3qhVyTA_TBi5jS01eZ_sQPjm5u8ALarHWotBtuRkzZiYtmI-6wBro4YhxmJ2TSRfRnE_Vkw8Yh-fzEjMCVfyOlOof0rmSdH5VrD8eczw45LRwJmUr8FAYIQZ-LBkzFACLImGawDJZF_GrAxRfb84YiLBQjgQ"/>
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+<button class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+</div>
+<!-- Tabs - Editorial Style -->
+<div class="flex gap-8 mb-8 border-b border-outline-variant/10">
+<button class="pb-3 border-b-2 border-[#2563EB] font-headline font-bold text-sm">Curriculum</button>
+<button class="pb-3 border-b-2 border-transparent text-slate-500 font-headline font-bold text-sm">Overview</button>
+<button class="pb-3 border-b-2 border-transparent text-slate-500 font-headline font-bold text-sm">Resources</button>
+</div>
+<!-- Progress Summary -->
+<div class="bg-surface-container-low rounded-xl p-5 mb-8">
+<div class="flex justify-between items-end mb-3">
+<div>
+<p class="font-label text-[10px] uppercase tracking-widest text-slate-500">Overall Progress</p>
+<p class="font-headline font-extrabold text-2xl">64%</p>
+</div>
+<p class="font-label text-[10px] uppercase tracking-widest text-[#2563EB]">9 of 14 Lessons</p>
+</div>
+<div class="h-1.5 w-full bg-primary-container rounded-sm overflow-hidden">
+<div class="h-full bg-primary" style="width: 64%"></div>
+</div>
+</div>
+<!-- Lesson List -->
+<div class="space-y-4">
+<h3 class="font-headline font-bold text-lg mb-4">Course Content</h3>
+<!-- Completed Lesson -->
+<div class="bg-surface-container-lowest p-4 rounded-xl flex items-center gap-4 group transition-all">
+<div class="w-10 h-10 rounded-lg bg-[#2563EB]/10 flex items-center justify-center text-[#2563EB]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex-1">
+<h4 class="font-headline font-bold text-sm">Introduction to Protocol Layers</h4>
+<p class="font-label text-[10px] text-slate-500 uppercase tracking-wider">Video • 12 mins</p>
+</div>
+</div>
+<!-- Active Lesson -->
+<div class="bg-surface-container-high p-4 rounded-xl flex items-center gap-4 ring-1 ring-[#2563EB]/20">
+<div class="w-10 h-10 rounded-lg bg-[#2563EB] flex items-center justify-center text-white">
+<span class="material-symbols-outlined">play_circle</span>
+</div>
+<div class="flex-1">
+<h4 class="font-headline font-bold text-sm text-[#2563EB]">Liquidity Pool Mechanisms</h4>
+<p class="font-label text-[10px] text-[#2563EB]/70 uppercase tracking-wider">Interactive • 24 mins</p>
+</div>
+</div>
+<!-- Locked Lesson -->
+<div class="bg-surface-container-low p-4 rounded-xl flex items-center gap-4 opacity-60">
+<div class="w-10 h-10 rounded-lg bg-slate-200 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div class="flex-1">
+<h4 class="font-headline font-bold text-sm">Governance Tokenomics</h4>
+<p class="font-label text-[10px] text-slate-500 uppercase tracking-wider">Quiz • 15 mins</p>
+</div>
+</div>
+</div>
+<!-- Certificate Checklist - Bento Style -->
+<div class="mt-12 p-6 bg-inverse-surface rounded-2xl text-on-primary">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-surface-dim">verified</span>
+<h3 class="font-headline font-bold text-lg text-white">Certificate Eligibility</h3>
+</div>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#2563EB] text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label text-xs uppercase tracking-wider text-slate-300">Identity Verified</span>
+</div>
+<span class="material-symbols-outlined text-xs text-slate-500">info</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#2563EB] text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label text-xs uppercase tracking-wider text-slate-300">Watch Time: 90%</span>
+</div>
+<span class="material-symbols-outlined text-xs text-slate-500">info</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error text-sm">radio_button_unchecked</span>
+<span class="font-label text-xs uppercase tracking-wider text-slate-300">Final Exam Score &gt; 80%</span>
+</div>
+<span class="font-label text-[10px] text-error font-bold">LOCKED</span>
+</div>
+</div>
+<button class="w-full mt-6 py-4 rounded-xl bg-primary-dim text-white font-headline font-bold text-sm tracking-tight active:scale-95 transition-transform">
+                    Unlock Exam
+                </button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-white/80 dark:bg-[#070e1d]/80 backdrop-blur-xl shadow-[0_-4px_32px_rgba(7,14,29,0.04)]">
+<div class="flex justify-around items-center h-16 px-4 w-full">
+<!-- Learn Active -->
+<a class="flex flex-col items-center justify-center text-[#2563EB] after:content-[''] after:w-1 after:h-1 after:bg-[#2563EB] after:rounded-full after:mt-1 tap-highlight-none" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-1">Learn</span>
+</a>
+<!-- Credentials -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-1">Credentials</span>
+</a>
+<!-- Search -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-1">Search</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-1">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

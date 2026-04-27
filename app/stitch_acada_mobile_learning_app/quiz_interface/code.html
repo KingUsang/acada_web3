@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quiz Interface - Acada</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Space_Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#752121",
+                    "primary-container": "#dbe1ff",
+                    "secondary-dim": "#535356",
+                    "primary-fixed-dim": "#c7d3ff",
+                    "on-primary-fixed-variant": "#0050d4",
+                    "on-secondary-container": "#515155",
+                    "secondary-container": "#e4e2e6",
+                    "on-primary": "#f8f7ff",
+                    "on-secondary-fixed": "#3f3f43",
+                    "inverse-primary": "#618bff",
+                    "tertiary": "#625b77",
+                    "on-tertiary-container": "#4f4964",
+                    "error-dim": "#4e0309",
+                    "outline-variant": "#9bb2e5",
+                    "primary-fixed": "#dbe1ff",
+                    "primary": "#0053db",
+                    "tertiary-dim": "#564f6b",
+                    "primary-dim": "#0048c1",
+                    "error-container": "#fe8983",
+                    "on-tertiary": "#fdf7ff",
+                    "surface-container-high": "#e1e8ff",
+                    "on-secondary-fixed-variant": "#5b5b5f",
+                    "surface-container-highest": "#d8e2ff",
+                    "on-tertiary-fixed-variant": "#59526e",
+                    "on-tertiary-fixed": "#3c3650",
+                    "surface-container-low": "#f1f3ff",
+                    "on-surface": "#19315d",
+                    "on-primary-container": "#0048bf",
+                    "surface-dim": "#ccdaff",
+                    "on-background": "#19315d",
+                    "surface-tint": "#0053db",
+                    "tertiary-fixed-dim": "#d0c7e8",
+                    "outline": "#647aab",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#485f8d",
+                    "error": "#9f403d",
+                    "surface": "#f9f9ff",
+                    "tertiary-fixed": "#dfd5f7",
+                    "inverse-surface": "#070e1d",
+                    "on-error": "#fff7f6",
+                    "surface-container": "#e9edff",
+                    "surface-bright": "#f9f9ff",
+                    "surface-variant": "#d8e2ff",
+                    "secondary": "#5f5f62",
+                    "secondary-fixed-dim": "#d5d3d8",
+                    "inverse-on-surface": "#969db0",
+                    "tertiary-container": "#dfd5f7",
+                    "on-secondary": "#faf8fc",
+                    "on-primary-fixed": "#003798",
+                    "secondary-fixed": "#e4e2e6",
+                    "background": "#f9f9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Manrope"],
+                    "label": ["Space Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar Fragmented (Transactional Mode: No Global Nav) -->
+<header class="w-full sticky top-0 z-50 bg-[#f9f9ff] dark:bg-[#070e1d] flex justify-between items-center px-6 py-4 max-w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer active:scale-95 duration-150">close</span>
+<h1 class="font-headline font-bold tracking-tight text-lg text-on-surface">Question 4 of 20</h1>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">timer</span>
+<span class="font-label text-sm font-bold tracking-wider text-on-primary-fixed-variant">14:52</span>
+</div>
+</header>
+<!-- Linear Progress Bar -->
+<div class="w-full h-1 bg-surface-container">
+<div class="h-full bg-primary w-[20%] transition-all duration-500"></div>
+</div>
+<main class="flex-grow flex flex-col px-6 py-8 max-w-3xl mx-auto w-full">
+<!-- Question Section -->
+<section class="mb-12">
+<span class="font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant mb-4 block">Advanced Microeconomics</span>
+<h2 class="font-headline text-2xl md:text-3xl font-extrabold text-on-surface leading-tight tracking-tight">
+                Explain the relationship between the Nash Equilibrium and the concept of Pareto Efficiency within a non-cooperative game environment.
+            </h2>
+</section>
+<!-- Media/Visual Context (Optional for Quiz) -->
+<div class="w-full h-48 bg-surface-container-low rounded-xl mb-12 overflow-hidden flex items-center justify-center relative">
+<img class="w-full h-full object-cover mix-blend-multiply opacity-40" data-alt="Abstract mathematical visualization of network nodes and connecting lines representing game theory strategies on a clean light blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUR8MX5IpCRqww3KDBFUIVNyGp7f5CTAoTxqZXQYbV_J5tZ8p4LbnFDGa-W3zg4Smgw_6OYmpJ9_oa7YSA4o_vmOUP0DJknh__y0vAkvWBYA2U4OjB0ctI_mAJZjenF9zInxBjL4UIXk4sLAUBITsVkDu660M0X9p4BlN9Sr_NTSxFWXvlh0Q5sJxpCKlo-nJk5xDUnEsQwjfqw4-6LXdRlEYB3VwzO2J8d-WqAsTRm4tA0Yq6KK6btUVrJpEHvvqUu5RD_4uVFA"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="font-label text-xs font-bold text-primary-dim uppercase tracking-widest bg-white/60 backdrop-blur-md px-4 py-2 rounded-lg">Figure 4.1: Strategic Interaction Matrix</span>
+</div>
+</div>
+<!-- Options List -->
+<div class="space-y-4 mb-24">
+<!-- Option A -->
+<label class="group relative flex items-center p-5 bg-surface-container-lowest rounded-xl cursor-pointer hover:bg-surface-container-high transition-all duration-200 border-2 border-transparent has-[:checked]:border-primary/20 has-[:checked]:bg-primary-container/30">
+<input class="hidden peer" name="quiz-option" type="radio"/>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary transition-colors">
+<div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
+</div>
+<span class="ml-4 font-headline font-semibold text-on-surface group-hover:text-primary transition-colors">Every Nash Equilibrium is necessarily Pareto Efficient in competitive markets.</span>
+</label>
+<!-- Option B (Selected State Mock) -->
+<label class="group relative flex items-center p-5 bg-primary-container/30 rounded-xl cursor-pointer transition-all duration-200 border-2 border-primary/20">
+<input checked="" class="hidden peer" name="quiz-option" type="radio"/>
+<div class="w-6 h-6 rounded-full border-2 border-primary bg-primary flex items-center justify-center transition-colors">
+<div class="w-2 h-2 rounded-full bg-white opacity-100"></div>
+</div>
+<span class="ml-4 font-headline font-semibold text-on-primary-container">A Nash Equilibrium is not guaranteed to be Pareto Efficient, as seen in the Prisoner's Dilemma.</span>
+</label>
+<!-- Option C -->
+<label class="group relative flex items-center p-5 bg-surface-container-lowest rounded-xl cursor-pointer hover:bg-surface-container-high transition-all duration-200 border-2 border-transparent">
+<input class="hidden peer" name="quiz-option" type="radio"/>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary transition-colors">
+<div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
+</div>
+<span class="ml-4 font-headline font-semibold text-on-surface">Nash Equilibrium only exists when Pareto Efficiency is achieved through side payments.</span>
+</label>
+<!-- Option D -->
+<label class="group relative flex items-center p-5 bg-surface-container-lowest rounded-xl cursor-pointer hover:bg-surface-container-high transition-all duration-200 border-2 border-transparent">
+<input class="hidden peer" name="quiz-option" type="radio"/>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary transition-colors">
+<div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
+</div>
+<span class="ml-4 font-headline font-semibold text-on-surface">Pareto Efficiency is a prerequisite for reaching any stable Nash strategy.</span>
+</label>
+</div>
+</main>
+<!-- Sticky Bottom CTA -->
+<footer class="fixed bottom-0 left-0 right-0 p-6 bg-white/80 dark:bg-[#070e1d]/80 backdrop-blur-xl border-t border-blue-100/10 z-40">
+<div class="max-w-3xl mx-auto flex items-center justify-between gap-6">
+<button class="flex items-center gap-2 text-on-surface-variant font-label text-sm uppercase tracking-widest hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">flag</span>
+                Report
+            </button>
+<button class="flex-grow md:flex-grow-0 md:min-w-[200px] bg-gradient-to-br from-primary to-primary-dim text-on-primary py-4 px-8 rounded-full font-headline font-bold text-lg shadow-[0_8px_24px_rgba(0,83,219,0.25)] active:scale-95 transition-all">
+                Next Question
+            </button>
+</div>
+</footer>
+</body></html>

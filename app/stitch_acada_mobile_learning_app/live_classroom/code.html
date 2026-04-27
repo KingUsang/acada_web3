@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Space_Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#e9edff",
+                        "surface-bright": "#f9f9ff",
+                        "surface-variant": "#d8e2ff",
+                        "on-error": "#fff7f6",
+                        "tertiary-fixed": "#dfd5f7",
+                        "inverse-surface": "#070e1d",
+                        "surface": "#f9f9ff",
+                        "on-secondary": "#faf8fc",
+                        "on-primary-fixed": "#003798",
+                        "secondary-fixed": "#e4e2e6",
+                        "background": "#f9f9ff",
+                        "inverse-on-surface": "#969db0",
+                        "tertiary-container": "#dfd5f7",
+                        "secondary": "#5f5f62",
+                        "secondary-fixed-dim": "#d5d3d8",
+                        "on-surface": "#19315d",
+                        "on-primary-container": "#0048bf",
+                        "surface-container-low": "#f1f3ff",
+                        "surface-container-highest": "#d8e2ff",
+                        "on-tertiary-fixed-variant": "#59526e",
+                        "on-tertiary-fixed": "#3c3650",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#485f8d",
+                        "error": "#9f403d",
+                        "tertiary-fixed-dim": "#d0c7e8",
+                        "outline": "#647aab",
+                        "on-background": "#19315d",
+                        "surface-tint": "#0053db",
+                        "surface-dim": "#ccdaff",
+                        "tertiary": "#625b77",
+                        "on-tertiary-container": "#4f4964",
+                        "on-secondary-fixed": "#3f3f43",
+                        "inverse-primary": "#618bff",
+                        "on-primary": "#f8f7ff",
+                        "on-tertiary": "#fdf7ff",
+                        "surface-container-high": "#e1e8ff",
+                        "on-secondary-fixed-variant": "#5b5b5f",
+                        "primary-fixed": "#dbe1ff",
+                        "primary": "#0053db",
+                        "tertiary-dim": "#564f6b",
+                        "primary-dim": "#0048c1",
+                        "error-container": "#fe8983",
+                        "error-dim": "#4e0309",
+                        "outline-variant": "#9bb2e5",
+                        "primary-container": "#dbe1ff",
+                        "secondary-dim": "#535356",
+                        "on-error-container": "#752121",
+                        "secondary-container": "#e4e2e6",
+                        "on-secondary-container": "#515155",
+                        "primary-fixed-dim": "#c7d3ff",
+                        "on-primary-fixed-variant": "#0050d4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Manrope"],
+                        "label": ["Space_Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Manrope', sans-serif; background-color: #070e1d; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="overflow-hidden flex flex-col items-center justify-center min-h-screen">
+<!-- Mobile Screen Wrapper (375px) -->
+<main class="w-[375px] h-[812px] relative bg-inverse-surface flex flex-col overflow-hidden shadow-2xl">
+<!-- Top App Bar (Shared Component Strategy) -->
+<header class="fixed top-0 w-[375px] z-50 flex justify-between items-center px-6 h-16 bg-slate-950/40 backdrop-blur-xl">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-white" data-icon="menu">menu</span>
+<span class="text-2xl font-black tracking-tighter text-blue-500 font-headline">ACADA</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="bg-error px-2 py-0.5 rounded-lg flex items-center gap-1.5">
+<span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+<span class="text-[10px] font-label font-bold text-white uppercase tracking-widest">LIVE</span>
+</div>
+<span class="material-symbols-outlined text-white" data-icon="notifications">notifications</span>
+</div>
+</header>
+<!-- Main Video Area (Teacher) -->
+<div class="absolute inset-0 z-0">
+<img alt="Teacher" class="w-full h-full object-cover" data-alt="A professional female educator speaking passionately in a modern minimalist studio setting with soft warm key lighting and book-filled shelves." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDui4B07NXZXASUoOjiRBaXgVC25QvCzMLor88Q_EFCd2CFVbr-ODh37uN0eGx8ZxeaR3QBksjWCz4C3z6OVbhvvI4k5O1qvdxDf0HlG6FID5WoT-4EP_nmUx8V4EGQGlx9bldUf24TxYLUmvOpo5tM1JXO6UTLF32dcO82p3GYrQstfDufkjDmRLbsWQX3Q-oHVYwSEnepluEXBD5YNbhzu4oFwKJR6InZCseDb579xTD7WzQzSTrzqX1Afs7_MrG5iQm7rT8_0g"/>
+<!-- Overlay Gradient for legibility -->
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface via-transparent to-inverse-surface/40"></div>
+</div>
+<!-- Student Picture-in-Picture / Slides -->
+<div class="absolute top-20 right-4 w-32 aspect-[3/4] z-20 rounded-xl overflow-hidden shadow-2xl border border-white/10">
+<img alt="Presentation Slide" class="w-full h-full object-cover" data-alt="High-contrast digital slide showing complex geometric architecture diagrams with blue accent lines on a dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsT9hWmA4NEr7GUJSmQ56GSacATMEibmzTr249OUCYElULlNLuJRzYPeERdvMPzQgUlZJyFM_yn2NWDbS3Q5QDuX6dpKuiUQKOeNX1jMioLNEXWDyahvb7xf8_tTQTV4g3Qr1m0erJABvwYVeeiO7EUzOgiEqbNpzysFJsYgqSt1qfC41FjY4Q-Efs4ujdeCiYWHydBf5JSe-EXm0r2ddWz94BEU08fWq5ADKx2YM16a3fefWlG3EZhnjnukBv4hpEpw9uu1gV_w"/>
+<div class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-md px-1.5 py-0.5 rounded text-[8px] font-label text-white uppercase tracking-wider">
+                Slides
+            </div>
+</div>
+<!-- Class Info Badge -->
+<div class="absolute top-20 left-4 z-20 flex flex-col gap-1">
+<h1 class="text-white font-bold text-lg leading-tight drop-shadow-md">Advanced Web3 UI Architecture</h1>
+<p class="text-white/70 text-xs font-label uppercase tracking-widest">Module 4: Semantic Layers</p>
+</div>
+<!-- Floating Controls Bar (Bottom) -->
+<div class="absolute bottom-24 left-1/2 -translate-x-1/2 z-30 w-[90%] flex justify-between items-center px-4 py-3 bg-white/10 backdrop-blur-2xl rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/5">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="videocam">videocam</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/20 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="present_to_all">present_to_all</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+<button class="w-12 h-10 flex items-center justify-center rounded-full bg-error text-white shadow-lg shadow-error/20 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="call_end">call_end</span>
+</button>
+</div>
+<!-- Sliding Chat Drawer (Minimized State - Tab) -->
+<div class="absolute bottom-4 left-0 w-full px-4 z-40">
+<div class="w-full bg-white/90 backdrop-blur-2xl rounded-t-3xl rounded-b-xl overflow-hidden shadow-2xl flex flex-col max-h-[300px]">
+<!-- Header -->
+<div class="flex items-center justify-between px-6 py-3 border-b border-black/5">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-label font-bold text-blue-600 uppercase tracking-widest">Live Chat</span>
+<span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-lg" data-icon="keyboard_arrow_up">keyboard_arrow_up</span>
+</div>
+<!-- Chat Snippet -->
+<div class="px-6 py-4 flex items-start gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-surface-variant">
+<img alt="Student Avatar" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional man with a clean beard and friendly expression in soft studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvQgxWloAuMuk7X-TtbvfGy5-gS-NCLTqIiVQkA8Jh3AqGDhs-BlvGVE4OVAy-1CNygnQglewMzN5JJ6_eAfHxlflcFcq4Ec_DGJ3w2KI0YpfIfXrj2EVIa421kPMa1p8y1ogHiAlJvul1aM2sc1XdofSAJ1Vw7twwKNrOeC0futWaVVSM3ZMRlkoLAJK68OQeD1rbfBKUslVmRVzv7hvwWy7EeQwSYC7aY8hibmDfv0rlyXlwC5oyUzKk_HNW3Jr57n8OsNxu3A"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-label font-bold text-slate-500">MARCUS VANE</span>
+<p class="text-xs text-on-surface leading-snug">Could you elaborate more on the 'No-Line' rule in dark mode contexts?</p>
+</div>
+</div>
+<!-- Quick Input -->
+<div class="px-4 pb-4">
+<div class="flex items-center bg-surface-container-low rounded-full px-4 py-2">
+<input class="bg-transparent border-none focus:ring-0 text-xs flex-grow font-body text-on-surface" placeholder="Type a message..." type="text"/>
+<span class="material-symbols-outlined text-blue-600 text-lg" data-icon="send">send</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Visual Elements for Depth (Grayscale accents) -->
+<div class="absolute top-40 left-0 w-1 h-24 bg-blue-600/40 rounded-r-full blur-[1px]"></div>
+</main>
+<!-- Bottom Nav Bar Simulation (Suppressed as per rules for task-focused classroom mode, but visible in ghosted background for context if needed - though the rules say suppress it for focused journeys) -->
+<!-- We keep the nav suppressed to focus on the Live Class experience. -->
+</body></html>

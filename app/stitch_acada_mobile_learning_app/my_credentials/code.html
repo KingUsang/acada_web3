@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=375, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Space_Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#3c3650",
+                    "inverse-surface": "#070e1d",
+                    "on-secondary-fixed-variant": "#5b5b5f",
+                    "on-error-container": "#752121",
+                    "surface-bright": "#f9f9ff",
+                    "on-error": "#fff7f6",
+                    "on-tertiary": "#fdf7ff",
+                    "inverse-primary": "#618bff",
+                    "on-surface": "#19315d",
+                    "error": "#9f403d",
+                    "surface-dim": "#ccdaff",
+                    "surface-container-high": "#e1e8ff",
+                    "on-secondary-container": "#515155",
+                    "error-container": "#fe8983",
+                    "on-primary": "#f8f7ff",
+                    "background": "#f9f9ff",
+                    "tertiary": "#625b77",
+                    "tertiary-fixed": "#dfd5f7",
+                    "inverse-on-surface": "#969db0",
+                    "tertiary-container": "#dfd5f7",
+                    "on-secondary": "#faf8fc",
+                    "surface-container-low": "#f1f3ff",
+                    "secondary": "#5f5f62",
+                    "on-background": "#19315d",
+                    "secondary-container": "#e4e2e6",
+                    "surface": "#f9f9ff",
+                    "primary-container": "#dbe1ff",
+                    "on-surface-variant": "#485f8d",
+                    "on-primary-container": "#0048bf",
+                    "surface-variant": "#d8e2ff",
+                    "on-primary-fixed-variant": "#0050d4",
+                    "error-dim": "#4e0309",
+                    "on-tertiary-fixed-variant": "#59526e",
+                    "primary-fixed": "#dbe1ff",
+                    "surface-container": "#e9edff",
+                    "secondary-dim": "#535356",
+                    "secondary-fixed": "#e4e2e6",
+                    "primary-fixed-dim": "#c7d3ff",
+                    "tertiary-dim": "#564f6b",
+                    "outline-variant": "#9bb2e5",
+                    "primary": "#2563EB",
+                    "secondary-fixed-dim": "#d5d3d8",
+                    "tertiary-fixed-dim": "#d0c7e8",
+                    "on-secondary-fixed": "#3f3f43",
+                    "on-primary-fixed": "#003798",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-container": "#4f4964",
+                    "outline": "#647aab",
+                    "surface-tint": "#2563EB",
+                    "surface-container-highest": "#d8e2ff",
+                    "primary-dim": "#0048c1"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Manrope"],
+                    "label": ["Space_Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f9f9ff;
+            font-family: 'Manrope', sans-serif;
+            width: 375px;
+            margin: 0 auto;
+            min-height: 100vh;
+            color: #19315d;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface select-none">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface-container-low shadow-none z-40">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#2563EB] active:scale-95 duration-200 cursor-pointer" data-icon="menu">menu</span>
+<h1 class="font-['Manrope'] font-bold tracking-tight text-on-surface text-xl">Acada</h1>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center border border-primary-container overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="minimalist avatar of a professional student with clean lines and soft blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmHmNgDVvbWJrCyj5nHPoH8NuAa5r3wEFl1f7VzGeguUxR-DcHzs7V5QcB3dYMoelSBFoKgPGbX2fTBBpidMzVJqeuE4y8N8AnnOZeKCKtZinaNBV4V0tdLM_k-zPTfmRdO39e9Aq2Y0kN3z5_FCjBzFpTM9GHYudgZHhlCxXmXtJ38C9gcg87uYaSoz3N88KRfRMYVRvjrTzImBoZIxqjGpUemsqGkRCvFY5yn9L1S0SGHEYmzRBfIAL6_yg6QMs_AwwPKkZ0Lg"/>
+</div>
+</div>
+</header>
+<main class="px-6 pt-6 pb-24">
+<!-- Header Section -->
+<section class="mb-8">
+<div class="flex justify-between items-end mb-2">
+<h2 class="text-3xl font-extrabold tracking-tight text-on-surface">My Credentials</h2>
+<span class="font-label text-xs uppercase tracking-widest text-[#2563EB] font-bold mb-1">8 Total</span>
+</div>
+<p class="text-on-surface-variant body-lg leading-relaxed">Verified achievements and professional certifications earned through the Acada ecosystem.</p>
+</section>
+<!-- Stats Overview (Asymmetric Bento-ish) -->
+<section class="grid grid-cols-2 gap-3 mb-8">
+<div class="bg-surface-container-low p-4 rounded-xl flex flex-col justify-between h-32">
+<span class="material-symbols-outlined text-[#2563EB]" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<div>
+<div class="text-2xl font-black font-headline tracking-tighter">04</div>
+<div class="font-label text-[10px] uppercase tracking-widest text-secondary">Advanced Tiers</div>
+</div>
+</div>
+<div class="bg-primary p-4 rounded-xl flex flex-col justify-between h-32 text-on-primary">
+<span class="material-symbols-outlined" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<div>
+<div class="text-2xl font-black font-headline tracking-tighter">100%</div>
+<div class="font-label text-[10px] uppercase tracking-widest opacity-80">On-Chain Verified</div>
+</div>
+</div>
+</section>
+<!-- Credentials Grid -->
+<div class="grid gap-4">
+<!-- Credential Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(37,99,235,0.04)] active:scale-[0.98] transition-transform">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-[#2563EB] text-2xl" data-icon="code">code</span>
+</div>
+<div class="flex items-center gap-1.5 bg-primary-container px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-[#2563EB] text-xs" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label text-[10px] font-bold uppercase text-[#2563EB] tracking-wider">Verified</span>
+</div>
+</div>
+<h3 class="font-headline font-bold text-lg text-on-surface leading-tight mb-1">Full-Stack Architecture</h3>
+<div class="flex items-center gap-2">
+<span class="font-label text-xs text-slate-500 uppercase tracking-widest">Issued Oct 2023</span>
+<span class="w-1 h-1 bg-slate-300 rounded-full"></span>
+<span class="font-label text-xs text-slate-500 uppercase tracking-widest">ID: AC-882</span>
+</div>
+</div>
+<!-- Credential Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(37,99,235,0.04)] active:scale-[0.98] transition-transform">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-[#2563EB] text-2xl" data-icon="database">database</span>
+</div>
+<div class="flex items-center gap-1.5 bg-primary-container px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-[#2563EB] text-xs" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label text-[10px] font-bold uppercase text-[#2563EB] tracking-wider">Verified</span>
+</div>
+</div>
+<h3 class="font-headline font-bold text-lg text-on-surface leading-tight mb-1">Data Systems Mastery</h3>
+<div class="flex items-center gap-2">
+<span class="font-label text-xs text-slate-500 uppercase tracking-widest">Issued Aug 2023</span>
+<span class="w-1 h-1 bg-slate-300 rounded-full"></span>
+<span class="font-label text-xs text-slate-500 uppercase tracking-widest">ID: AC-714</span>
+</div>
+</div>
+<!-- Credential Card 3 (Editorial Style Variant) -->
+<div class="bg-inverse-surface rounded-xl p-5 active:scale-[0.98] transition-transform relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-white text-6xl" data-icon="shield">shield</span>
+</div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-2xl" data-icon="security">security</span>
+</div>
+<div class="flex items-center gap-1.5 bg-[#2563EB] px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-white text-xs" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label text-[10px] font-bold uppercase text-white tracking-wider">Verified</span>
+</div>
+</div>
+<h3 class="font-headline font-bold text-lg text-white leading-tight mb-1 relative z-10">Cybersecurity Fundamentals</h3>
+<div class="flex items-center gap-2 relative z-10">
+<span class="font-label text-xs text-white/60 uppercase tracking-widest">Issued Jan 2024</span>
+<span class="w-1 h-1 bg-white/20 rounded-full"></span>
+<span class="font-label text-xs text-white/60 uppercase tracking-widest">ID: AC-901</span>
+</div>
+</div>
+<!-- Credential Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_20px_rgba(37,99,235,0.04)] active:scale-[0.98] transition-transform">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-[#2563EB] text-2xl" data-icon="palette">palette</span>
+</div>
+<div class="flex items-center gap-1.5 bg-primary-container px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-[#2563EB] text-xs" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label text-[10px] font-bold uppercase text-[#2563EB] tracking-wider">Verified</span>
+</div>
+</div>
+<h3 class="font-headline font-bold text-lg text-on-surface leading-tight mb-1">Visual Design Systems</h3>
+<div class="flex items-center gap-2">
+<span class="font-label text-xs text-slate-500 uppercase tracking-widest">Issued Jun 2023</span>
+<span class="w-1 h-1 bg-slate-300 rounded-full"></span>
+<span class="font-label text-xs text-slate-500 uppercase tracking-widest">ID: AC-552</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-white/80 dark:bg-[#070e1d]/80 backdrop-blur-xl shadow-[0_-4px_32px_rgba(7,14,29,0.04)]">
+<div class="flex justify-around items-center h-16 px-4 w-full">
+<div class="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors tap-highlight-none cursor-pointer">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-0.5">Learn</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#2563EB] after:content-[''] after:w-1 after:h-1 after:bg-[#2563EB] after:rounded-full after:mt-1 tap-highlight-none cursor-pointer">
+<span class="material-symbols-outlined" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-0.5">Credentials</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors tap-highlight-none cursor-pointer">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-0.5">Search</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors tap-highlight-none cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-0.5">Profile</span>
+</div>
+</div>
+</nav>
+</body></html>

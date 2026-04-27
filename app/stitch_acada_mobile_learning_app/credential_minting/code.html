@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Credential Minting | Acada</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Space_Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#752121",
+                    "primary-container": "#dbe1ff",
+                    "secondary-dim": "#535356",
+                    "primary-fixed-dim": "#c7d3ff",
+                    "on-primary-fixed-variant": "#0050d4",
+                    "on-secondary-container": "#515155",
+                    "secondary-container": "#e4e2e6",
+                    "on-primary": "#f8f7ff",
+                    "on-secondary-fixed": "#3f3f43",
+                    "inverse-primary": "#618bff",
+                    "tertiary": "#625b77",
+                    "on-tertiary-container": "#4f4964",
+                    "error-dim": "#4e0309",
+                    "outline-variant": "#9bb2e5",
+                    "primary-fixed": "#dbe1ff",
+                    "primary": "#0053db",
+                    "tertiary-dim": "#564f6b",
+                    "primary-dim": "#0048c1",
+                    "error-container": "#fe8983",
+                    "on-tertiary": "#fdf7ff",
+                    "surface-container-high": "#e1e8ff",
+                    "on-secondary-fixed-variant": "#5b5b5f",
+                    "surface-container-highest": "#d8e2ff",
+                    "on-tertiary-fixed-variant": "#59526e",
+                    "on-tertiary-fixed": "#3c3650",
+                    "surface-container-low": "#f1f3ff",
+                    "on-surface": "#19315d",
+                    "on-primary-container": "#0048bf",
+                    "surface-dim": "#ccdaff",
+                    "on-background": "#19315d",
+                    "surface-tint": "#0053db",
+                    "tertiary-fixed-dim": "#d0c7e8",
+                    "outline": "#647aab",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#485f8d",
+                    "error": "#9f403d",
+                    "surface": "#f9f9ff",
+                    "tertiary-fixed": "#dfd5f7",
+                    "inverse-surface": "#070e1d",
+                    "on-error": "#fff7f6",
+                    "surface-container": "#e9edff",
+                    "surface-bright": "#f9f9ff",
+                    "surface-variant": "#d8e2ff",
+                    "secondary": "#5f5f62",
+                    "secondary-fixed-dim": "#d5d3d8",
+                    "inverse-on-surface": "#969db0",
+                    "tertiary-container": "#dfd5f7",
+                    "on-secondary": "#faf8fc",
+                    "on-primary-fixed": "#003798",
+                    "secondary-fixed": "#e4e2e6",
+                    "background": "#f9f9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Manrope"],
+                    "label": ["Space Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .minting-gradient {
+            background: linear-gradient(135deg, #0053db 0%, #0048c1 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation (Contextually Suppressed for focus journey, but shown here as a thin anchor) -->
+<header class="w-full sticky top-0 z-50 bg-[#f1f3ff] dark:bg-[#1a1f2e] flex justify-between items-center px-6 py-4 max-w-full">
+<div class="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tighter font-headline">Acada</div>
+<div class="flex items-center gap-3 bg-surface-container-lowest px-4 py-2 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="font-label text-sm font-bold tracking-tight">0x71C...4f2D</span>
+</div>
+</header>
+<main class="min-h-[calc(100vh-144px)] flex flex-col items-center justify-center px-6 py-12">
+<div class="max-w-3xl w-full flex flex-col items-center text-center space-y-10">
+<!-- Celebration Header -->
+<div class="space-y-4">
+<span class="font-label text-primary font-bold tracking-widest uppercase text-xs">Achievement Unlocked</span>
+<h1 class="text-5xl md:text-7xl font-headline font-extrabold tracking-tight text-on-surface">Congratulations!</h1>
+<p class="text-on-surface-variant text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
+                    You've successfully completed the advanced Web3 Architecture quiz. Your expertise is now being permanentized.
+                </p>
+</div>
+<!-- Minting Visualization: Bento Style Card -->
+<div class="relative w-full aspect-video md:aspect-[21/9] bg-surface-container-low rounded-xl overflow-hidden flex items-center justify-center">
+<!-- Background Texture -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDVXYBr38Mfdwrw3jkXnCnKKeegPOO-f0Jg7glxA6jnQ0JLRn4tSdni2sMaKQaYj55nrJiALMrYcqY57S6vQ7p-vfBn0PsXh8Jkh2MO8HYLkty5SWVDFxpCbi8JMVBpej_L0BsugG7Vfx5oKvVIaF4K4GMWxJPo7sFvGVL2OWM6zxuUFAf895U5Xy30RhFhCj7lObDRdNvoQXAUt9yeYENcskADfBpt_lZTZ3LX3ygW-ZxX3ilYdUueOA-75bNlV3O6wAr5d2cx-A');"></div>
+<div class="relative z-10 flex flex-col md:flex-row items-center gap-12 px-8">
+<!-- The Certificate Icon (Physical Depth Layer) -->
+<div class="relative group">
+<div class="w-40 h-52 bg-surface-container-lowest rounded-lg shadow-xl flex flex-col p-4 border border-outline-variant/20 transform -rotate-3 transition-transform hover:rotate-0 duration-500">
+<div class="w-full h-4 bg-primary-container rounded-sm mb-4"></div>
+<div class="space-y-2 mb-8">
+<div class="w-full h-2 bg-surface-container rounded-sm"></div>
+<div class="w-3/4 h-2 bg-surface-container rounded-sm"></div>
+<div class="w-1/2 h-2 bg-surface-container rounded-sm"></div>
+</div>
+<div class="mt-auto flex justify-end">
+<div class="w-12 h-12 rounded-full border-4 border-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+</div>
+<!-- Blockchain Node Symbols -->
+<div class="absolute -top-6 -right-6 w-12 h-12 bg-surface-container-highest rounded-full flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-primary" data-icon="hub">hub</span>
+</div>
+</div>
+<!-- The Progress Indicator -->
+<div class="flex flex-col items-center md:items-start text-center md:text-left space-y-6">
+<div class="flex items-center gap-4">
+<!-- Custom Loading Ring -->
+<div class="relative w-16 h-16">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-high" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-primary" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-dasharray="175.9" stroke-dashoffset="40" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl animate-pulse">link</span>
+</div>
+</div>
+<div class="space-y-1">
+<h3 class="font-headline font-bold text-xl">Minting on-chain...</h3>
+<p class="font-label text-xs text-on-surface-variant uppercase tracking-widest">Transaction: 0x8a92...e10b</p>
+</div>
+</div>
+<div class="bg-surface-container-highest/50 backdrop-blur-sm p-4 rounded-xl border border-primary/10">
+<p class="text-sm font-body text-on-surface max-w-sm">
+                                Your educational credential is being secured on the Ethereum layer-2 network. This provides cryptographic proof of your skills that can be verified globally.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- CTA Section -->
+<div class="w-full max-w-md pt-8">
+<button class="w-full h-16 minting-gradient text-on-primary font-headline font-bold rounded-full shadow-lg opacity-50 cursor-not-allowed flex items-center justify-center gap-3 transition-all" disabled="">
+<span>Generating Final Certificate...</span>
+<span class="material-symbols-outlined text-xl">hourglass_bottom</span>
+</button>
+<p class="mt-4 text-xs font-label text-on-surface-variant uppercase tracking-tighter">Please do not close this window</p>
+</div>
+</div>
+</main>
+<!-- Navigation Suppressed logic: No BottomNavBar on success screen to ensure focus -->
+<!-- Secondary Informational Cards: Editorial Detail -->
+<section class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
+<div class="p-6 bg-surface-container-low rounded-xl space-y-3">
+<span class="material-symbols-outlined text-primary" data-icon="lock">lock</span>
+<h4 class="font-headline font-bold">Immutable Proof</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Once minted, your results cannot be altered or removed, ensuring permanent credibility.</p>
+</div>
+<div class="p-6 bg-surface-container-low rounded-xl space-y-3">
+<span class="material-symbols-outlined text-primary" data-icon="share">share</span>
+<h4 class="font-headline font-bold">Universal Sharing</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Easily add this credential to your LinkedIn, CV, or professional portfolio with a verified link.</p>
+</div>
+<div class="p-6 bg-surface-container-low rounded-xl space-y-3">
+<span class="material-symbols-outlined text-primary" data-icon="token">token</span>
+<h4 class="font-headline font-bold">Reward Tokens</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Earning this credential also grants you 50 ACAD tokens for future course discounts.</p>
+</div>
+</section>
+<!-- Footer Identity -->
+<footer class="w-full py-12 bg-inverse-surface flex flex-col items-center justify-center space-y-6">
+<div class="text-2xl font-extrabold text-on-primary tracking-tighter font-headline">Acada</div>
+<div class="flex gap-8">
+<span class="text-inverse-on-surface text-xs font-label uppercase tracking-widest hover:text-on-primary transition-colors cursor-pointer">Protocol</span>
+<span class="text-inverse-on-surface text-xs font-label uppercase tracking-widest hover:text-on-primary transition-colors cursor-pointer">Security</span>
+<span class="text-inverse-on-surface text-xs font-label uppercase tracking-widest hover:text-on-primary transition-colors cursor-pointer">Explorer</span>
+</div>
+<div class="pt-4 opacity-30">
+<img alt="Acada Logo" class="h-6 grayscale" data-alt="minimalist tech logo with geometric shapes and sharp lines in white on black background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxrg7Asx_Rd5htc04HIOmZdBfqp8CxbfeO-FxIBt8mVgA74nNOQbkj3Ei7wzTqM4KzlcYVTa0U15Ta0OxhxKMvN_HrJC5HBGNGdiUyEXlZpUqDxgnSD8aDsOwLXkpAStWYvmIq3Zf9Uy7M5aNvCpCSAfgM-tMOj-EMOjfTHdEUp3avr-FqZBhwGi1IXIla9wyF6EBTZDjAvoj46jEAH3VIMokmGY8uPSiQeJYZiJPEpWM7nXPRMPeS7JRgbwdXWq90UKs8fLrvlQ"/>
+</div>
+</footer>
+</body></html>

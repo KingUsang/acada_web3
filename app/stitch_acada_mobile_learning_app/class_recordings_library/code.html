@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#5f5f62",
+                        "secondary-fixed-dim": "#d5d3d8",
+                        "tertiary-container": "#dfd5f7",
+                        "inverse-on-surface": "#969db0",
+                        "secondary-fixed": "#e4e2e6",
+                        "background": "#f9f9ff",
+                        "on-secondary": "#faf8fc",
+                        "on-primary-fixed": "#003798",
+                        "surface": "#f9f9ff",
+                        "inverse-surface": "#070e1d",
+                        "tertiary-fixed": "#dfd5f7",
+                        "on-error": "#fff7f6",
+                        "surface-variant": "#d8e2ff",
+                        "surface-container": "#e9edff",
+                        "surface-bright": "#f9f9ff",
+                        "surface-dim": "#ccdaff",
+                        "on-background": "#19315d",
+                        "surface-tint": "#0053db",
+                        "outline": "#647aab",
+                        "tertiary-fixed-dim": "#d0c7e8",
+                        "error": "#9f403d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#485f8d",
+                        "surface-container-highest": "#d8e2ff",
+                        "on-tertiary-fixed-variant": "#59526e",
+                        "on-tertiary-fixed": "#3c3650",
+                        "surface-container-low": "#f1f3ff",
+                        "on-primary-container": "#0048bf",
+                        "on-surface": "#19315d",
+                        "outline-variant": "#9bb2e5",
+                        "error-dim": "#4e0309",
+                        "tertiary-dim": "#564f6b",
+                        "primary-dim": "#0048c1",
+                        "error-container": "#fe8983",
+                        "primary-fixed": "#dbe1ff",
+                        "primary": "#0053db",
+                        "on-tertiary": "#fdf7ff",
+                        "surface-container-high": "#e1e8ff",
+                        "on-secondary-fixed-variant": "#5b5b5f",
+                        "on-primary": "#f8f7ff",
+                        "on-secondary-fixed": "#3f3f43",
+                        "inverse-primary": "#618bff",
+                        "tertiary": "#625b77",
+                        "on-tertiary-container": "#4f4964",
+                        "primary-fixed-dim": "#c7d3ff",
+                        "on-primary-fixed-variant": "#0050d4",
+                        "on-secondary-container": "#515155",
+                        "secondary-container": "#e4e2e6",
+                        "on-error-container": "#752121",
+                        "secondary-dim": "#535356",
+                        "primary-container": "#dbe1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Manrope"],
+                        "label": ["Space Grotesk"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-white/60 backdrop-blur-xl flex items-center justify-between px-6 h-16 shadow-[0_16px_32px_-12px_rgba(7,14,29,0.04)]">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-slate-100/50 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-slate-900">menu</span>
+</button>
+<h1 class="text-xl font-extrabold tracking-tighter text-blue-600">Acada</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden">
+<img alt="User profile" data-alt="Close-up portrait of a professional individual with soft studio lighting and a clean neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCNYlXW7IQ11kGBhArdnYoLQX30vqLGpylh4kDQMLbgr_1aHBd16s0sPda9DfQn_wsWT9QJbh18vszCgLP8sKbs_LIj2Ib9TBy3-D2S-DAf1xt-ZTs3dR3odWD5zeaWJaL2uwaMkfbONU0RRL-lP60c0zCNHCQKzX-KMEeNCxWbZ6NuwJ13MNxgKIm1Vh9KaGPcJqmFttCGHY-TFV-kDGAlro5v1BeFeQlgXWFDSKYl971f3lzlScLI8cekdP9RJnowBFZ-Uul2Q"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-5xl mx-auto">
+<!-- Editorial Header Section -->
+<section class="mb-10">
+<h2 class="text-4xl font-headline font-extrabold tracking-tight text-inverse-surface mb-2">Class Recordings</h2>
+<p class="text-on-surface-variant font-medium">Revisit your curriculum sessions and deep-dive into past lectures.</p>
+</section>
+<!-- Search & Filter Bar -->
+<section class="mb-12 space-y-6">
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full h-14 pl-12 pr-4 bg-surface-container-low border-none rounded-xl text-on-surface focus:ring-0 focus:bg-surface-container-highest transition-all font-body" placeholder="Search recordings, topics, or instructors..." type="text"/>
+</div>
+<!-- Horizontal Filter Scroll -->
+<div class="flex items-center gap-3 overflow-x-auto hide-scrollbar">
+<button class="px-6 py-2.5 rounded-full bg-inverse-surface text-inverse-on-surface text-sm font-label uppercase tracking-widest whitespace-nowrap">All</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-label uppercase tracking-widest whitespace-nowrap hover:bg-surface-container-highest transition-colors">Recent</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-label uppercase tracking-widest whitespace-nowrap hover:bg-surface-container-highest transition-colors">Favorites</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-label uppercase tracking-widest whitespace-nowrap hover:bg-surface-container-highest transition-colors">Computer Science</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-label uppercase tracking-widest whitespace-nowrap hover:bg-surface-container-highest transition-colors">Mathematics</button>
+</div>
+</section>
+<!-- Bento Grid / Asymmetric List -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Featured Item (Spans 2 columns on desktop) -->
+<div class="md:col-span-2 group relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_16px_32px_-12px_rgba(7,14,29,0.04)] hover:shadow-xl transition-all">
+<div class="aspect-video w-full overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Digital representation of complex neural network architecture with glowing blue nodes and connections on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJovyssAGnpTBEr_Sz15hwxbV3j92cQELSORnAkA56gsIhqSmiMwriBYNNnMvDcqMMqKoJDl60-eR5Zl5VbMFIA3Cvzl02KS8PRLnsY-po-ptokLMIWaxgTk6gsyKM-lD7NwoatoDOfOJBoFcIx2Lsl9yQ64nJWvmFYh0QxCFaEzd9wDy4gcUayawncMz8uTBqBoyDTc8aHW1Oqn2wruTIyvzt8R8PT0wQK6yjFisati1Yi5Y3P73eAH8vgsg3F4eADxstLnlrdA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 flex items-center gap-3">
+<div class="px-3 py-1 bg-primary text-white text-xs font-label uppercase tracking-tighter rounded-sm">Featured</div>
+<div class="flex items-center gap-1 text-white/90 text-sm font-label">
+<span class="material-symbols-outlined text-sm">schedule</span> 1h 45m
+                        </div>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start gap-4 mb-4">
+<div>
+<p class="text-primary text-xs font-label uppercase tracking-widest font-bold mb-1">Advanced Neural Architectures</p>
+<h3 class="text-2xl font-headline font-bold text-inverse-surface leading-tight">Week 2: Convolutional Layer Deep Dive</h3>
+</div>
+<button class="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary-dim active:scale-90 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+<p class="text-secondary text-sm font-label">Recorded on Oct 24, 2023</p>
+</div>
+</div>
+<!-- Standard Items -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_16px_32px_-12px_rgba(7,14,29,0.04)] hover:shadow-xl transition-all border border-transparent hover:border-outline-variant/10">
+<div class="aspect-[16/10] relative">
+<img class="w-full h-full object-cover" data-alt="Abstract visualization of quantum computing concepts with geometric shapes and soft blue gradients" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5GxfuA7PrBP6oOn_sWScNrriAFqiZz68sDD0rpyDn3UZFZ54x7o0XiFrGLm43zI5q8uKpEMizQfzqhywB87bK6ZIC7ZB_LrQp8ogyHsmq91XDMnt5KGYw88ZGhYq1tGrdKcAOd9mcVUvvrcV-_mt_9iBHV54pRk_gcwOBPAneZ6K99iUlui_kQyVaQFqtveHJX6kmzT-Am95-ciFUs79c3U9BZMaf6TFewtQqESsV18d7e-z_1xvjN6-Atj2n9jwjvPhEHn-O0g"/>
+<div class="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-4xl">play_circle</span>
+</div>
+</div>
+<div class="p-5">
+<p class="text-primary text-[10px] font-label uppercase tracking-widest font-bold mb-1">Quantum Computing</p>
+<h3 class="text-lg font-headline font-bold text-inverse-surface mb-4 line-clamp-1">Qubit Supervision &amp; Decoherence</h3>
+<div class="flex items-center justify-between">
+<span class="text-secondary text-xs font-label">Oct 21 • 52m</span>
+<button class="text-primary font-label text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
+                            PLAY <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_16px_32px_-12px_rgba(7,14,29,0.04)] hover:shadow-xl transition-all border border-transparent hover:border-outline-variant/10">
+<div class="aspect-[16/10] relative">
+<img class="w-full h-full object-cover" data-alt="Clean desk with high-end calculator and neatly written mathematical equations on white paper with natural morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAisNUK-mCfD79KJbSFDzmNZJ-vI5h3WcwH5DU8ZJzIgH5uHZI6SMJBPqkLE8vAOSa5OEUimZs49mD2O_Zr3zHw6Cle3sp15Nlmq1ozGo145dZ77O0hnbKZ9anSH78M1vE5AOYhyxWb3U3bUeGR4rW8xUQp_wgU8M2T4pMuPl4YnpGOrIX_4h4Iu9aZA2RmgSqGoc43DrHZG1SxvwYZ0q5TE5EGN5i-QY_rwGd8N2PDlTQ71crlrLQAmjUiHYEor0JcaL8rVTGw0w"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-white/90 backdrop-blur rounded text-[10px] font-label font-bold text-inverse-surface">
+                        SAVED
+                    </div>
+</div>
+<div class="p-5">
+<p class="text-primary text-[10px] font-label uppercase tracking-widest font-bold mb-1">Linear Algebra</p>
+<h3 class="text-lg font-headline font-bold text-inverse-surface mb-4 line-clamp-1">Eigenvalues and Eigenvectors</h3>
+<div class="flex items-center justify-between">
+<span class="text-secondary text-xs font-label">Oct 18 • 1h 10m</span>
+<button class="text-primary font-label text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
+                            PLAY <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_16px_32px_-12px_rgba(7,14,29,0.04)] hover:shadow-xl transition-all border border-transparent hover:border-outline-variant/10">
+<div class="aspect-[16/10] relative">
+<img class="w-full h-full object-cover" data-alt="High-resolution data dashboard on a screen showing colorful charts and graphs in a minimalist room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD-YT4p55JO_Nhhc_D-P_2NvTkTJjxJvRh1TmJpK09V_Gehg2d5f464T1bk2RUWp0dkWBANQEIorUGqtbtxCJ-o1pOQJ3RwdfdYJk0mMH6zKgDmnctogEvUB8ePBPN2J9-_VUu_haJpmk9_BFFRr-SSQx09DeLlUhAqq5F4OVnDE6psv_XUOucmOwxW8M_giDvEflz9DxO5mzgiUMeu9BAPf5fXMxclmO3SLd90T7iIIR2-FhMENvM_n_R5xNuToPK_0-58PB_vg"/>
+</div>
+<div class="p-5">
+<p class="text-primary text-[10px] font-label uppercase tracking-widest font-bold mb-1">Data Visualization</p>
+<h3 class="text-lg font-headline font-bold text-inverse-surface mb-4 line-clamp-1">Narrative Structures in Viz</h3>
+<div class="flex items-center justify-between">
+<span class="text-secondary text-xs font-label">Oct 15 • 45m</span>
+<button class="text-primary font-label text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
+                            PLAY <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- More items can be added here... -->
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl shadow-[0_32px_64px_-16px_rgba(7,14,29,0.08)] flex justify-around items-center h-20 px-4 z-50">
+<a class="flex flex-col items-center justify-center text-blue-600 dark:text-blue-400 relative after:content-[''] after:absolute after:-bottom-2 after:w-1 after:h-1 after:bg-blue-600 after:rounded-full" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">video_library</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 opacity-60 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined">quiz</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Quiz</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 opacity-60 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Results</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 opacity-60 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

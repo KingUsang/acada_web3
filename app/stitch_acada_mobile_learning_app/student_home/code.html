@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Space_Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#3c3650",
+                        "inverse-surface": "#070e1d",
+                        "on-secondary-fixed-variant": "#5b5b5f",
+                        "on-error-container": "#752121",
+                        "surface-bright": "#f9f9ff",
+                        "on-error": "#fff7f6",
+                        "on-tertiary": "#fdf7ff",
+                        "inverse-primary": "#618bff",
+                        "on-surface": "#19315d",
+                        "error": "#9f403d",
+                        "surface-dim": "#ccdaff",
+                        "surface-container-high": "#e1e8ff",
+                        "on-secondary-container": "#515155",
+                        "error-container": "#fe8983",
+                        "on-primary": "#f8f7ff",
+                        "background": "#f9f9ff",
+                        "tertiary": "#625b77",
+                        "tertiary-fixed": "#dfd5f7",
+                        "inverse-on-surface": "#969db0",
+                        "tertiary-container": "#dfd5f7",
+                        "on-secondary": "#faf8fc",
+                        "surface-container-low": "#f1f3ff",
+                        "secondary": "#5f5f62",
+                        "on-background": "#19315d",
+                        "secondary-container": "#e4e2e6",
+                        "surface": "#f9f9ff",
+                        "primary-container": "#dbe1ff",
+                        "on-surface-variant": "#485f8d",
+                        "on-primary-container": "#0048bf",
+                        "surface-variant": "#d8e2ff",
+                        "on-primary-fixed-variant": "#0050d4",
+                        "error-dim": "#4e0309",
+                        "on-tertiary-fixed-variant": "#59526e",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container": "#e9edff",
+                        "secondary-dim": "#535356",
+                        "secondary-fixed": "#e4e2e6",
+                        "primary-fixed-dim": "#c7d3ff",
+                        "tertiary-dim": "#564f6b",
+                        "outline-variant": "#9bb2e5",
+                        "primary": "#0053db",
+                        "secondary-fixed-dim": "#d5d3d8",
+                        "tertiary-fixed-dim": "#d0c7e8",
+                        "on-secondary-fixed": "#3f3f43",
+                        "on-primary-fixed": "#003798",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#4f4964",
+                        "outline": "#647aab",
+                        "surface-tint": "#0053db",
+                        "surface-container-highest": "#d8e2ff",
+                        "primary-dim": "#0048c1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Manrope"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            max-width: 375px;
+            margin: 0 auto;
+            background-color: #f9f9ff;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-[#f9f9ff] dark:bg-[#070e1d] flex justify-between items-center px-6 py-4 w-full bg-surface-container-low shadow-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#2563EB] active:scale-95 duration-200" data-icon="menu">menu</span>
+<h1 class="text-xl font-black text-[#2563EB] tracking-tighter font-['Manrope']">Acada</h1>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="Student Profile" class="w-full h-full object-cover" data-alt="Close-up studio portrait of a young male student with a friendly expression and neutral lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMYwWXB0-lRQMpUMnwnboX1hC7-stYxccg5VuIFEzoCc7r7bMQhH_CNkD-nVWKsfMbmhGeY6Ml1qwPs9T-OkEt8fWHC12VTULGhlxU_u0YJ-W4QxMWgtSqns94d8S35l-nvHS_AhgtX-rftdbSwOX2Do8kZhoBNmPzh1BLSs1JJpNRt2zVEMMDElwkGE2cjTUm_1fMSBxr6Bkd3_czUSy92wjDANXhZEAFgAyuvwCOUqSgSqtnAn1lgAfPUeOd7OapEIsU9jXMFw"/>
+</div>
+</header>
+<main class="px-6 pt-4 pb-24 space-y-8">
+<!-- Welcome & Progress Summary -->
+<section class="space-y-4">
+<div class="flex justify-between items-end">
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Academic Overview</span>
+<h2 class="text-2xl font-extrabold tracking-tight">Hi, Alex</h2>
+</div>
+<div class="bg-primary-container px-3 py-1 rounded-full">
+<span class="font-label text-[10px] font-bold text-on-primary-container tracking-widest">RANK: A+</span>
+</div>
+</div>
+<!-- Bento Progress Card -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-5 rounded-xl flex flex-col justify-between aspect-square">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="auto_awesome">auto_awesome</span>
+<div>
+<div class="text-3xl font-extrabold font-headline">84%</div>
+<div class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Overall Progress</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container-low p-4 rounded-xl flex items-center justify-between">
+<div class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Credits</div>
+<div class="font-headline font-bold text-lg">124</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl flex items-center justify-between">
+<div class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">GPA</div>
+<div class="font-headline font-bold text-lg">3.9</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Continue Learning (Asymmetric Scroll) -->
+<section class="space-y-4">
+<h3 class="font-headline font-bold text-lg tracking-tight">Continue Learning</h3>
+<div class="flex overflow-x-auto gap-4 pb-4 -mx-6 px-6 no-scrollbar">
+<!-- Course Card 1 -->
+<div class="min-w-[280px] bg-surface-container-lowest rounded-xl overflow-hidden group">
+<div class="h-32 relative">
+<img alt="Quantum Physics" class="w-full h-full object-cover" data-alt="Abstract digital visualization of quantum particles and wave functions in glowing blue and white tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRIftb3BIibhgKEdv9RRGgnHD_qk2Pf9PaOC7PufqXEJ4CuArql9AHL7W4LTH92oFb3w4HMxqggpF6shb_R_t6UcXpvEnaNvQY25_yDNSw68QT1pVZGzcHH9deI6vNNCXLa5DG5jwNA08Vb0IWLFgt56CXICPZyR2tBAtVvJYzKxgMU1STUJUnhyxMs27r8rfO9gvNrwof_QymkuiipWTfbf1D26TqpXBDgS5JuKs396n1RgxJPx3lj1QU7a99YwdFF6X7P6xM3A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/60 to-transparent"></div>
+<span class="absolute bottom-3 left-3 font-label text-[10px] text-on-primary bg-primary px-2 py-0.5 rounded">WEEK 08</span>
+</div>
+<div class="p-4 space-y-3">
+<h4 class="font-headline font-bold leading-tight">Advanced Quantum Mechanics</h4>
+<div class="w-full bg-surface-container-high h-1.5 rounded-sm overflow-hidden">
+<div class="bg-primary h-full w-[65%]"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label text-[10px] text-on-surface-variant">65% COMPLETED</span>
+<span class="material-symbols-outlined text-primary text-xl" data-icon="play_circle">play_circle</span>
+</div>
+</div>
+</div>
+<!-- Course Card 2 -->
+<div class="min-w-[280px] bg-surface-container-lowest rounded-xl overflow-hidden">
+<div class="h-32 relative">
+<img alt="Data Structures" class="w-full h-full object-cover" data-alt="Close up of high precision architectural blueprint with technical lines and geometric shapes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqzSnLMl3f5t2HZGAiCdGW3bX5FsFs0IQmHZQrsb0h4cm2HnmPa65x2VZik2U25FYPhZwUyoq5lK-1suqI97FyuWKX-bNByrB_2SbFScO9Pj4ABMtxl24nVGxrPT4CidnKzveT011aL9RniNd0BjH97dOJfPXytRK20Qih9m6PBFzZnSM77uhAMM0Hu6bNDczHmdrAhMbbyL2tvVDLQFffLWqA9PaaCngcUe8OFX8YgwKwru4UiAdN1uZuII1uc2dR2IioPVjKlQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/60 to-transparent"></div>
+<span class="absolute bottom-3 left-3 font-label text-[10px] text-on-primary bg-primary px-2 py-0.5 rounded">WEEK 04</span>
+</div>
+<div class="p-4 space-y-3">
+<h4 class="font-headline font-bold leading-tight">Data Structures &amp; Algorithms</h4>
+<div class="w-full bg-surface-container-high h-1.5 rounded-sm overflow-hidden">
+<div class="bg-primary h-full w-[42%]"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label text-[10px] text-on-surface-variant">42% COMPLETED</span>
+<span class="material-symbols-outlined text-primary text-xl" data-icon="play_circle">play_circle</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Upcoming Classes -->
+<section class="space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="font-headline font-bold text-lg tracking-tight">Today's Schedule</h3>
+<span class="font-label text-[10px] text-primary font-bold uppercase tracking-widest">View All</span>
+</div>
+<div class="space-y-3">
+<!-- Class Row 1 -->
+<div class="flex items-center gap-4 bg-surface-container-low p-4 rounded-xl">
+<div class="flex flex-col items-center justify-center bg-surface-container-lowest w-14 h-14 rounded-lg">
+<span class="font-label text-[10px] text-on-surface-variant uppercase">10:00</span>
+<span class="font-headline font-bold">AM</span>
+</div>
+<div class="flex-1">
+<h5 class="font-headline font-bold text-sm">Linear Algebra Lecture</h5>
+<p class="text-xs text-on-surface-variant">Room 402 • Prof. Sarah Jenkins</p>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Class Row 2 -->
+<div class="flex items-center gap-4 bg-surface-container-low p-4 rounded-xl">
+<div class="flex flex-col items-center justify-center bg-surface-container-lowest w-14 h-14 rounded-lg">
+<span class="font-label text-[10px] text-on-surface-variant uppercase">02:30</span>
+<span class="font-headline font-bold">PM</span>
+</div>
+<div class="flex-1">
+<h5 class="font-headline font-bold text-sm">UI/UX Design Studio</h5>
+<p class="text-xs text-on-surface-variant">Digital Lab 1 • Interactive Workshop</p>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Pending Quizzes -->
+<section class="space-y-4">
+<h3 class="font-headline font-bold text-lg tracking-tight">Pending Quizzes</h3>
+<div class="bg-inverse-surface p-6 rounded-xl relative overflow-hidden">
+<!-- Decorative element -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl"></div>
+<div class="relative z-10 space-y-4">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<span class="font-label text-[10px] text-primary-container uppercase tracking-widest">Ends in 2h 45m</span>
+<h4 class="text-on-primary font-headline font-bold text-lg">Statistical Inference Quiz</h4>
+</div>
+<span class="material-symbols-outlined text-primary-container" data-icon="assignment_late">assignment_late</span>
+</div>
+<button class="w-full bg-primary text-on-primary font-label text-xs font-bold py-3 rounded-full uppercase tracking-widest active:scale-95 transition-transform">
+                        Start Quiz Now
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-white/80 dark:bg-[#070e1d]/80 backdrop-blur-xl shadow-[0_-4px_32px_rgba(7,14,29,0.04)] flex justify-around items-center h-16 px-4 w-full">
+<button class="flex flex-col items-center justify-center text-[#2563EB] after:content-[''] after:w-1 after:h-1 after:bg-[#2563EB] after:rounded-full after:mt-1 hover:text-[#2563EB] transition-colors tap-highlight-none">
+<span class="material-symbols-outlined" data-icon="school" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-0.5">Learn</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors tap-highlight-none">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-0.5">Credentials</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors tap-highlight-none">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-0.5">Search</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors tap-highlight-none">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-0.5">Profile</span>
+</button>
+</nav>
+</body></html>

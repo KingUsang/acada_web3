@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Acada - Quiz Results</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Space_Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#5f5f62",
+                        "secondary-fixed-dim": "#d5d3d8",
+                        "tertiary-container": "#dfd5f7",
+                        "inverse-on-surface": "#969db0",
+                        "secondary-fixed": "#e4e2e6",
+                        "background": "#f9f9ff",
+                        "on-secondary": "#faf8fc",
+                        "on-primary-fixed": "#003798",
+                        "surface": "#f9f9ff",
+                        "inverse-surface": "#070e1d",
+                        "tertiary-fixed": "#dfd5f7",
+                        "on-error": "#fff7f6",
+                        "surface-variant": "#d8e2ff",
+                        "surface-container": "#e9edff",
+                        "surface-bright": "#f9f9ff",
+                        "surface-dim": "#ccdaff",
+                        "on-background": "#19315d",
+                        "surface-tint": "#0053db",
+                        "outline": "#647aab",
+                        "tertiary-fixed-dim": "#d0c7e8",
+                        "error": "#9f403d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#485f8d",
+                        "surface-container-highest": "#d8e2ff",
+                        "on-tertiary-fixed-variant": "#59526e",
+                        "on-tertiary-fixed": "#3c3650",
+                        "surface-container-low": "#f1f3ff",
+                        "on-primary-container": "#0048bf",
+                        "on-surface": "#19315d",
+                        "outline-variant": "#9bb2e5",
+                        "error-dim": "#4e0309",
+                        "tertiary-dim": "#564f6b",
+                        "primary-dim": "#0048c1",
+                        "error-container": "#fe8983",
+                        "primary-fixed": "#dbe1ff",
+                        "primary": "#0053db",
+                        "on-tertiary": "#fdf7ff",
+                        "surface-container-high": "#e1e8ff",
+                        "on-secondary-fixed-variant": "#5b5b5f",
+                        "on-primary": "#f8f7ff",
+                        "on-secondary-fixed": "#3f3f43",
+                        "inverse-primary": "#618bff",
+                        "tertiary": "#625b77",
+                        "on-tertiary-container": "#4f4964",
+                        "primary-fixed-dim": "#c7d3ff",
+                        "on-primary-fixed-variant": "#0050d4",
+                        "on-secondary-container": "#515155",
+                        "secondary-container": "#e4e2e6",
+                        "on-error-container": "#752121",
+                        "secondary-dim": "#535356",
+                        "primary-container": "#dbe1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Manrope"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tap-highlight-transparent {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
+<header class="fixed top-0 w-full z-50 bg-white/60 dark:bg-slate-950/60 backdrop-blur-xl shadow-[0_16px_32px_-12px_rgba(7,14,29,0.04)] flex items-center justify-between px-6 h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-600 dark:text-blue-400" data-icon="menu">menu</span>
+<h1 class="text-xl font-extrabold tracking-tighter text-blue-600 dark:text-blue-400 font-headline">Acada</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest flex items-center justify-center">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Close up portrait of a young professional male in soft daylight with a clean minimalist background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAME1BIn0T9UgGFus101_tUOptg6G931SCyNrH6inuh0EHlVbHshxXFmCREFnLfB-H1ZZsGr8PsKXibKw23VIY1GrOgQGxQke0f06kplNFaa1dvl3CsZSIR_zVz1ancGBzBolajH8MByfRsbJFfHGKnxFaIQWqfWHsd6KELK57QE2iEMsOuDcSji5hDlMaWUvAKVSLUhlE6t2od7mE2cwAdYA96rluE_FHyLXl1milKjIn8ekAa4JJoIdr0pmKyazmHH5w8_-m7Mg"/>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-2xl mx-auto min-h-screen flex flex-col items-center">
+<div class="w-full flex flex-col items-center text-center mb-10">
+<div class="mb-4 inline-flex items-center gap-2 bg-primary/10 px-4 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="stars" data-weight="fill" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-label text-xs font-bold tracking-widest text-primary uppercase">Quiz Completed</span>
+</div>
+<div class="relative w-48 h-48 flex items-center justify-center mb-6">
+<svg class="absolute w-full h-full -rotate-90">
+<circle class="text-surface-container-high" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-primary" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="552.92" stroke-dashoffset="82.93" stroke-width="12"></circle>
+</svg>
+<div class="flex flex-col items-center">
+<span class="text-6xl font-headline font-extrabold tracking-tighter text-on-surface">85%</span>
+<span class="font-label text-xs text-on-surface-variant tracking-widest uppercase">Final Score</span>
+</div>
+</div>
+<div class="bg-inverse-surface text-inverse-on-surface px-8 py-2 rounded-full font-label font-bold text-sm tracking-[0.2em] uppercase mb-8">
+                Pass
+            </div>
+</div>
+<div class="w-full grid grid-cols-3 gap-4 mb-10">
+<div class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center justify-center aspect-square">
+<span class="material-symbols-outlined text-primary mb-2" data-icon="task_alt">task_alt</span>
+<span class="text-xl font-headline font-bold text-on-surface">17/20</span>
+<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest text-center">Correct</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center justify-center aspect-square">
+<span class="material-symbols-outlined text-primary mb-2" data-icon="timer">timer</span>
+<span class="text-xl font-headline font-bold text-on-surface">04:12</span>
+<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest text-center">Time taken</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center justify-center aspect-square">
+<span class="material-symbols-outlined text-primary mb-2" data-icon="emoji_events">emoji_events</span>
+<span class="text-xl font-headline font-bold text-on-surface">#12</span>
+<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest text-center">Global Rank</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-lowest p-6 rounded-xl shadow-[0_32px_64px_-16px_rgba(7,14,29,0.08)] mb-10">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline font-bold text-lg">Performance Analysis</h3>
+<span class="font-label text-xs text-primary font-bold">EXCELLENT</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+                Great job! You've demonstrated a strong understanding of <span class="font-bold text-on-surface">Digital Assets &amp; Blockchain Governance</span>. You're ready to move to the next module.
+            </p>
+<div class="flex items-center justify-center">
+<a class="inline-flex items-center gap-2 text-primary font-label text-xs font-bold tracking-widest uppercase hover:underline" href="#">
+                    View Detailed Answers
+                    <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</div>
+<div class="w-full flex flex-col gap-4 mt-auto">
+<button class="w-full h-14 bg-primary text-on-primary font-headline font-bold rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+                Continue to Next Lesson
+            </button>
+<button class="w-full h-14 bg-surface-container-high text-on-surface font-headline font-bold rounded-xl flex items-center justify-center active:scale-95 transition-transform">
+                Retake Quiz
+            </button>
+</div>
+</main>
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl shadow-[0_32px_64px_-16px_rgba(7,14,29,0.08)] flex justify-around items-center h-20 px-4 z-50">
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 opacity-60 hover:opacity-100 transition-all tap-highlight-transparent">
+<span class="material-symbols-outlined" data-icon="video_library">video_library</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Library</span>
+</div>
+<div class="flex flex-col items-center justify-center text-blue-600 dark:text-blue-400 relative after:content-[''] after:absolute after:-bottom-2 after:w-1 after:h-1 after:bg-blue-600 after:rounded-full tap-highlight-transparent">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Quiz</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 opacity-60 hover:opacity-100 transition-all tap-highlight-transparent">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Results</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 opacity-60 hover:opacity-100 transition-all tap-highlight-transparent">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Profile</span>
+</div>
+</nav>
+</body></html>
