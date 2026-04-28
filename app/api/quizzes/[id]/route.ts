@@ -6,9 +6,27 @@ import { verifyWeb3AuthToken, unauthorized } from "@/app/lib/auth/verify-web3aut
  * GET /api/quizzes/[id]
  * Returns the quiz with questions but HIDES the correct answers.
  *
- * POST /api/quizzes/[id]/submit
- * → Handled in /api/quizzes/[id]/submit/route.ts
+ * PATCH /api/quizzes/[id]
+ * Edit a quiz (TUTOR or ORG_ADMIN).
+ * Body: { title?, passing_score?, quiz_data? }
+ *
+ * DELETE /api/quizzes/[id]
+ * Delete a quiz (TUTOR or ORG_ADMIN).
+ *
+ * POST /api/quizzes/[id]/submit → /api/quizzes/[id]/submit/route.ts
  */
+
+async function verifyQuizAccess(userId: string) {
+  const supabase = createAdminClient()
+  const { data: user } = await supabase
+    .from("users")
+    .select("role")
+    .eq("id", userId)
+    .single()
+  const allowed = user?.role === "TUTOR" || user?.role === "ORG_ADMIN"
+  return { allowed, supabase }
+}
+
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     await verifyWeb3AuthToken(req)
@@ -17,63 +35,82 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     const { data, error } = await supabase
       .from("quizzes")
-      .select("id, title, passing_score, course_id, lesson_id, quiz_data")
+      .select("id, title, passing_score, time_limit_minutes, max_attempts, course_id, lesson_id, quiz_data")
       .eq("id", id)
       .single()
 
     if (error) return Response.json({ error: "Quiz not found" }, { status: 404 })
 
-    // Strip correct_answer from each question so client can't cheat
     const safeQuizData = stripAnswers(data.quiz_data)
-
     return Response.json({ data: { ...data, quiz_data: safeQuizData } })
   } catch {
     return unauthorized()
   }
 }
 
-/**
- * POST /api/quizzes
- * Create a new quiz (TUTOR or ORG_ADMIN).
- * Body: { title, course_id, lesson_id?, passing_score, quiz_data }
- *
- * quiz_data format:
- * {
- *   questions: [
- *     { id: string, question: string, options: string[], correct_answer: number }
- *   ]
- * }
- */
-export async function POST(req: NextRequest) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const web3User = await verifyWeb3AuthToken(req)
-    const { title, course_id, lesson_id, passing_score = 70, quiz_data } = await req.json()
+    const { id } = await params
+    const { allowed, supabase } = await verifyQuizAccess(web3User.sub)
+    if (!allowed) return Response.json({ error: "Forbidden: TUTOR or ORG_ADMIN only" }, { status: 403 })
 
-    if (!title || !course_id || !quiz_data) {
-      return Response.json({ error: "title, course_id, and quiz_data are required" }, { status: 400 })
-    }
+    const { title, passing_score, time_limit_minutes, max_attempts, quiz_data } = await req.json()
 
-    const supabase = createAdminClient()
+    // Guard: block quiz_data edits once any student has attempted the quiz.
+    // Title and passing_score are safe metadata — always editable.
+    if (quiz_data !== undefined) {
+      const { count: attemptCount } = await supabase
+        .from("quiz_attempts")
+        .select("id", { count: "exact", head: true })
+        .eq("quiz_id", id)
 
-    // Verify caller is TUTOR or ORG_ADMIN
-    const { data: member } = await supabase
-      .from("organization_members")
-      .select("role")
-      .eq("user_id", web3User.sub)
-      .single()
-
-    if (!member) {
-      return Response.json({ error: "Forbidden: TUTOR or ORG_ADMIN only" }, { status: 403 })
+      if ((attemptCount ?? 0) > 0) {
+        return Response.json(
+          { error: "Cannot edit quiz questions after students have already attempted it." },
+          { status: 409 }
+        )
+      }
     }
 
     const { data, error } = await supabase
       .from("quizzes")
-      .insert({ title, course_id, lesson_id: lesson_id || null, passing_score, quiz_data })
+      .update({ title, passing_score, time_limit_minutes, max_attempts, quiz_data })
+      .eq("id", id)
       .select()
       .single()
 
     if (error) return Response.json({ error: error.message }, { status: 500 })
-    return Response.json({ data }, { status: 201 })
+    return Response.json({ data })
+  } catch {
+    return unauthorized()
+  }
+}
+
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const web3User = await verifyWeb3AuthToken(req)
+    const { id } = await params
+    const { allowed, supabase } = await verifyQuizAccess(web3User.sub)
+    if (!allowed) return Response.json({ error: "Forbidden: TUTOR or ORG_ADMIN only" }, { status: 403 })
+
+    // Guard: block deletion if any student has attempted this quiz.
+    const { count: attemptCount } = await supabase
+      .from("quiz_attempts")
+      .select("id", { count: "exact", head: true })
+      .eq("quiz_id", id)
+
+    if ((attemptCount ?? 0) > 0) {
+      return Response.json(
+        { error: "Cannot delete a quiz that students have already attempted." },
+        { status: 409 }
+      )
+    }
+
+    const { error } = await supabase.from("quizzes").delete().eq("id", id)
+    if (error) return Response.json({ error: error.message }, { status: 500 })
+
+    return new Response(null, { status: 204 })
   } catch {
     return unauthorized()
   }

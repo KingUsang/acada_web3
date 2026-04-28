@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Space+Grotesk:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#e9edff",
+                    "surface-bright": "#f9f9ff",
+                    "surface-variant": "#d8e2ff",
+                    "on-error": "#fff7f6",
+                    "tertiary-fixed": "#dfd5f7",
+                    "inverse-surface": "#070e1d",
+                    "surface": "#f9f9ff",
+                    "on-secondary": "#faf8fc",
+                    "on-primary-fixed": "#003798",
+                    "secondary-fixed": "#e4e2e6",
+                    "background": "#f9f9ff",
+                    "inverse-on-surface": "#969db0",
+                    "tertiary-container": "#dfd5f7",
+                    "secondary": "#5f5f62",
+                    "secondary-fixed-dim": "#d5d3d8",
+                    "on-surface": "#19315d",
+                    "on-primary-container": "#0048bf",
+                    "surface-container-low": "#f1f3ff",
+                    "surface-container-highest": "#d8e2ff",
+                    "on-tertiary-fixed-variant": "#59526e",
+                    "on-tertiary-fixed": "#3c3650",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#485f8d",
+                    "error": "#9f403d",
+                    "tertiary-fixed-dim": "#d0c7e8",
+                    "outline": "#647aab",
+                    "on-background": "#19315d",
+                    "surface-tint": "#0053db",
+                    "surface-dim": "#ccdaff",
+                    "tertiary": "#625b77",
+                    "on-tertiary-container": "#4f4964",
+                    "on-secondary-fixed": "#3f3f43",
+                    "inverse-primary": "#618bff",
+                    "on-primary": "#f8f7ff",
+                    "on-tertiary": "#fdf7ff",
+                    "surface-container-high": "#e1e8ff",
+                    "on-secondary-fixed-variant": "#5b5b5f",
+                    "primary-fixed": "#dbe1ff",
+                    "primary": "#0053db",
+                    "tertiary-dim": "#564f6b",
+                    "primary-dim": "#0048c1",
+                    "error-container": "#fe8983",
+                    "error-dim": "#4e0309",
+                    "outline-variant": "#9bb2e5",
+                    "primary-container": "#dbe1ff",
+                    "secondary-dim": "#535356",
+                    "on-error-container": "#752121",
+                    "secondary-container": "#e4e2e6",
+                    "on-secondary-container": "#515155",
+                    "primary-fixed-dim": "#c7d3ff",
+                    "on-primary-fixed-variant": "#0050d4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Manrope"],
+                    "label": ["Space Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f3ff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d8e2ff;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface antialiased max-w-[375px] mx-auto min-h-screen overflow-x-hidden relative">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#f9f9ff] dark:bg-slate-950 opacity-80 backdrop-blur-xl flex justify-between items-center px-6 h-16 w-full transition-all duration-300 ease-in-out">
+<div class="flex items-center gap-4">
+<button class="text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 p-2 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="text-2xl font-black tracking-tighter text-blue-700 dark:text-blue-500 font-['Manrope']">ACADA</h1>
+</div>
+<div class="flex items-center">
+<button class="text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 p-2 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6">
+<!-- Editorial Header Section -->
+<section class="mb-10">
+<span class="font-label text-xs uppercase tracking-widest text-primary mb-2 block">Curator Studio</span>
+<h2 class="text-4xl font-extrabold tracking-tight text-on-surface leading-tight">Create New Course</h2>
+<p class="mt-3 text-on-surface-variant font-body leading-relaxed">Draft your curriculum and set your professional parameters.</p>
+</section>
+<!-- Form Container -->
+<form class="space-y-10">
+<!-- Section: Core Details -->
+<div class="space-y-6">
+<div class="space-y-2">
+<label class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant ml-1">Course Title</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-highest transition-all duration-300 text-on-surface placeholder:text-outline-variant font-medium" placeholder="e.g. Advanced Crypto-Economics" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant ml-1">Subject</label>
+<div class="relative">
+<select class="w-full bg-surface-container-low border-none rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary/20 appearance-none focus:bg-surface-container-highest transition-all duration-300 text-on-surface font-medium">
+<option>Economics &amp; Finance</option>
+<option>Digital Architecture</option>
+<option>Curatorial Studies</option>
+<option>Blockchain Governance</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-outline" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Section: Delivery & Pricing -->
+<div class="bg-surface-container-low p-6 rounded-xl space-y-8">
+<div class="space-y-4">
+<label class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">Course Type Selector</label>
+<div class="flex flex-wrap gap-2">
+<label class="relative flex-1 min-w-[80px]">
+<input checked="" class="peer sr-only" name="type" type="radio"/>
+<div class="bg-surface-container-high peer-checked:bg-inverse-surface peer-checked:text-surface text-center py-3 rounded-full font-label text-xs transition-all cursor-pointer">Live</div>
+</label>
+<label class="relative flex-1 min-w-[80px]">
+<input class="peer sr-only" name="type" type="radio"/>
+<div class="bg-surface-container-high peer-checked:bg-inverse-surface peer-checked:text-surface text-center py-3 rounded-full font-label text-xs transition-all cursor-pointer">On-Demand</div>
+</label>
+<label class="relative flex-1 min-w-[80px]">
+<input class="peer sr-only" name="type" type="radio"/>
+<div class="bg-surface-container-high peer-checked:bg-inverse-surface peer-checked:text-surface text-center py-3 rounded-full font-label text-xs transition-all cursor-pointer">Hybrid</div>
+</label>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant ml-1">Price</label>
+<div class="flex items-center bg-surface-container-lowest rounded-xl p-1 shadow-sm">
+<span class="font-label px-4 text-primary font-bold">ETH</span>
+<input class="w-full bg-transparent border-none py-3 focus:ring-0 text-on-surface font-label text-lg" placeholder="0.00" step="0.01" type="number"/>
+</div>
+</div>
+</div>
+<!-- Section: Media -->
+<div class="space-y-2">
+<label class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant ml-1">Thumbnail Upload</label>
+<div class="relative w-full aspect-video rounded-xl overflow-hidden group">
+<div class="absolute inset-0 border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center bg-surface-container-low/50 group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-4xl text-primary mb-2" data-icon="add_photo_alternate">add_photo_alternate</span>
+<span class="font-label text-[10px] uppercase tracking-widest text-outline">Drop asset or click</span>
+</div>
+<input class="absolute inset-0 opacity-0 cursor-pointer" type="file"/>
+</div>
+</div>
+<!-- Action Area -->
+<div class="pt-4">
+<button class="w-full bg-gradient-to-br from-[#0053db] to-[#0048c1] text-surface font-headline font-bold py-5 rounded-xl shadow-[0_8px_20px_rgba(37,99,235,0.25)] active:scale-[0.98] transition-transform" type="submit">
+                    Save &amp; Continue
+                </button>
+<button class="w-full mt-4 font-label text-[10px] uppercase tracking-widest text-outline text-center py-2" type="button">
+                    Save as Draft
+                </button>
+</div>
+</form>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl shadow-[0_-8px_32px_rgba(0,0,0,0.04)] rounded-t-3xl flex justify-around items-center pt-3 pb-8 px-4">
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 transition-transform active:scale-95">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-blue-600 dark:text-blue-400 after:content-[''] after:w-1 after:h-1 after:bg-blue-600 after:rounded-full after:mt-1 transition-transform active:scale-95">
+<span class="material-symbols-outlined mb-1" data-icon="import_contacts" style="font-variation-settings: 'FILL' 1;">import_contacts</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest">Courses</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 transition-transform active:scale-95">
+<span class="material-symbols-outlined mb-1" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest">Wallet</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 transition-transform active:scale-95">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest">Profile</span>
+</div>
+</nav>
+<!-- Background Decorative Element -->
+<div class="fixed top-0 right-0 -z-10 w-64 h-64 bg-primary-container/20 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2"></div>
+<div class="fixed bottom-0 left-0 -z-10 w-80 h-80 bg-surface-dim/30 rounded-full blur-3xl opacity-40 translate-y-1/2 -translate-x-1/4"></div>
+</body></html>

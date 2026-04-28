@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const web3User = await verifyWeb3AuthToken(req)
-    const { organization_id, title, description, price_usdc } = await req.json()
+    const { organization_id, title, description, price_usdc, category, duration, price_ngn, status, thumbnail_url } = await req.json()
 
     if (!organization_id || !title) {
       return Response.json({ error: "organization_id and title are required" }, { status: 400 })
@@ -58,7 +58,17 @@ export async function POST(req: NextRequest) {
 
     const { data, error } = await supabase
       .from("courses")
-      .insert({ organization_id, title, description: description || null, price_usdc: price_usdc ?? 0 })
+      .insert({ 
+        organization_id, 
+        title, 
+        description: description || null, 
+        price_usdc: price_usdc ?? 0,
+        category: category ?? "TUTORIAL",
+        duration: duration || null,
+        price_ngn: price_ngn ?? 0,
+        status: status ?? "DRAFT",
+        thumbnail_url: thumbnail_url || null
+      })
       .select()
       .single()
 

@@ -16,6 +16,18 @@ export async function POST(req: NextRequest) {
 
     const supabase = createAdminClient()
 
+    const { data: session } = await supabase
+      .from("sessions")
+      .select("started_at, ended_at")
+      .eq("id", session_id)
+      .single()
+
+    const isLive = session && session.started_at !== null && session.ended_at === null
+
+    if (!isLive) {
+      return Response.json({ error: "Cannot log attendance: Session is not currently live" }, { status: 409 })
+    }
+
     const { data, error } = await supabase
       .from("attendance_logs")
       .insert({

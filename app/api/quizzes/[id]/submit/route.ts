@@ -25,11 +25,29 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     // Fetch the quiz with correct answers (server only)
     const { data: quiz, error: quizError } = await supabase
       .from("quizzes")
-      .select("quiz_data, passing_score, course_id")
+      .select("quiz_data, passing_score, max_attempts, course_id")
       .eq("id", quizId)
       .single()
 
     if (quizError || !quiz) return Response.json({ error: "Quiz not found" }, { status: 404 })
+
+    const max_attempts = quiz.max_attempts ?? 0
+
+    // Enforce max_attempts if it's greater than 0
+    if (max_attempts > 0) {
+      const { count: attemptCount } = await supabase
+        .from("quiz_attempts")
+        .select("id", { count: "exact", head: true })
+        .eq("quiz_id", quizId)
+        .eq("user_id", web3User.sub)
+
+      if ((attemptCount ?? 0) >= max_attempts) {
+        return Response.json(
+          { error: `Maximum attempts (${max_attempts}) reached` },
+          { status: 403 }
+        )
+      }
+    }
 
     const questions: any[] = (quiz.quiz_data as any)?.questions ?? []
     let correct = 0

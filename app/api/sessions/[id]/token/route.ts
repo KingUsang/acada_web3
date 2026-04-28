@@ -17,12 +17,22 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     // Fetch the session + the user profile
     const [{ data: session }, { data: user }] = await Promise.all([
-      supabase.from("sessions").select("livekit_room_name, lesson_id").eq("id", id).single(),
+      supabase.from("sessions").select("livekit_room_name, lesson_id, started_at, ended_at").eq("id", id).single(),
       supabase.from("users").select("role, full_name").eq("id", web3User.sub).single(),
     ])
 
     if (!session) return Response.json({ error: "Session not found" }, { status: 404 })
     if (!user) return Response.json({ error: "User not found" }, { status: 404 })
+
+    const isLive = session.started_at !== null && session.ended_at === null
+
+    if (!isLive) {
+      if (!session.started_at) {
+        return Response.json({ error: "Cannot join. Session has not started yet." }, { status: 403 })
+      } else {
+        return Response.json({ error: "Cannot join. Session has ended." }, { status: 403 })
+      }
+    }
 
     const apiKey = process.env.LIVEKIT_API_KEY!
     const apiSecret = process.env.LIVEKIT_API_SECRET!
