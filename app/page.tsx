@@ -15,257 +15,123 @@ import { ClusterSelect } from "./components/cluster-select";
 import { WalletButton } from "./components/wallet-button";
 import { useCluster } from "./components/cluster-context";
 
-export default function Home() {
-  const { wallet, status } = useWallet();
-  const { cluster, getExplorerUrl } = useCluster();
-  const client = useSolanaClient();
-
-  const address = wallet?.account.address;
-  const balance = useBalance(address);
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    if (!address) return;
-    await navigator.clipboard.writeText(address);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleAirdrop = async () => {
-    if (!address) return;
-    try {
-      toast.info("Requesting airdrop...");
-      const sig = await client.airdrop(address, sol(1_000_000_000n));
-      toast.success("Airdrop received!", {
-        description: sig ? (
-          <a
-            href={getExplorerUrl(`/tx/${sig}`)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
-            View transaction
-          </a>
-        ) : undefined,
-      });
-    } catch (err) {
-      console.error("Airdrop failed:", err);
-      const msg = err instanceof Error ? err.message : String(err);
-      const isRateLimited =
-        msg.includes("429") || msg.includes("Internal JSON-RPC error");
-      toast.error(
-        isRateLimited
-          ? "Devnet faucet rate-limited. Use the web faucet instead."
-          : "Airdrop failed. Try again later.",
-        isRateLimited
-          ? {
-              description: (
-                <a
-                  href="https://faucet.solana.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline"
-                >
-                  Open faucet.solana.com
-                </a>
-              ),
-            }
-          : undefined
-      );
-    }
-  };
-
+export default function LandingPage() {
   return (
-    <div className="relative min-h-screen bg-background text-foreground">
-      <GridBackground />
-
-      <div className="relative z-10">
-        {/* Header */}
-        <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <span className="text-sm font-semibold tracking-tight">
-            Solana Starter Kit
-          </span>
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-            <ClusterSelect />
-            <WalletButton />
+    <div className="bg-background text-on-background font-body antialiased min-h-screen">
+      {/* Glassmorphism Header */}
+      <header className="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 glass-header shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
+        <div className="flex items-center gap-2">
+          <span className="text-2xl font-black tracking-tighter text-blue-600">Acada</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <button className="material-symbols-outlined text-slate-500 hover:bg-slate-200/50 p-2 rounded-full transition-colors active:scale-95 duration-200">notifications</button>
+          <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+            <img alt="User profile avatar" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjoxqYfXOWejHk8_UWFDq6Wi2-0ecZoOfbZsB4h9HK_hUVJQtd5SwnEIIYvTj2_caLv1BQQQ7xN07cepW5yeUUzAcsdJg4t4Qs-yZhM2411D9-fO70gRGDId3G6zfxdbbL1LgvS12RSzPBChq-lHxXG6Vr4TTDZZsrgEIwtzzrmfV5TFqMmPXSbvuUQnNCOC9K8i99vVsTEnQLvXMQJ_IxgXBzEFFG7VKY-EXO0zEGFzLsy5rUT1JZ0c_kpy5NBwFPvMjZwFpvOA" />
           </div>
-        </header>
-
-        <main className="mx-auto max-w-6xl px-6">
-          {/* Hero */}
-          <section className="pt-6 pb-20 md:pt-8 md:pb-32">
-            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h1 className="font-black tracking-tight text-foreground">
-                  <span className="block text-6xl md:text-7xl">Anchor</span>
-                  <span className="block text-7xl md:text-8xl">Vault</span>
-                </h1>
-              </div>
-
-              <div className="flex max-w-2xl flex-col gap-3">
-                <p className="text-base leading-relaxed text-foreground/50">
-                  This program creates a personal vault for each user using a
-                  Program Derived Address (PDA). Connect your wallet, deposit
-                  SOL into your vault, and withdraw it anytime. Only you can
-                  access your funds.
-                </p>
-                <p className="text-sm leading-relaxed text-foreground/40">
-                  The vault is an{" "}
-                  <a
-                    href="https://www.anchor-lang.com/docs/introduction"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline underline-offset-2"
-                  >
-                    Anchor
-                  </a>{" "}
-                  program you can deploy to localnet or devnet and modify
-                  yourself. Check the README for setup instructions.
-                </p>
-                <div className="flex flex-wrap gap-4">
-                  <a
-                    href="https://solana.com/docs"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm font-medium text-foreground/70 underline underline-offset-4 transition-colors hover:text-foreground"
-                  >
-                    Solana docs
-                    <span aria-hidden="true">&rarr;</span>
-                  </a>
-                  <a
-                    href="https://www.anchor-lang.com/docs/introduction"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm font-medium text-foreground/70 underline underline-offset-4 transition-colors hover:text-foreground"
-                  >
-                    Anchor docs
-                    <span aria-hidden="true">&rarr;</span>
-                  </a>
-                  <a
-                    href="https://faucet.solana.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm font-medium text-foreground/70 underline underline-offset-4 transition-colors hover:text-foreground"
-                  >
-                    Faucet
-                    <span aria-hidden="true">&rarr;</span>
-                  </a>
-                </div>
-              </div>
+        </div>
+      </header>
+      <main className="relative pt-16 min-h-screen flex flex-col items-center overflow-x-hidden">
+        {/* Hero Section */}
+        <section className="w-full max-w-7xl px-6 py-20 md:py-32 flex flex-col items-center text-center relative">
+          {/* Background Decorative Elements */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 pointer-events-none">
+            <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 blur-[120px] rounded-full"></div>
+            <div className="absolute bottom-10 right-10 w-96 h-96 bg-primary/10 blur-[150px] rounded-full"></div>
+          </div>
+          {/* Content */}
+          <div className="space-y-6 max-w-4xl">
+            <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-surface-container-low text-primary font-label text-sm font-bold tracking-tight">
+              <span className="material-symbols-outlined text-sm mr-2">verified</span>
+              WEB3 POWERED CREDENTIALS
             </div>
-          </section>
-
-          {/* Template content */}
-          <div className="space-y-10 pb-20">
-            {/* Wallet Balance */}
-            {status === "connected" && address && (
-              <section className="relative w-full overflow-hidden rounded-2xl border border-border-low bg-card px-5 py-5">
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-100 dark:opacity-0"
-                  aria-hidden="true"
-                  style={{
-                    backgroundImage: `
-                      linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px)
-                    `,
-                    backgroundSize: "24px 24px",
-                    mask: "radial-gradient(ellipse 80% 80% at 50% 0%, black, transparent)",
-                    WebkitMask:
-                      "radial-gradient(ellipse 80% 80% at 50% 0%, black, transparent)",
-                  }}
-                />
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-0 dark:opacity-100"
-                  aria-hidden="true"
-                  style={{
-                    backgroundImage: `
-                      linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px)
-                    `,
-                    backgroundSize: "24px 24px",
-                    mask: "radial-gradient(ellipse 80% 80% at 50% 0%, black, transparent)",
-                    WebkitMask:
-                      "radial-gradient(ellipse 80% 80% at 50% 0%, black, transparent)",
-                  }}
-                />
-                <div className="relative flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cream">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-4 w-4 text-foreground/70"
-                      >
-                        <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
-                        <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
-                        <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
-                      </svg>
-                    </div>
-                    <span className="text-sm font-medium">Wallet Balance</span>
-                    <button
-                      onClick={handleCopy}
-                      className="flex cursor-pointer items-center gap-1.5 font-mono text-xs text-muted transition hover:text-foreground"
-                    >
-                      {ellipsify(address, 4)}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-3 w-3"
-                      >
-                        {copied ? (
-                          <path d="M20 6 9 17l-5-5" />
-                        ) : (
-                          <>
-                            <rect
-                              width="14"
-                              height="14"
-                              x="8"
-                              y="8"
-                              rx="2"
-                              ry="2"
-                            />
-                            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-                          </>
-                        )}
-                      </svg>
-                    </button>
-                  </div>
-                  {cluster !== "mainnet" && (
-                    <button
-                      onClick={handleAirdrop}
-                      className="cursor-pointer rounded-lg border border-border-low px-3 py-1.5 text-xs font-medium transition hover:bg-cream"
-                    >
-                      Airdrop
-                    </button>
-                  )}
-                </div>
-                <p className="relative mt-4 font-mono text-4xl font-bold tabular-nums tracking-tight">
-                  {balance.lamports != null
-                    ? lamportsToSolString(balance.lamports)
-                    : "\u2014"}
-                  <span className="ml-1.5 text-lg font-normal text-muted">
-                    SOL
-                  </span>
-                </p>
-              </section>
-            )}
-
-            {/* Vault Program Section */}
-            <VaultCard />
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-inverse-surface leading-[1.1]">
+              Decentralized Learning <br />
+              <span className="text-primary italic">for the Future</span>
+            </h1>
+            <p className="text-lg md:text-xl text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
+              Earn immutable blockchain certificates, own your educational data, and join a global network of curated knowledge curators and builders.
+            </p>
+            {/* CTA Cluster */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
+              <button className="w-full sm:w-auto px-8 py-4 bg-primary text-on-primary font-bold rounded-xl shadow-lg shadow-primary/20 hover:bg-primary-dim active:scale-[0.98] transition-all text-lg">
+                Sign Up
+              </button>
+              <button className="w-full sm:w-auto px-8 py-4 bg-surface-container-lowest text-on-surface font-bold rounded-xl shadow-sm hover:bg-surface-container-low active:scale-[0.98] transition-all text-lg border border-transparent">
+                Log In
+              </button>
+            </div>
           </div>
-        </main>
-      </div>
+        </section>
+        {/* Feature Bento Grid */}
+        <section className="w-full max-w-7xl px-6 pb-32">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            {/* Large Card */}
+            <div className="md:col-span-8 bg-surface-container-low rounded-xl p-8 flex flex-col justify-between min-h-100 overflow-hidden relative">
+              <div className="relative z-10">
+                <span className="font-label text-primary font-bold uppercase tracking-widest text-xs">Innovation</span>
+                <h3 className="text-3xl font-bold mt-2 tracking-tight">Blockchain-Verified Excellence</h3>
+                <p className="text-on-surface-variant mt-4 max-w-md">Your achievements are secured on-chain forever. No more manual verification—just one link to prove your entire skill set.</p>
+              </div>
+              <div className="mt-12 relative z-10 flex justify-end">
+                <div className="bg-white p-6 rounded-xl shadow-xl shadow-slate-900/5 max-w-xs rotate-3">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
+                      <span className="material-symbols-outlined text-primary">auto_awesome</span>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="h-2 w-24 bg-slate-100 rounded"></div>
+                      <div className="h-2 w-16 bg-slate-50 rounded"></div>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="h-12 w-full bg-slate-50 rounded-lg flex items-center px-4 font-label text-[10px] text-slate-400">0x821...F3B2</div>
+                    <div className="h-10 w-full bg-primary text-white text-[10px] rounded-lg flex items-center justify-center font-bold">VERIFY CERTIFICATE</div>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute bottom-0 right-0 w-2/3 h-2/3 bg-primary/5 rounded-full blur-3xl -mb-20 -mr-20"></div>
+            </div>
+            {/* Small Card 1 */}
+            <div className="md:col-span-4 bg-inverse-surface text-on-tertiary rounded-xl p-8 flex flex-col justify-center items-center text-center">
+              <div className="w-16 h-16 bg-surface-container-highest/20 rounded-full flex items-center justify-center mb-6">
+                <span className="material-symbols-outlined text-white text-3xl">account_balance_wallet</span>
+              </div>
+              <h3 className="text-xl font-bold font-headline">Wallet Native</h3>
+              <p className="text-slate-400 mt-2 text-sm leading-relaxed">Connect your wallet to instantly access decentralized learning pathways.</p>
+            </div>
+            {/* Small Card 2 */}
+            <div className="md:col-span-4 bg-surface-container-high rounded-xl p-8 flex flex-col">
+              <span className="material-symbols-outlined text-primary mb-4">speed</span>
+              <h3 className="text-xl font-bold tracking-tight">Adaptive Pace</h3>
+              <p className="text-on-surface-variant mt-2 text-sm">Self-directed curriculums designed to fit into your professional schedule.</p>
+            </div>
+            {/* Small Card 3 */}
+            <div className="md:col-span-4 bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_24px_-4px_rgba(7,14,29,0.04)] flex flex-col">
+              <span className="material-symbols-outlined text-primary mb-4">groups</span>
+              <h3 className="text-xl font-bold tracking-tight">Curated Peer Review</h3>
+              <p className="text-on-surface-variant mt-2 text-sm">Learn alongside high-caliber peers and industry-leading mentors.</p>
+            </div>
+            {/* Small Card 4 */}
+            <div className="md:col-span-4 bg-primary text-white rounded-xl p-8 flex flex-col justify-between">
+              <h3 className="text-xl font-bold tracking-tight">Global Network</h3>
+              <div className="flex -space-x-3 mt-4">
+                {/* Example avatars, replace with real data if available */}
+                <img className="w-10 h-10 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User 1" />
+                <img className="w-10 h-10 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/44.jpg" alt="User 2" />
+                <img className="w-10 h-10 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/men/54.jpg" alt="User 3" />
+                <span className="w-10 h-10 rounded-full bg-white text-primary flex items-center justify-center font-bold border-2 border-white">+99</span>
+              </div>
+              <p className="mt-4 text-sm">Join a global community of learners and educators.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+      <style jsx>{`
+        .glass-header {
+          background: rgba(249, 249, 255, 0.6);
+          backdrop-filter: blur(20px);
+        }
+      `}</style>
     </div>
   );
 }
