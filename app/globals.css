@@ -80,6 +80,64 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Material Design 3 Palette */
+  --color-on-tertiary-fixed: #3c3650;
+  --color-inverse-surface: #070e1d;
+  --color-on-secondary-fixed-variant: #5b5b5f;
+  --color-on-error-container: #752121;
+  --color-surface-bright: #f9f9ff;
+  --color-on-error: #fff7f6;
+  --color-on-tertiary: #fdf7ff;
+  --color-inverse-primary: #618bff;
+  --color-on-surface: #19315d;
+  --color-error: #9f403d;
+  --color-surface-dim: #ccdaff;
+  --color-surface-container-high: #e1e8ff;
+  --color-on-secondary-container: #515155;
+  --color-error-container: #fe8983;
+  --color-on-primary: #f8f7ff;
+  --color-tertiary: #625b77;
+  --color-tertiary-fixed: #dfd5f7;
+  --color-inverse-on-surface: #969db0;
+  --color-tertiary-container: #dfd5f7;
+  --color-on-secondary: #faf8fc;
+  --color-surface-container-low: #f1f3ff;
+  --color-on-background: #19315d;
+  --color-secondary-container: #e4e2e6;
+  --color-surface: #f9f9ff;
+  --color-primary-container: #dbe1ff;
+  --color-on-surface-variant: #485f8d;
+  --color-on-primary-container: #0048bf;
+  --color-surface-variant: #d8e2ff;
+  --color-on-primary-fixed-variant: #0050d4;
+  --color-error-dim: #4e0309;
+  --color-on-tertiary-fixed-variant: #59526e;
+  --color-primary-fixed: #dbe1ff;
+  --color-surface-container: #e9edff;
+  --color-secondary-dim: #535356;
+  --color-secondary-fixed: #e4e2e6;
+  --color-primary-fixed-dim: #c7d3ff;
+  --color-tertiary-dim: #564f6b;
+  --color-outline-variant: #9bb2e5;
+  --color-secondary-fixed-dim: #d5d3d8;
+  --color-tertiary-fixed-dim: #d0c7e8;
+  --color-on-secondary-fixed: #3f3f43;
+  --color-on-primary-fixed: #003798;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-tertiary-container: #4f4964;
+  --color-outline: #647aab;
+  --color-surface-tint: #2563eb;
+  --color-surface-container-highest: #d8e2ff;
+  --color-primary-dim: #0048c1;
+
+  /* Overriding primary to match design */
+  --color-primary: #2563eb;
+
+  /* Custom Fonts */
+  --font-headline: "Manrope", var(--font-sans);
+  --font-body: "Manrope", var(--font-sans);
+  --font-label: "Space Grotesk", var(--font-sans);
 }
 
 @layer base {
