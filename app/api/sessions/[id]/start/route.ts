@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server"
 import { createAdminClient } from "@/app/lib/supabase/admin"
 import { verifyWeb3AuthToken, unauthorized } from "@/app/lib/auth/verify-web3auth"
-import { RoomServiceClient } from "livekit-server-sdk"
+import { RoomServiceClient, EgressClient, EncodedFileOutput, EncodedFileType } from "livekit-server-sdk"
 
 /**
  * POST /api/sessions/[id]/start
@@ -46,14 +46,27 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
     if (apiKey && apiSecret && livekitUrl) {
       const roomService = new RoomServiceClient(livekitUrl, apiKey, apiSecret)
+      const egressClient = new EgressClient(livekitUrl, apiKey, apiSecret)
+      const roomName = session.livekit_room_name || `room-${id}`
+      
       try {
         await roomService.createRoom({
-          name: session.livekit_room_name || `room-${id}`,
+          name: roomName,
           emptyTimeout: 10 * 60, // 10 minutes timeout if empty
           maxParticipants: 1000,
         })
+        
+        // Automatically start recording
+        const fileOutput = new EncodedFileOutput({
+          fileType: EncodedFileType.MP4,
+          filepath: `recordings/${roomName}-{time}.mp4`,
+        })
+
+        await egressClient.startRoomCompositeEgress(roomName, {
+          file: fileOutput,
+        })
       } catch (e) {
-        console.error("Failed to pre-create LiveKit room", e)
+        console.error("Failed to pre-create LiveKit room or start recording", e)
       }
     }
 

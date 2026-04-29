@@ -27,37 +27,11 @@ This folder contains all frontend pages, layouts, and UI components for the Acad
 ---
 
 ## 🔐 Authentication (Web3Auth)
-The backend uses **Web3Auth JWT verification**. After login, you must:
+The backend uses **Web3Auth JWT verification**. 
 
-1. Get the ID token from Web3Auth:
-   ```js
-   const idToken = await web3auth.authenticateUser();
-   ```
+For a complete, step-by-step tutorial on how to install Web3Auth, set up the React Context Provider, register the user with our backend, and make authenticated API calls, please read the dedicated guide:
 
-2. Call the register endpoint **once** after first login:
-   ```js
-   await fetch('/api/auth/register', {
-     method: 'POST',
-     headers: {
-       'Authorization': `Bearer ${idToken.idToken}`,
-       'Content-Type': 'application/json',
-     },
-     body: JSON.stringify({
-       email: userInfo.email,
-       full_name: userInfo.name,
-       solana_wallet_address: walletAddress,  // from Web3Auth wallet
-       role: 'STUDENT'  // or 'TUTOR'
-     })
-   });
-   ```
-
-3. On **every** subsequent API call, include the JWT:
-   ```js
-   const headers = {
-     'Authorization': `Bearer ${idToken.idToken}`,
-     'Content-Type': 'application/json',
-   };
-   ```
+👉 **[Web3Auth Frontend Integration Guide](WEB3AUTH_GUIDE.md)**
 
 ---
 
