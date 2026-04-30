@@ -1,32 +1,152 @@
-import React from "react";
+"use client";
+
+import { useMemo, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useAuth } from "../../lib/auth/context";
+import { useCourses } from "../../lib/api";
+
+function toIsoDateTime(date: string, time: string) {
+  return new Date(`${date}T${time}`).toISOString();
+}
 
 export default function ScheduleAClassPage() {
+  const { idToken, userId, appUser } = useAuth();
+  const router = useRouter();
+  const { data, isLoading } = useCourses();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    courseId: "",
+    lessonId: "",
+    title: "",
+    date: "",
+    time: "",
+  });
+
+  const tutorCourses = useMemo(() => {
+    const courses = data?.data ?? [];
+    if (!userId) return [];
+
+    return courses.filter((course) => {
+      if (appUser?.role === "ORG_ADMIN") return true;
+      return course.course_tutors?.some((tutor) => tutor.tutor_id === userId);
+    });
+  }, [appUser?.role, data?.data, userId]);
+
+  const selectedCourse = tutorCourses.find((course) => course.id === form.courseId);
+  const lessons = selectedCourse?.lessons ?? [];
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!idToken || !form.lessonId || !form.date || !form.time) return;
+
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/sessions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          lesson_id: form.lessonId,
+          title: form.title || "Live Session",
+          scheduled_at: toIsoDateTime(form.date, form.time),
+        }),
+      });
+
+      const payload = (await res.json()) as { data?: { id: string }; error?: string };
+      if (!res.ok || !payload.data) {
+        throw new Error(payload.error || "Failed to schedule session");
+      }
+
+      toast.success("Session scheduled successfully");
+      router.push(`/live_classroom?sessionId=${payload.data.id}&mode=tutor`);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Failed to schedule session");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="bg-surface text-on-surface antialiased min-h-screen pb-32 font-body">
-      {/* Top Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl flex justify-between items-center px-6 h-16 transition-all duration-300 ease-in-out">
         <div className="flex items-center gap-4">
-          <span className="material-symbols-outlined text-on-surface-variant cursor-pointer">
+          <Link href="/tutor_home" className="material-symbols-outlined text-on-surface-variant cursor-pointer">
             close
-          </span>
+          </Link>
         </div>
         <span className="text-2xl font-black tracking-tighter text-primary">ACADA</span>
-        <div className="w-6"></div> {/* Spacer for balance */}
+        <div className="w-6"></div>
       </nav>
 
-      {/* Main Content Canvas */}
       <main className="mt-16 px-6 pt-8 max-w-md mx-auto">
         <header className="mb-8">
           <h1 className="text-3xl font-extrabold tracking-tight text-on-surface">
             Schedule a Class
           </h1>
           <p className="text-on-surface-variant text-lg mt-2 font-medium opacity-80">
-            Define your curriculum and time slots for students.
+            Create a live session and launch it when class time begins.
           </p>
         </header>
 
-        <form className="space-y-6">
-          {/* Session Title */}
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <section className="space-y-2">
+            <label className="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold">
+              Course
+            </label>
+            <div className="bg-surface-container-low rounded-md p-1">
+              <select
+                className="w-full bg-transparent border-none focus:ring-0 px-4 py-3 text-on-surface font-medium"
+                value={form.courseId}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    courseId: event.target.value,
+                    lessonId: "",
+                  }))
+                }
+                required
+              >
+                <option value="">Select a course</option>
+                {tutorCourses.map((course) => (
+                  <option key={course.id} value={course.id}>
+                    {course.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </section>
+
+          <section className="space-y-2">
+            <label className="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold">
+              Lesson
+            </label>
+            <div className="bg-surface-container-low rounded-md p-1">
+              <select
+                className="w-full bg-transparent border-none focus:ring-0 px-4 py-3 text-on-surface font-medium"
+                value={form.lessonId}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    lessonId: event.target.value,
+                  }))
+                }
+                required
+                disabled={!form.courseId}
+              >
+                <option value="">Select a lesson</option>
+                {lessons.map((lesson) => (
+                  <option key={lesson.id} value={lesson.id}>
+                    {lesson.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </section>
+
           <section className="space-y-2">
             <label className="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold">
               Session Title
@@ -34,98 +154,77 @@ export default function ScheduleAClassPage() {
             <div className="bg-surface-container-low rounded-md p-1">
               <input
                 className="w-full bg-transparent border-none focus:ring-0 px-4 py-3 text-on-surface placeholder:text-outline-variant font-medium"
-                placeholder="e.g. Advanced Macroeconomics"
+                placeholder="e.g. Advanced Macroeconomics Live Review"
                 type="text"
+                value={form.title}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    title: event.target.value,
+                  }))
+                }
               />
             </div>
           </section>
 
-          {/* Date Picker (Inline Calendar View) */}
-          <section className="space-y-2">
-            <div className="flex justify-between items-end mb-4">
-              <label className="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold">
-                Select Date
-              </label>
-              <span className="font-label text-sm text-primary font-bold">October 2023</span>
-            </div>
-            <div className="bg-surface-container-lowest rounded-xl p-4 shadow-[0_8px_32px_rgba(0,0,0,0.02)]">
-              <div className="grid grid-cols-7 gap-2 text-center mb-4">
-                {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
-                  <span key={day} className="font-label text-[10px] text-outline">
-                    {day}
-                  </span>
-                ))}
-              </div>
-              <div className="grid grid-cols-7 gap-2">
-                {/* Previous month dates */}
-                <span className="py-2 text-sm text-outline opacity-40 text-center">26</span>
-                <span className="py-2 text-sm text-outline opacity-40 text-center">27</span>
-                <span className="py-2 text-sm text-outline opacity-40 text-center">28</span>
-                {/* Current month dates */}
-                <span className="py-2 text-sm text-on-surface-variant text-center">1</span>
-                <span className="py-2 text-sm text-on-surface-variant text-center">2</span>
-                <span className="py-2 text-sm text-on-surface-variant text-center">3</span>
-                <span className="py-2 text-sm text-on-surface-variant text-center">4</span>
-                <span className="py-2 text-sm text-on-surface-variant text-center">5</span>
-                {/* Active Date */}
-                <span className="py-2 text-sm bg-primary text-on-primary rounded-full font-bold flex items-center justify-center">
-                  6
-                </span>
-                <span className="py-2 text-sm text-on-surface-variant text-center">7</span>
-                <span className="py-2 text-sm text-on-surface-variant text-center">8</span>
-                <span className="py-2 text-sm text-on-surface-variant text-center">9</span>
-                <span className="py-2 text-sm text-on-surface-variant text-center">10</span>
-                <span className="py-2 text-sm text-on-surface-variant text-center">11</span>
-              </div>
-            </div>
-          </section>
-
-          {/* Time and Duration Row */}
           <div className="grid grid-cols-2 gap-4">
-            {/* Time Picker */}
+            <section className="space-y-2">
+              <label className="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold">
+                Date
+              </label>
+              <div className="bg-surface-container-low rounded-md flex items-center px-4 py-3">
+                <input
+                  className="bg-transparent border-none focus:ring-0 p-0 text-sm font-bold w-full"
+                  type="date"
+                  value={form.date}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      date: event.target.value,
+                    }))
+                  }
+                  required
+                />
+              </div>
+            </section>
+
             <section className="space-y-2">
               <label className="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold">
                 Start Time
               </label>
               <div className="bg-surface-container-low rounded-md flex items-center px-4 py-3">
-                <span className="material-symbols-outlined text-primary text-sm mr-2">schedule</span>
                 <input
                   className="bg-transparent border-none focus:ring-0 p-0 text-sm font-bold w-full"
-                  type="text"
-                  defaultValue="09:00 AM"
-                />
-              </div>
-            </section>
-            {/* Duration */}
-            <section className="space-y-2">
-              <label className="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold">
-                Duration
-              </label>
-              <div className="bg-surface-container-low rounded-md flex items-center px-4 py-3">
-                <input
-                  className="bg-transparent border-none focus:ring-0 p-0 text-sm font-bold w-full"
-                  type="text"
-                  defaultValue="60 mins"
+                  type="time"
+                  value={form.time}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      time: event.target.value,
+                    }))
+                  }
+                  required
                 />
               </div>
             </section>
           </div>
 
-          {/* Recurring Toggle */}
           <section className="bg-surface-container-low rounded-xl p-4 flex items-center justify-between">
             <div>
-              <h3 className="font-bold text-on-surface">Recurring Session</h3>
-              <p className="text-xs text-on-surface-variant mt-0.5">Repeat every week at this time</p>
+              <h3 className="font-bold text-on-surface">Tutor Scope</h3>
+              <p className="text-xs text-on-surface-variant mt-0.5">
+                {isLoading
+                  ? "Loading your courses..."
+                  : tutorCourses.length > 0
+                    ? `${tutorCourses.length} course(s) available for scheduling`
+                    : "No eligible tutor courses found yet"}
+              </p>
             </div>
-            <button
-              className="w-12 h-6 bg-primary rounded-full relative flex items-center px-1"
-              type="button"
-            >
+            <div className="w-12 h-6 bg-primary rounded-full relative flex items-center px-1">
               <div className="bg-on-primary w-4 h-4 rounded-full ml-auto"></div>
-            </button>
+            </div>
           </section>
 
-          {/* Additional Detail: Bento Style Card */}
           <div className="grid grid-cols-1 gap-4 mt-8">
             <div className="bg-surface-container-highest/30 backdrop-blur-sm p-6 rounded-xl border border-primary/5">
               <div className="flex items-start gap-4">
@@ -138,43 +237,25 @@ export default function ScheduleAClassPage() {
                   </span>
                 </div>
                 <div>
-                  <h4 className="font-bold text-on-surface">Did you know?</h4>
+                  <h4 className="font-bold text-on-surface">What happens next?</h4>
                   <p className="text-sm text-on-surface-variant leading-relaxed mt-1">
-                    Morning classes see a 24% higher attendance rate on average.
+                    After scheduling, you can open the classroom and start the LiveKit room when class begins.
                   </p>
                 </div>
               </div>
             </div>
           </div>
+
+          <footer className="pt-4">
+            <button
+              disabled={isSubmitting || tutorCourses.length === 0}
+              className="w-full bg-gradient-to-br from-primary to-primary-dim text-on-primary font-bold py-4 rounded-full shadow-[0_12px_24px_-8px_rgba(0,83,219,0.3)] active:scale-95 transition-all text-sm uppercase tracking-widest font-label max-w-md mx-auto block disabled:opacity-50"
+            >
+              {isSubmitting ? "Scheduling..." : "Schedule Session"}
+            </button>
+          </footer>
         </form>
       </main>
-
-      {/* Fixed Action Bar */}
-      <footer className="fixed bottom-0 left-0 w-full p-6 bg-gradient-to-t from-surface via-surface/90 to-transparent z-40">
-        <button className="w-full bg-gradient-to-br from-primary to-primary-dim text-on-primary font-bold py-4 rounded-full shadow-[0_12px_24px_-8px_rgba(0,83,219,0.3)] active:scale-95 transition-all text-sm uppercase tracking-widest font-label max-w-md mx-auto block">
-          Schedule Session
-        </button>
-      </footer>
-
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center pt-3 pb-8 px-4 bg-white/80 backdrop-blur-2xl shadow-[0_-8px_32px_rgba(0,0,0,0.04)] rounded-t-3xl md:hidden z-50">
-        <div className="flex flex-col items-center justify-center text-slate-400">
-          <span className="material-symbols-outlined">home</span>
-          <span className="font-label text-[10px] uppercase tracking-widest mt-1">Home</span>
-        </div>
-        <div className="flex flex-col items-center justify-center text-primary after:content-[''] after:w-1 after:h-1 after:bg-primary after:rounded-full after:mt-1">
-          <span className="material-symbols-outlined">import_contacts</span>
-          <span className="font-label text-[10px] uppercase tracking-widest mt-1">Courses</span>
-        </div>
-        <div className="flex flex-col items-center justify-center text-slate-400">
-          <span className="material-symbols-outlined">account_balance_wallet</span>
-          <span className="font-label text-[10px] uppercase tracking-widest mt-1">Wallet</span>
-        </div>
-        <div className="flex flex-col items-center justify-center text-slate-400">
-          <span className="material-symbols-outlined">person</span>
-          <span className="font-label text-[10px] uppercase tracking-widest mt-1">Profile</span>
-        </div>
-      </nav>
     </div>
   );
 }
