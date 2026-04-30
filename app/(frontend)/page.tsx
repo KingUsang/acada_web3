@@ -1,19 +1,20 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { lamports as sol } from "@solana/kit";
 import { toast } from "sonner";
-import { useWallet } from "./lib/wallet/context";
-import { useBalance } from "./lib/hooks/use-balance";
-import { lamportsToSolString } from "./lib/lamports";
-import { useSolanaClient } from "./lib/solana-client-context";
-import { ellipsify } from "./lib/explorer";
-import { VaultCard } from "./components/vault-card";
-import { GridBackground } from "./components/grid-background";
-import { ThemeToggle } from "./components/theme-toggle";
-import { ClusterSelect } from "./components/cluster-select";
-import { WalletButton } from "./components/wallet-button";
-import { useCluster } from "./components/cluster-context";
+import { useWallet } from "../lib/wallet/context";
+import { useBalance } from "../lib/hooks/use-balance";
+import { lamportsToSolString } from "../lib/lamports";
+import { useSolanaClient } from "../lib/solana-client-context";
+import { ellipsify } from "../lib/explorer";
+import { VaultCard } from "../components/vault-card";
+import { GridBackground } from "../components/grid-background";
+import { ThemeToggle } from "../components/theme-toggle";
+import { ClusterSelect } from "../components/cluster-select";
+import { WalletButton } from "../components/wallet-button";
+import { useCluster } from "../components/cluster-context";
 
 export default function LandingPage() {
   return (
@@ -53,12 +54,12 @@ export default function LandingPage() {
             </p>
             {/* CTA Cluster */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-              <button className="w-full sm:w-auto px-8 py-4 bg-primary text-on-primary font-bold rounded-xl shadow-lg shadow-primary/20 hover:bg-primary-dim active:scale-[0.98] transition-all text-lg">
+              <Link href="/sign_up" className="w-full sm:w-auto px-8 py-4 bg-primary text-on-primary font-bold rounded-xl shadow-lg shadow-primary/20 hover:bg-primary-dim active:scale-[0.98] transition-all text-lg flex items-center justify-center">
                 Sign Up
-              </button>
-              <button className="w-full sm:w-auto px-8 py-4 bg-surface-container-lowest text-on-surface font-bold rounded-xl shadow-sm hover:bg-surface-container-low active:scale-[0.98] transition-all text-lg border border-transparent">
+              </Link>
+              <Link href="/login" className="w-full sm:w-auto px-8 py-4 bg-surface-container-lowest text-on-surface font-bold rounded-xl shadow-sm hover:bg-surface-container-low active:scale-[0.98] transition-all text-lg border border-transparent flex items-center justify-center">
                 Log In
-              </button>
+              </Link>
             </div>
           </div>
         </section>
