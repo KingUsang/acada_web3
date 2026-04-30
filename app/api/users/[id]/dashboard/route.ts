@@ -11,8 +11,11 @@ import { verifyWeb3AuthToken, unauthorized } from "@/app/lib/auth/verify-web3aut
  */
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await verifyWeb3AuthToken(req)
+    const web3User = await verifyWeb3AuthToken(req)
     const { id } = await params
+    if (web3User.sub !== id) {
+      return Response.json({ error: "Forbidden" }, { status: 403 })
+    }
     const supabase = createAdminClient()
 
     const today = new Date()
@@ -20,31 +23,49 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     const endOfDay = new Date(today.setHours(23, 59, 59, 999)).toISOString()
 
     // Enrolled courses with progress
-    const [enrollmentsRes, sessionsRes, attemptsRes] = await Promise.all([
+    const [enrollmentsRes] = await Promise.all([
       supabase
         .from("enrollments")
         .select("*, course:courses(id, title, description, lessons(id, title, type))")
         .eq("user_id", id)
         .eq("status", "active"),
-
-      // Today's sessions for enrolled courses
-      supabase
-        .from("sessions")
-        .select("*, lesson:lessons(id, title, course_id)")
-        .gte("scheduled_at", startOfDay)
-        .lte("scheduled_at", endOfDay),
-
-      // Quiz attempts the user has NOT completed yet
-      supabase
-        .from("quizzes")
-        .select("id, title, passing_score, course_id, lesson_id")
-        .not("id", "in",
-          supabase
-            .from("quiz_attempts")
-            .select("quiz_id")
-            .eq("user_id", id)
-        ),
     ])
+
+    const enrolledCourseIds =
+      enrollmentsRes.data?.map((enrollment) => enrollment.course_id).filter(Boolean) ?? []
+
+    const [sessionsRes, attemptsRes] = await Promise.all([
+      enrolledCourseIds.length
+        ? supabase
+            .from("sessions")
+            .select("*, lesson:lessons(id, title, course_id)")
+            .in("lesson.course_id", enrolledCourseIds as string[])
+            .gte("scheduled_at", startOfDay)
+            .lte("scheduled_at", endOfDay)
+            .order("scheduled_at", { ascending: true })
+        : Promise.resolve({ data: [] }),
+
+      enrolledCourseIds.length
+        ? supabase
+            .from("quizzes")
+            .select("id, title, passing_score, course_id, lesson_id")
+            .in("course_id", enrolledCourseIds as string[])
+        : Promise.resolve({ data: [] }),
+    ])
+
+    const attemptedQuizIds =
+      (
+        await supabase
+          .from("quiz_attempts")
+          .select("quiz_id")
+          .eq("user_id", id)
+      ).data
+        ?.map((attempt) => attempt.quiz_id)
+        .filter(Boolean) ?? []
+
+    const pendingQuizzes = (attemptsRes.data ?? []).filter(
+      (quiz) => !attemptedQuizIds.includes(quiz.id)
+    )
 
     // Also fetch course progress
     const { data: progressData } = await supabase
@@ -56,7 +77,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       data: {
         enrollments: enrollmentsRes.data ?? [],
         todaySessions: sessionsRes.data ?? [],
-        pendingQuizzes: attemptsRes.data ?? [],
+        pendingQuizzes,
         progress: progressData ?? [],
       },
     })

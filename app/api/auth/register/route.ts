@@ -15,9 +15,22 @@ export async function POST(req: NextRequest) {
   try {
     const web3User = await verifyWeb3AuthToken(req)
     const body = await req.json()
-    const { email, full_name, solana_wallet_address, role = "STUDENT" } = body
+    const { email, full_name, solana_wallet_address, role } = body as {
+      email?: string
+      full_name?: string
+      solana_wallet_address?: string
+      role?: "STUDENT" | "TUTOR" | "ORG_ADMIN"
+    }
 
     const supabase = createAdminClient()
+
+    const { data: existingUser } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", web3User.sub)
+      .maybeSingle()
+
+    const nextRole = role ?? existingUser?.role ?? "STUDENT"
 
     // Upsert user — if already registered, update their wallet/info
     const { data, error } = await supabase
@@ -28,7 +41,7 @@ export async function POST(req: NextRequest) {
           email: email || web3User.email || "",
           full_name: full_name || web3User.name || null,
           solana_wallet_address: solana_wallet_address || null,
-          role,
+          role: nextRole,
         },
         { onConflict: "id" }
       )
@@ -41,8 +54,9 @@ export async function POST(req: NextRequest) {
     }
 
     return Response.json({ data }, { status: 201 })
-  } catch (err: any) {
-    if (err.message?.includes("Authorization")) return unauthorized()
-    return Response.json({ error: err.message }, { status: 500 })
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unknown error"
+    if (message.includes("Authorization")) return unauthorized()
+    return Response.json({ error: message }, { status: 500 })
   }
 }
