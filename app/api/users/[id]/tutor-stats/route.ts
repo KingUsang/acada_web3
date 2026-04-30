@@ -12,8 +12,11 @@ import { verifyWeb3AuthToken, unauthorized } from "@/app/lib/auth/verify-web3aut
  */
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await verifyWeb3AuthToken(req)
+    const web3User = await verifyWeb3AuthToken(req)
     const { id } = await params
+    if (web3User.sub !== id) {
+      return Response.json({ error: "Forbidden" }, { status: 403 })
+    }
     const supabase = createAdminClient()
 
     // Courses this tutor teaches

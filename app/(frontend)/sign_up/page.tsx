@@ -1,6 +1,58 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../lib/auth/context";
+import { toast } from "sonner";
 
 export default function SignUpPage() {
+  const { login, authenticateUser, refreshAppUser } = useAuth();
+  const router = useRouter();
+  const [isSigningUp, setIsSigningUp] = useState(false);
+  const [role, setRole] = useState<"STUDENT" | "TUTOR">("STUDENT");
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSigningUp(true);
+    try {
+      await login();
+      const idToken = await authenticateUser();
+      
+      if (!idToken) {
+        toast.error("Failed to get authentication token");
+        return;
+      }
+
+      // Call register API to upsert user
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          role,
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to register");
+      }
+
+      toast.success(`Account created as ${role}!`);
+      router.push(role === "STUDENT" ? "/student_home" : "/tutor_home");
+      await refreshAppUser(idToken);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "An error occurred during sign up";
+      console.error("Sign up error:", error);
+      toast.error(message);
+    } finally {
+      setIsSigningUp(false);
+    }
+  };
+
   return (
     <div className="bg-background font-body text-on-background min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-6">
       {/* Ambient Glow Background Decoration */}
@@ -27,19 +79,25 @@ export default function SignUpPage() {
                 Choose your journey
               </label>
               <div className="flex p-1 bg-surface-container-high rounded-full w-full">
-                {/* Student Pill (Active State) */}
-                <button className="flex-1 py-3 px-6 rounded-full font-label font-semibold text-sm transition-all duration-200 bg-inverse-surface text-on-primary">
+                {/* Student Pill */}
+                <button 
+                  onClick={() => setRole("STUDENT")}
+                  className={`flex-1 py-3 px-6 rounded-full font-label font-semibold text-sm transition-all duration-200 ${role === "STUDENT" ? "bg-inverse-surface text-on-primary" : "text-on-surface-variant hover:text-on-surface"}`}
+                >
                   Student
                 </button>
-                {/* Tutor Pill (Inactive State) */}
-                <button className="flex-1 py-3 px-6 rounded-full font-label font-semibold text-sm transition-all duration-200 text-on-surface-variant hover:text-on-surface">
+                {/* Tutor Pill */}
+                <button 
+                  onClick={() => setRole("TUTOR")}
+                  className={`flex-1 py-3 px-6 rounded-full font-label font-semibold text-sm transition-all duration-200 ${role === "TUTOR" ? "bg-inverse-surface text-on-primary" : "text-on-surface-variant hover:text-on-surface"}`}
+                >
                   Tutor
                 </button>
               </div>
             </div>
 
             {/* Input Group */}
-            <div className="space-y-6">
+            <form onSubmit={handleSignUp} className="space-y-6">
               {/* Name Field */}
               <div className="space-y-2">
                 <label className="font-label text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1">
@@ -53,6 +111,7 @@ export default function SignUpPage() {
                     className="w-full pl-12 pr-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary focus:bg-surface-container-highest transition-all duration-200 text-on-surface placeholder:text-outline/60 font-body"
                     placeholder="John Doe"
                     type="text"
+                    required
                   />
                 </div>
               </div>
@@ -70,6 +129,7 @@ export default function SignUpPage() {
                     className="w-full pl-12 pr-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary focus:bg-surface-container-highest transition-all duration-200 text-on-surface placeholder:text-outline/60 font-body"
                     placeholder="john@example.com"
                     type="email"
+                    required
                   />
                 </div>
               </div>
@@ -87,27 +147,32 @@ export default function SignUpPage() {
                     className="w-full pl-12 pr-12 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary focus:bg-surface-container-highest transition-all duration-200 text-on-surface placeholder:text-outline/60 font-body"
                     placeholder="••••••••"
                     type="password"
+                    required
                   />
-                  <button className="absolute right-4 text-outline hover:text-primary">
+                  <button type="button" className="absolute right-4 text-outline hover:text-primary">
                     <span className="material-symbols-outlined">visibility</span>
                   </button>
                 </div>
               </div>
-            </div>
 
-            {/* Primary Action */}
-            <div className="pt-4">
-              <button className="w-full py-5 rounded-xl bg-gradient-to-br from-primary to-primary-dim text-on-primary font-headline font-extrabold text-lg tracking-tight shadow-lg shadow-primary/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center space-x-3">
-                <span>Create Account</span>
-                <span className="material-symbols-outlined">arrow_forward</span>
-              </button>
-              <p className="mt-6 text-center font-body text-sm text-on-surface-variant">
-                Already have an account?{" "}
-                <a className="text-primary font-bold hover:underline" href="#">
-                  Log in
-                </a>
-              </p>
-            </div>
+              {/* Primary Action */}
+              <div className="pt-4">
+                <button 
+                  type="submit" 
+                  className="w-full py-5 rounded-xl bg-gradient-to-br from-primary to-primary-dim text-on-primary font-headline font-extrabold text-lg tracking-tight shadow-lg shadow-primary/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center space-x-3 disabled:opacity-50"
+                  disabled={isSigningUp}
+                >
+                  <span>{isSigningUp ? "Creating Account..." : "Create Account"}</span>
+                  <span className="material-symbols-outlined">arrow_forward</span>
+                </button>
+                <p className="mt-6 text-center font-body text-sm text-on-surface-variant">
+                  Already have an account?{" "}
+                  <Link className="text-primary font-bold hover:underline" href="/login">
+                    Log in
+                  </Link>
+                </p>
+              </div>
+            </form>
           </div>
         </section>
 

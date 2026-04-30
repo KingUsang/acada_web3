@@ -73,6 +73,21 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (error) return Response.json({ error: error.message }, { status: 500 })
+
+    const { data: existingTutorLink } = await supabase
+      .from("course_tutors")
+      .select("id")
+      .eq("course_id", data.id)
+      .eq("tutor_id", web3User.sub)
+      .maybeSingle()
+
+    if (!existingTutorLink) {
+      await supabase.from("course_tutors").insert({
+        course_id: data.id,
+        tutor_id: web3User.sub,
+      })
+    }
+
     return Response.json({ data }, { status: 201 })
   } catch {
     return unauthorized()
