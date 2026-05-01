@@ -186,6 +186,14 @@ export function useCertificates(userId: string | null) {
   );
 }
 
+export function useCertificate(certificateId: string | null) {
+  const fetcher = useApiFetcher();
+  return useSWR<ApiResponse<CourseCertificate>>(
+    certificateId ? `/api/certificates/${certificateId}` : null,
+    fetcher
+  );
+}
+
 export function useQuiz(quizId: string | null) {
   const fetcher = useApiFetcher();
   return useSWR<ApiResponse<QuizDetails>>(quizId ? `/api/quizzes/${quizId}` : null, fetcher);

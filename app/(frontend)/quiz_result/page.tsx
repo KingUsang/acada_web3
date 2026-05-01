@@ -17,7 +17,7 @@ export default function QuizResultPage() {
 
   return (
     <div className="bg-surface font-body text-on-surface antialiased overflow-x-hidden min-h-screen flex flex-col">
-      <header className="fixed top-0 w-full z-50 bg-white/60 dark:bg-slate-950/60 backdrop-blur-xl shadow-[0_16px_32px_-12px_rgba(7,14,29,0.04)] flex items-center justify-between px-6 h-16">
+      <header className="fixed top-0 w-full z-50 bg-surface-container-lowest/80 backdrop-blur-xl shadow-[0_16px_32px_-12px_rgba(7,14,29,0.04)] flex items-center justify-between px-6 h-16">
         <div className="flex items-center gap-3">
           <Link href="/student_home" className="material-symbols-outlined text-primary">
             arrow_back
@@ -79,7 +79,7 @@ export default function QuizResultPage() {
             </div>
           </div>
 
-          <div className="bg-inverse-surface text-inverse-on-surface px-8 py-2 rounded-full font-label font-bold text-sm tracking-[0.2em] uppercase mb-8">
+          <div className="bg-surface-container-highest text-on-surface px-8 py-2 rounded-full font-label font-bold text-sm tracking-[0.2em] uppercase mb-8">
             {passed ? "Pass" : "Retry"}
           </div>
         </div>
