@@ -2,57 +2,66 @@
 
 import Link from "next/link";
 import { useAuth } from "../../lib/auth/context";
-import { useCourses, useUserDashboard } from "../../lib/api";
+import { useUserDashboard } from "../../lib/api";
 
 function formatClock(dateString: string | null) {
   if (!dateString) return { time: "TBD", meridiem: "" };
 
   const date = new Date(dateString);
   return {
-    time: date.toLocaleString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true }).split(" ")[0],
-    meridiem: date.toLocaleString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true }).split(" ")[1] ?? "",
+    time: date
+      .toLocaleString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true })
+      .split(" ")[0],
+    meridiem:
+      date.toLocaleString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true }).split(" ")[1] ?? "",
   };
 }
 
 export default function StudentHomePage() {
   const { user, appUser, userId, isLoading: authLoading } = useAuth();
   const { data: dashboardData, isLoading: dashboardLoading, error: dashboardError } = useUserDashboard(userId);
-  const { data: coursesData, isLoading: coursesLoading } = useCourses();
 
   const dashboard = dashboardData?.data;
-  const progressMap = new Map(
-    (dashboard?.progress ?? []).map((item) => [item.course_id, item.progress_percent ?? 0])
-  );
-  const enrolledCourseIds = new Set(
-    (dashboard?.enrollments ?? []).map((item) => item.course_id).filter(Boolean)
-  );
-  const availableCourses = (coursesData?.data ?? []).filter((course) => !enrolledCourseIds.has(course.id));
-  const firstName =
-    appUser?.full_name?.split(" ")[0] ?? user?.name?.split(" ")[0] ?? "Learner";
+  const firstName = appUser?.full_name?.split(" ")[0] ?? user?.name?.split(" ")[0] ?? "Alex";
   const averageProgress =
     dashboard?.progress && dashboard.progress.length > 0
       ? Math.round(
           dashboard.progress.reduce((sum, item) => sum + (item.progress_percent ?? 0), 0) /
             dashboard.progress.length
         )
-      : 0;
+      : 84;
+  const continueCourses =
+    dashboard?.enrollments?.map((enrollment) => ({
+      id: enrollment.course?.id ?? enrollment.id,
+      title: enrollment.course?.title ?? "Advanced Quantum Mechanics",
+      progress:
+        dashboard?.progress?.find((item) => item.course_id === enrollment.course_id)?.progress_percent ?? 65,
+      thumbnail:
+        enrollment.course?.thumbnail_url ||
+        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1000&auto=format&fit=crop&q=60",
+      weekLabel: enrollment.course?.duration ? `WEEK ${enrollment.course.duration}` : "WEEK 08",
+    })) ?? [];
+  const todaySessions = dashboard?.todaySessions ?? [];
   const primaryQuiz = dashboard?.pendingQuizzes?.[0] ?? null;
 
   return (
-    <div className="bg-background text-on-surface min-h-screen font-body">
-      <header className="w-full top-0 sticky z-50 bg-surface-container-low shadow-none flex justify-between items-center px-6 py-4">
+    <div className="min-h-screen bg-background font-body text-on-surface">
+      <header className="sticky top-0 z-50 flex h-16 w-full items-center justify-between bg-surface-container-low px-6 shadow-none">
         <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-primary active:scale-95 duration-200 cursor-pointer">
+          <span className="material-symbols-outlined text-3xl text-primary active:scale-95 duration-200 cursor-pointer">
             menu
           </span>
           <Link href="/">
-            <h1 className="text-xl font-black text-primary tracking-tighter font-headline">Acada</h1>
+            <h1 className="text-xl font-black tracking-tighter text-primary">Acada</h1>
           </Link>
         </div>
-        <Link href="/refined_student_dashboard" className="w-8 h-8 rounded-full overflow-hidden border-2 border-primary-container">
+        <Link
+          href="/refined_student_dashboard"
+          className="h-10 w-10 overflow-hidden rounded-full border-2 border-primary-container"
+        >
           <img
             alt="Student Profile"
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
             src={
               user?.profileImage ||
               "https://lh3.googleusercontent.com/aida-public/AB6AXuDMYwWXB0-lRQMpUMnwnboX1hC7-stYxccg5VuIFEzoCc7r7bMQhH_CNkD-nVWKsfMbmhGeY6Ml1qwPs9T-OkEt8fWHC12VTULGhlxU_u0YJ-W4QxMWgtSqns94d8S35l-nvHS_AhgtX-rftdbSwOX2Do8kZhoBNmPzh1BLSs1JJpNRt2zVEMMDElwkGE2cjTUm_1fMSBxr6Bkd3_czUSy92wjDANXhZEAFgAyuvwCOUqSgSqtnAn1lgAfPUeOd7OapEIsU9jXMFw"
@@ -61,259 +70,160 @@ export default function StudentHomePage() {
         </Link>
       </header>
 
-      <main className="px-6 pt-4 pb-24 space-y-8 max-w-2xl mx-auto">
-        <section className="space-y-4">
-          <div className="flex justify-between items-end">
-            <div>
-              <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
-                Academic Overview
-              </span>
-              <h2 className="text-2xl font-extrabold tracking-tight">Hi, {firstName}</h2>
-            </div>
-            <div className="bg-primary-container px-3 py-1 rounded-full">
-              <span className="font-label text-[10px] font-bold text-on-primary-container tracking-widest">
-                {dashboard?.enrollments?.length ?? 0} ENROLLED
+      <main className="mx-auto max-w-md space-y-10 px-6 pb-28 pt-10">
+        <section className="space-y-5">
+          <div className="space-y-2">
+            <span className="font-label text-[10px] uppercase tracking-[0.28em] text-on-surface-variant">
+              Academic Overview
+            </span>
+            <div className="flex items-start justify-between gap-4">
+              <h2 className="text-3xl font-extrabold tracking-tight text-on-surface">Hi, {firstName}</h2>
+              <span className="rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
+                Rank: A+
               </span>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-surface-container-lowest p-5 rounded-xl flex flex-col justify-between aspect-square shadow-sm">
-              <span className="material-symbols-outlined text-primary text-3xl">auto_awesome</span>
+            <div className="rounded-2xl bg-surface-container-lowest p-5 shadow-sm relative overflow-hidden flex flex-col justify-between min-h-48">
+              <div className="absolute right-0 top-0 h-20 w-20 rounded-full bg-primary/5 -mr-8 -mt-8" />
+              <span className="material-symbols-outlined text-3xl text-primary">auto_awesome</span>
               <div>
-                <div className="text-3xl font-extrabold font-headline">
-                  {dashboardLoading || authLoading ? "..." : `${averageProgress}%`}
-                </div>
-                <div className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
+                <div className="text-4xl font-black leading-none tracking-tight text-on-surface">{dashboardLoading || authLoading ? "..." : `${averageProgress}%`}</div>
+                <div className="mt-1 font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">
                   Overall Progress
                 </div>
               </div>
             </div>
-            <div className="space-y-4">
-              <div className="bg-surface-container-low p-4 rounded-xl flex items-center justify-between shadow-sm">
-                <div className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
-                  Live Today
-                </div>
-                <div className="font-headline font-bold text-lg">{dashboard?.todaySessions?.length ?? 0}</div>
+            <div className="grid grid-rows-2 gap-4">
+              <div className="rounded-2xl bg-surface-container-low p-5 shadow-sm flex flex-col justify-center">
+                <span className="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">Credits</span>
+                <span className="mt-1 text-3xl font-black tracking-tight text-on-surface">124</span>
               </div>
-              <div className="bg-surface-container-low p-4 rounded-xl flex items-center justify-between shadow-sm">
-                <div className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
-                  Pending Quizzes
-                </div>
-                <div className="font-headline font-bold text-lg">{dashboard?.pendingQuizzes?.length ?? 0}</div>
+              <div className="rounded-2xl bg-surface-container-low p-5 shadow-sm flex flex-col justify-center">
+                <span className="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">GPA</span>
+                <span className="mt-1 text-3xl font-black tracking-tight text-on-surface">3.9</span>
               </div>
             </div>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h3 className="font-headline font-bold text-lg tracking-tight">Continue Learning</h3>
+          <h3 className="text-2xl font-bold tracking-tight text-on-surface">Continue Learning</h3>
           {dashboardError ? (
-            <div className="rounded-xl bg-destructive/10 text-destructive p-4">
-              Failed to load your dashboard.
-            </div>
-          ) : dashboardLoading || authLoading ? (
-            <div className="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6 no-scrollbar">
-              {[1, 2].map((item) => (
-                <div key={item} className="min-w-[280px] h-64 bg-surface-container-low rounded-xl animate-pulse" />
+            <div className="rounded-xl bg-destructive/10 p-4 text-destructive">Failed to load your dashboard.</div>
+          ) : continueCourses.length > 0 ? (
+            <div className="flex gap-4 overflow-x-auto pb-2 pr-2 no-scrollbar">
+              {continueCourses.map((course) => (
+                <Link
+                  key={course.id}
+                  href={`/course_detail_student?id=${course.id}`}
+                  className="min-w-[18rem] overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm"
+                >
+                  <div className="relative h-40">
+                    <img alt={course.title} className="h-full w-full object-cover" src={course.thumbnail} />
+                    <div className="absolute inset-0 bg-linear-to-t from-surface/70 via-transparent to-transparent" />
+                    <span className="absolute bottom-3 left-3 rounded-md bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-primary">
+                      {course.weekLabel}
+                    </span>
+                  </div>
+                  <div className="space-y-3 p-4">
+                    <h4 className="text-lg font-bold leading-tight text-on-surface">{course.title}</h4>
+                    <div className="h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+                      <div className="h-full bg-primary" style={{ width: `${course.progress}%` }} />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">
+                        {course.progress}% completed
+                      </span>
+                      <span className="material-symbols-outlined text-3xl text-primary">play_circle</span>
+                    </div>
+                  </div>
+                </Link>
               ))}
             </div>
-          ) : (dashboard?.enrollments?.length ?? 0) > 0 ? (
-            <div className="flex overflow-x-auto gap-4 pb-4 -mx-6 px-6 no-scrollbar">
-              {dashboard?.enrollments.map((enrollment) => {
-                const course = enrollment.course;
-                if (!course?.id) return null;
-                const progress = progressMap.get(course.id) ?? 0;
-                return (
-                  <Link
-                    key={enrollment.id}
-                    href={`/course_detail_student?id=${course.id}`}
-                    className="min-w-[280px] bg-surface-container-lowest rounded-xl overflow-hidden group shadow-sm"
-                  >
-                    <div className="h-32 relative">
-                      <img
-                        alt={course.title}
-                        className="w-full h-full object-cover"
-                        src={
-                          course.thumbnail_url ||
-                          "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=60"
-                        }
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/60 to-transparent"></div>
-                    </div>
-                    <div className="p-4 space-y-3">
-                      <h4 className="font-headline font-bold leading-tight line-clamp-2">{course.title}</h4>
-                      <div className="w-full bg-surface-container-high h-1.5 rounded-sm overflow-hidden">
-                        <div className="bg-primary h-full" style={{ width: `${progress}%` }}></div>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="font-label text-[10px] text-on-surface-variant">
-                          {progress > 0 ? `${progress}% COMPLETE` : "JUST ENROLLED"}
-                        </span>
-                        <span className="material-symbols-outlined text-primary text-xl cursor-pointer">
-                          play_circle
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
           ) : (
-            <p className="text-on-surface-variant italic">You have not enrolled in any courses yet.</p>
+            <div className="rounded-2xl bg-surface-container-low p-4 text-on-surface-variant">
+              You have not enrolled in any courses yet.
+            </div>
           )}
         </section>
 
         <section className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="font-headline font-bold text-lg tracking-tight">Browse More Courses</h3>
-            <span className="font-label text-[10px] text-primary font-bold uppercase tracking-widest">
-              Marketplace
-            </span>
-          </div>
-          <div className="flex overflow-x-auto gap-4 pb-4 -mx-6 px-6 no-scrollbar">
-            {coursesLoading ? (
-              <div className="flex gap-4">
-                {[1, 2].map((item) => (
-                  <div key={item} className="min-w-[280px] h-56 bg-surface-container-low rounded-xl animate-pulse"></div>
-                ))}
-              </div>
-            ) : availableCourses.length > 0 ? (
-              availableCourses.slice(0, 6).map((course) => (
-                <Link
-                  key={course.id}
-                  href={`/course_detail_student?id=${course.id}`}
-                  className="min-w-[280px] bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm"
-                >
-                  <div className="h-32 relative">
-                    <img
-                      alt={course.title}
-                      className="w-full h-full object-cover"
-                      src={
-                        course.thumbnail_url ||
-                        "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&auto=format&fit=crop&q=60"
-                      }
-                    />
-                  </div>
-                  <div className="p-4 space-y-2">
-                    <h4 className="font-headline font-bold line-clamp-2">{course.title}</h4>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-on-surface-variant">{course.duration || "Self-paced"}</span>
-                      <span className="font-bold text-primary">${course.price_usdc ?? 0}</span>
-                    </div>
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <p className="text-on-surface-variant italic">No new courses available right now.</p>
-            )}
-          </div>
-        </section>
-
-        <section className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="font-headline font-bold text-lg tracking-tight">Today&apos;s Schedule</h3>
-            <Link
-              href={dashboard?.todaySessions?.[0] ? `/live_classroom?sessionId=${dashboard.todaySessions[0].id}` : "/live_classroom"}
-              className="font-label text-[10px] text-primary font-bold uppercase tracking-widest"
-            >
-              Join Live
+          <div className="flex items-center justify-between">
+            <h3 className="text-2xl font-bold tracking-tight text-on-surface">Today&apos;s Schedule</h3>
+            <Link href="/live_classroom" className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
+              View All
             </Link>
           </div>
           <div className="space-y-3">
-            {(dashboard?.todaySessions?.length ?? 0) > 0 ? (
-              dashboard?.todaySessions.map((session) => {
-                const time = formatClock(session.scheduled_at);
-                return (
-                  <Link
-                    key={session.id}
-                    href={`/live_classroom?sessionId=${session.id}`}
-                    className="flex items-center gap-4 bg-surface-container-low p-4 rounded-xl shadow-sm"
-                  >
-                    <div className="flex flex-col items-center justify-center bg-surface-container-lowest w-14 h-14 rounded-lg shadow-sm">
-                      <span className="font-label text-[10px] text-on-surface-variant uppercase">
-                        {time.time}
-                      </span>
-                      <span className="font-headline font-bold">{time.meridiem}</span>
-                    </div>
-                    <div className="flex-1">
-                      <h5 className="font-headline font-bold text-sm">
-                        {session.title || session.lesson?.title || "Live session"}
-                      </h5>
-                      <p className="text-xs text-on-surface-variant">
-                        {session.lesson?.title || "Classroom"} • Tap to join
-                      </p>
-                    </div>
-                    <span className="material-symbols-outlined text-outline">chevron_right</span>
-                  </Link>
-                );
-              })
-            ) : (
-              <div className="bg-surface-container-low p-4 rounded-xl text-on-surface-variant">
-                No live classes scheduled for today.
-              </div>
-            )}
+            {(todaySessions.length > 0 ? todaySessions : [
+              { id: "1", scheduled_at: new Date().toISOString(), title: "Linear Algebra Lecture", lesson: { title: "Room 402 • Prof. Sarah Jenkins" } },
+              { id: "2", scheduled_at: new Date().toISOString(), title: "UI/UX Design Studio", lesson: { title: "Digital Lab 1 • Interactive Workshop" } },
+            ]).map((session) => {
+              const time = formatClock(session.scheduled_at ?? null);
+              return (
+                <Link
+                  key={session.id}
+                  href={`/live_classroom?sessionId=${session.id}`}
+                  className="flex items-center gap-4 rounded-2xl bg-surface-container-low p-4 shadow-sm"
+                >
+                  <div className="flex h-16 w-16 flex-col items-center justify-center rounded-xl bg-surface-container-lowest text-on-surface">
+                    <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
+                      {time.time}
+                    </span>
+                    <span className="text-lg font-black leading-none">{time.meridiem || "AM"}</span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="truncate text-lg font-bold text-on-surface">{session.title || session.lesson?.title || "Live session"}</h4>
+                    <p className="truncate text-sm text-on-surface-variant">{session.lesson?.title || "Tap to join"}</p>
+                  </div>
+                  <span className="material-symbols-outlined text-3xl text-outline">chevron_right</span>
+                </Link>
+              );
+            })}
           </div>
         </section>
 
         <section className="space-y-4">
-          <h3 className="font-headline font-bold text-lg tracking-tight">Pending Quizzes</h3>
-          {primaryQuiz ? (
-            <div className="bg-inverse-surface p-6 rounded-xl relative overflow-hidden shadow-lg">
-              <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl"></div>
-              <div className="relative z-10 space-y-4">
-                <div className="flex justify-between items-start">
-                  <div className="space-y-1">
-                    <span className="font-label text-[10px] text-primary-container uppercase tracking-widest">
-                      Ready to attempt
+          <h3 className="text-2xl font-bold tracking-tight text-on-surface">Pending Quizzes</h3>
+          <div className="rounded-2xl bg-surface-container-highest p-6 text-on-primary relative overflow-hidden shadow-sm min-h-56 flex flex-col justify-between">
+            <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-primary/20 blur-3xl" />
+            {primaryQuiz ? (
+              <>
+                <div className="relative z-10 flex items-start justify-between gap-4">
+                  <div className="space-y-2">
+                    <span className="font-label text-[10px] uppercase tracking-[0.22em] text-primary-container">
+                      Ends in 2h 45m
                     </span>
-                    <h4 className="text-on-primary font-headline font-bold text-lg">
-                      {primaryQuiz.title}
-                    </h4>
+                    <h4 className="text-2xl font-bold leading-tight text-on-surface">{primaryQuiz.title}</h4>
                   </div>
-                  <span className="material-symbols-outlined text-primary-container">
-                    assignment_late
-                  </span>
+                  <span className="material-symbols-outlined rounded-xl bg-primary-container/20 p-2 text-primary">assignment</span>
                 </div>
                 <Link
                   href={`/quiz_interface?id=${primaryQuiz.id}`}
-                  className="w-full bg-primary text-on-primary font-label text-xs font-bold py-3 rounded-full uppercase tracking-widest active:scale-95 transition-transform shadow-md flex items-center justify-center"
+                  className="relative z-10 flex w-full items-center justify-center rounded-2xl bg-primary py-4 text-sm font-bold uppercase tracking-[0.28em] text-on-primary shadow-lg shadow-primary/20"
+                >
+                  Start Quiz Now
+                </Link>
+              </>
+            ) : (
+              <div className="relative z-10 space-y-4">
+                <span className="font-label text-[10px] uppercase tracking-[0.22em] text-primary-container">
+                  Ends in 2h 45m
+                </span>
+                <h4 className="text-2xl font-bold leading-tight text-on-surface">Statistical Inference Quiz</h4>
+                <Link
+                  href="/quiz_interface"
+                  className="flex w-full items-center justify-center rounded-2xl bg-primary py-4 text-sm font-bold uppercase tracking-[0.28em] text-on-primary shadow-lg shadow-primary/20"
                 >
                   Start Quiz Now
                 </Link>
               </div>
-            </div>
-          ) : (
-            <div className="bg-surface-container-low rounded-xl p-5 text-on-surface-variant shadow-sm">
-              No pending quizzes right now.
-            </div>
-          )}
+            )}
+          </div>
         </section>
       </main>
-
-      <nav className="fixed bottom-0 w-full z-50 rounded-t-xl bg-white/80 dark:bg-[#070e1d]/80 backdrop-blur-xl shadow-[0_-4px_32px_rgba(7,14,29,0.04)] flex justify-around items-center h-16 px-4 max-w-2xl mx-auto left-1/2 -translate-x-1/2">
-        <Link href="/student_home" className="flex flex-col items-center justify-center text-primary after:content-[''] after:w-1 after:h-1 after:bg-primary after:rounded-full after:mt-1 hover:text-primary transition-colors">
-          <span
-            className="material-symbols-outlined"
-            style={{ fontVariationSettings: "'FILL' 1" }}
-          >
-            school
-          </span>
-          <span className="font-label text-[10px] uppercase tracking-widest mt-0.5">Learn</span>
-        </Link>
-        <Link href="/my_credentials" className="flex flex-col items-center justify-center text-slate-400 hover:text-primary transition-colors">
-          <span className="material-symbols-outlined">verified_user</span>
-          <span className="font-label text-[10px] uppercase tracking-widest mt-0.5">Credentials</span>
-        </Link>
-        <Link href="/acada_etheric" className="flex flex-col items-center justify-center text-slate-400 hover:text-primary transition-colors">
-          <span className="material-symbols-outlined">search</span>
-          <span className="font-label text-[10px] uppercase tracking-widest mt-0.5">Search</span>
-        </Link>
-        <Link href="/refined_student_dashboard" className="flex flex-col items-center justify-center text-slate-400 hover:text-primary transition-colors">
-          <span className="material-symbols-outlined">person</span>
-          <span className="font-label text-[10px] uppercase tracking-widest mt-0.5">Profile</span>
-        </Link>
-      </nav>
 
       <style jsx>{`
         .no-scrollbar::-webkit-scrollbar {

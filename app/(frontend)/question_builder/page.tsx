@@ -120,9 +120,9 @@ export default function QuestionBuilderPage() {
       </main>
 
       {/* Sticky Bottom CTA */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-xl border-t border-surface-container-high z-50">
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-surface-container-lowest/80 backdrop-blur-xl z-50 shadow-[0_-4px_32px_rgba(7,14,29,0.04)]">
         <div className="max-w-2xl mx-auto flex items-center gap-4">
-          <button className="flex-1 bg-gradient-to-br from-primary to-primary-dim text-white font-bold py-5 rounded-xl shadow-[0_8px_20px_rgba(37,99,235,0.2)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group">
+          <button className="flex-1 bg-linear-to-br from-primary to-primary-dim text-on-primary font-bold py-5 rounded-xl shadow-[0_8px_20px_rgba(37,99,235,0.2)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group">
             <span>Add to Quiz</span>
             <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">
               arrow_forward
