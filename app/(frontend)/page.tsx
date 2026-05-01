@@ -1,36 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { lamports as sol } from "@solana/kit";
-import { toast } from "sonner";
-import { useWallet } from "../lib/wallet/context";
-import { useBalance } from "../lib/hooks/use-balance";
-import { lamportsToSolString } from "../lib/lamports";
-import { useSolanaClient } from "../lib/solana-client-context";
-import { ellipsify } from "../lib/explorer";
-import { VaultCard } from "../components/vault-card";
-import { GridBackground } from "../components/grid-background";
-import { ThemeToggle } from "../components/theme-toggle";
-import { ClusterSelect } from "../components/cluster-select";
-import { WalletButton } from "../components/wallet-button";
-import { useCluster } from "../components/cluster-context";
+import { useAuth } from "../lib/auth/context";
 
 export default function LandingPage() {
+  const { user, login } = useAuth();
+
   return (
     <div className="bg-background text-on-background font-body antialiased min-h-screen">
-      {/* Glassmorphism Header */}
-      <header className="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 glass-header shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl font-black tracking-tighter text-blue-600">Acada</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <button className="material-symbols-outlined text-slate-500 hover:bg-slate-200/50 p-2 rounded-full transition-colors active:scale-95 duration-200">notifications</button>
-          <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
-            <img alt="User profile avatar" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjoxqYfXOWejHk8_UWFDq6Wi2-0ecZoOfbZsB4h9HK_hUVJQtd5SwnEIIYvTj2_caLv1BQQQ7xN07cepW5yeUUzAcsdJg4t4Qs-yZhM2411D9-fO70gRGDId3G6zfxdbbL1LgvS12RSzPBChq-lHxXG6Vr4TTDZZsrgEIwtzzrmfV5TFqMmPXSbvuUQnNCOC9K8i99vVsTEnQLvXMQJ_IxgXBzEFFG7VKY-EXO0zEGFzLsy5rUT1JZ0c_kpy5NBwFPvMjZwFpvOA" />
-          </div>
-        </div>
-      </header>
       <main className="relative pt-16 min-h-screen flex flex-col items-center overflow-x-hidden">
         {/* Hero Section */}
         <section className="w-full max-w-7xl px-6 py-20 md:py-32 flex flex-col items-center text-center relative">
@@ -42,7 +19,7 @@ export default function LandingPage() {
           {/* Content */}
           <div className="space-y-6 max-w-4xl">
             <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-surface-container-low text-primary font-label text-sm font-bold tracking-tight">
-              <span className="material-symbols-outlined text-sm mr-2">verified</span>
+              <span className="material-symbols-outlined text-sm mr-2" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
               WEB3 POWERED CREDENTIALS
             </div>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-inverse-surface leading-[1.1]">
@@ -54,20 +31,24 @@ export default function LandingPage() {
             </p>
             {/* CTA Cluster */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-              <Link href="/sign_up" className="w-full sm:w-auto px-8 py-4 bg-primary text-on-primary font-bold rounded-xl shadow-lg shadow-primary/20 hover:bg-primary-dim active:scale-[0.98] transition-all text-lg flex items-center justify-center">
+              <Link href="/sign_up" className="w-full sm:w-auto px-8 py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:bg-primary-dim active:scale-[0.98] transition-all text-lg">
                 Sign Up
               </Link>
-              <Link href="/login" className="w-full sm:w-auto px-8 py-4 bg-surface-container-lowest text-on-surface font-bold rounded-xl shadow-sm hover:bg-surface-container-low active:scale-[0.98] transition-all text-lg border border-transparent flex items-center justify-center">
+              <button 
+                onClick={login}
+                className="w-full sm:w-auto px-8 py-4 bg-surface-container-lowest text-on-surface font-bold rounded-xl shadow-sm hover:bg-surface-container-low active:scale-[0.98] transition-all text-lg border border-transparent"
+              >
                 Log In
-              </Link>
+              </button>
             </div>
           </div>
         </section>
+
         {/* Feature Bento Grid */}
         <section className="w-full max-w-7xl px-6 pb-32">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Large Card */}
-            <div className="md:col-span-8 bg-surface-container-low rounded-xl p-8 flex flex-col justify-between min-h-100 overflow-hidden relative">
+            <div className="md:col-span-8 bg-surface-container-low rounded-xl p-8 flex flex-col justify-between min-h-[400px] overflow-hidden relative">
               <div className="relative z-10">
                 <span className="font-label text-primary font-bold uppercase tracking-widest text-xs">Innovation</span>
                 <h3 className="text-3xl font-bold mt-2 tracking-tight">Blockchain-Verified Excellence</h3>
@@ -92,47 +73,76 @@ export default function LandingPage() {
               </div>
               <div className="absolute bottom-0 right-0 w-2/3 h-2/3 bg-primary/5 rounded-full blur-3xl -mb-20 -mr-20"></div>
             </div>
+
             {/* Small Card 1 */}
             <div className="md:col-span-4 bg-inverse-surface text-on-tertiary rounded-xl p-8 flex flex-col justify-center items-center text-center">
               <div className="w-16 h-16 bg-surface-container-highest/20 rounded-full flex items-center justify-center mb-6">
                 <span className="material-symbols-outlined text-white text-3xl">account_balance_wallet</span>
               </div>
-              <h3 className="text-xl font-bold font-headline">Wallet Native</h3>
+              <h3 className="text-xl font-bold font-headline text-white">Wallet Native</h3>
               <p className="text-slate-400 mt-2 text-sm leading-relaxed">Connect your wallet to instantly access decentralized learning pathways.</p>
             </div>
+
             {/* Small Card 2 */}
             <div className="md:col-span-4 bg-surface-container-high rounded-xl p-8 flex flex-col">
               <span className="material-symbols-outlined text-primary mb-4">speed</span>
               <h3 className="text-xl font-bold tracking-tight">Adaptive Pace</h3>
               <p className="text-on-surface-variant mt-2 text-sm">Self-directed curriculums designed to fit into your professional schedule.</p>
             </div>
+
             {/* Small Card 3 */}
             <div className="md:col-span-4 bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_24px_-4px_rgba(7,14,29,0.04)] flex flex-col">
               <span className="material-symbols-outlined text-primary mb-4">groups</span>
               <h3 className="text-xl font-bold tracking-tight">Curated Peer Review</h3>
               <p className="text-on-surface-variant mt-2 text-sm">Learn alongside high-caliber peers and industry-leading mentors.</p>
             </div>
+
             {/* Small Card 4 */}
             <div className="md:col-span-4 bg-primary text-white rounded-xl p-8 flex flex-col justify-between">
               <h3 className="text-xl font-bold tracking-tight">Global Network</h3>
               <div className="flex -space-x-3 mt-4">
-                {/* Example avatars, replace with real data if available */}
-                <img className="w-10 h-10 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User 1" />
-                <img className="w-10 h-10 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/44.jpg" alt="User 2" />
-                <img className="w-10 h-10 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/men/54.jpg" alt="User 3" />
-                <span className="w-10 h-10 rounded-full bg-white text-primary flex items-center justify-center font-bold border-2 border-white">+99</span>
+                <img className="w-10 h-10 rounded-full border-2 border-primary object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtsyaMSyWRjmhGIep9jK7roFtlbgtgtyT6rus39Zc3AP1ywDREzk-KhVswXenkdxeBxzJw8Iza9hk4cbpTBsRotJz3YwyHXG3HwlRFrsO9LAIHHCh4szspRw78lpPe9ieAtTLoAG1DU1Ost_2Byw8gF60cKM6IkqCvbl8tA-D91llVX-0XjgzZgiZCviMCzrlCynAlGVLrL9NiOhr_UlK86CNpNwdi_xzsr2gTIAgWc4uOaPw9D2frYPNQec5q4WLmlfonP0esOA" alt="" />
+                <img className="w-10 h-10 rounded-full border-2 border-primary object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfGGt71lOTXaUazg4l24buMvrq1-8SiCUMafHRLNcr5hG3CPgBHs7twjsCwWcpNxi7vnNSqCQVnZdhyvJZrOr88gJivaHXms7iP50EOyv04WuVuDgYAg65DVRVgPO0Stcym_l5aPsb0gBCuNLtUd1KHB9NF48KYuJtYqcwecvdXm9a0S3coNCVU6H7Ooo2R5glWvAx9wuBEMmdsGxw2Nl8iWRxg6lTY80q7rRhNo36binWM5B9iC_Ejil_EqPch4P-UWUjuoKRXQ" alt="" />
+                <img className="w-10 h-10 rounded-full border-2 border-primary object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqC6ejf4tDb15svJYoB7Tr-hjlnhKue9g8l7jlq1BaoaQ3moGOCqbCG3RcXBViYuuqP4Z9-hWmRInpQjOgOsCHJxz1dgBjViqV54vhOLthwNQssGQOHulJO9tvhvcTh-M3YRPAakBmj5CKmdsZi8sgCtfOar2B9RXyhEFSPuqGxOWHsDooSlRbMKkbC_xSudS_criZP2SOkbYnmmbWC-vJx3l_GaLGkU8mV3UYgFF5bd92jOj4_2Z_6Ax6GGiejQHo4b2CwqR03A" alt="" />
+                <div className="w-10 h-10 rounded-full border-2 border-primary bg-white/20 flex items-center justify-center text-xs font-bold font-label">+12k</div>
               </div>
-              <p className="mt-4 text-sm">Join a global community of learners and educators.</p>
             </div>
           </div>
         </section>
+
+        {/* Footer / Secondary CTA */}
+        <footer className="w-full max-w-7xl px-6 py-20 flex flex-col items-center">
+          <div className="flex flex-col items-center space-y-4">
+            <p className="text-sm font-label text-on-surface-variant uppercase tracking-widest font-bold">Ready to take control of your learning?</p>
+            <button onClick={login} className="group flex items-center gap-3 px-6 py-3 rounded-full bg-surface-container-lowest border border-primary/10 shadow-sm hover:shadow-md transition-all active:scale-95">
+              <span className="material-symbols-outlined text-primary text-xl">wallet</span>
+              <span className="font-label font-bold text-primary">Connect Wallet</span>
+              <span className="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform">chevron_right</span>
+            </button>
+            <p className="text-xs text-slate-400 pt-4">MetaMask, WalletConnect, and Coinbase Wallet supported.</p>
+          </div>
+        </footer>
       </main>
-      <style jsx>{`
-        .glass-header {
-          background: rgba(249, 249, 255, 0.6);
-          backdrop-filter: blur(20px);
-        }
-      `}</style>
+
+      {/* BottomNavBar (Only for mobile destinations) */}
+      <nav className="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-white/80 backdrop-blur-lg z-50 rounded-t-xl shadow-[0_-8px_24px_-4px_rgba(7,14,29,0.04)]">
+        <Link href="/" className="flex flex-col items-center justify-center text-blue-600 after:content-[''] after:w-1 after:h-1 after:bg-blue-600 after:rounded-full after:mt-1">
+          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>home</span>
+          <span className="font-manrope text-[10px] font-semibold uppercase tracking-widest mt-1">Home</span>
+        </Link>
+        <Link href="/courses" className="flex flex-col items-center justify-center text-slate-400 hover:text-blue-500 transition-colors">
+          <span className="material-symbols-outlined">school</span>
+          <span className="font-manrope text-[10px] font-semibold uppercase tracking-widest mt-1">Courses</span>
+        </Link>
+        <button onClick={login} className="flex flex-col items-center justify-center text-slate-400 hover:text-blue-500 transition-colors">
+          <span className="material-symbols-outlined">account_balance_wallet</span>
+          <span className="font-manrope text-[10px] font-semibold uppercase tracking-widest mt-1">Wallet</span>
+        </button>
+        <Link href="/profile" className="flex flex-col items-center justify-center text-slate-400 hover:text-blue-500 transition-colors">
+          <span className="material-symbols-outlined">person</span>
+          <span className="font-manrope text-[10px] font-semibold uppercase tracking-widest mt-1">Profile</span>
+        </Link>
+      </nav>
     </div>
   );
 }

@@ -109,7 +109,7 @@ export default function LoginPage() {
             </div>
             {/* Primary Action Button */}
             <button 
-              className="w-full bg-linear-to-br from-primary to-primary-dim text-on-primary font-headline font-bold py-4 px-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98] transition-all duration-200 flex justify-center items-center gap-2 disabled:opacity-50" 
+              className="w-full bg-gradient-to-br from-primary to-primary-dim text-on-primary font-headline font-bold py-4 px-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98] transition-all duration-200 flex justify-center items-center gap-2 disabled:opacity-50" 
               type="submit"
               disabled={isLoggingIn}
             >

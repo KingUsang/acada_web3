@@ -10,7 +10,7 @@ import { AuthProvider } from "../lib/auth/context";
 
 export function Providers({ children }: PropsWithChildren) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark">
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <ClusterProvider>
         <SolanaClientProvider>
           <WalletProvider>
