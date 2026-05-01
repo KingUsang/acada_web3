@@ -3,18 +3,11 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-<<<<<<< HEAD
-  --background: #f9f9ff;
-  --foreground: #19315d;
-  --primary: #0053db;
-  --primary-foreground: #ffffff;
-=======
   /* Use design system color tokens as the base for background/foreground */
   --background: var(--color-surface);
   --foreground: var(--color-on-background);
   --primary: var(--color-primary);
   --primary-foreground: var(--color-on-primary);
->>>>>>> 9293b2cdd9231c7f54cccd67f3d00dc5210d1d4f
   --muted: #737373;
   --muted-foreground: #737373;
   --card: #ffffff;
