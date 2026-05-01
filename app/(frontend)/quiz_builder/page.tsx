@@ -4,10 +4,10 @@ export default function QuizBuilderPage() {
   return (
     <div className="bg-surface text-on-surface antialiased min-h-screen font-body">
       {/* TopAppBar */}
-      <header className="fixed top-0 w-full z-50 bg-surface-container-lowest/80 backdrop-blur-xl shadow-[0_16px_32px_-12px_rgba(7,14,29,0.04)]">
+      <header className="fixed top-0 w-full z-50 bg-white/60 dark:bg-slate-950/60 backdrop-blur-xl shadow-[0_16px_32px_-12px_rgba(7,14,29,0.04)]">
         <div className="flex items-center justify-between px-6 h-16 w-full">
           <div className="flex items-center gap-4">
-            <button className="p-2 hover:bg-surface-container-low transition-colors active:scale-95 duration-200 rounded-full">
+            <button className="p-2 hover:bg-slate-100/50 transition-colors active:scale-95 duration-200 rounded-full">
               <span className="material-symbols-outlined text-primary">menu</span>
             </button>
             <h1 className="text-xl font-extrabold tracking-tighter text-primary font-headline">
@@ -15,7 +15,7 @@ export default function QuizBuilderPage() {
             </h1>
           </div>
           <div className="flex items-center gap-4">
-            <button className="p-2 hover:bg-surface-container-low transition-colors active:scale-95 duration-200 rounded-full">
+            <button className="p-2 hover:bg-slate-100/50 transition-colors active:scale-95 duration-200 rounded-full">
               <span className="material-symbols-outlined text-slate-500">search</span>
             </button>
             <div className="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
@@ -136,7 +136,7 @@ export default function QuizBuilderPage() {
 
           {/* Metadata Pills */}
           <section className="flex flex-wrap gap-3 py-4">
-            <button className="px-4 py-2 rounded-full bg-surface-container-highest text-on-surface font-label text-xs font-bold flex items-center gap-2">
+            <button className="px-4 py-2 rounded-full bg-inverse-surface text-inverse-on-surface font-label text-xs font-bold flex items-center gap-2">
               <span className="material-symbols-outlined text-[16px]">label</span>
               ECONOMICS
             </button>
@@ -149,9 +149,9 @@ export default function QuizBuilderPage() {
       </main>
 
       {/* Bottom Action Area */}
-      <div className="fixed bottom-0 left-0 w-full p-6 bg-linear-to-t from-surface via-surface/90 to-transparent pointer-events-none">
+      <div className="fixed bottom-0 left-0 w-full p-6 bg-gradient-to-t from-surface via-surface/90 to-transparent pointer-events-none">
         <div className="max-w-2xl mx-auto pointer-events-auto">
-          <button className="w-full bg-linear-to-r from-primary to-primary-dim text-on-primary py-5 rounded-xl font-bold text-lg shadow-[0_16px_32px_-8px_rgba(0,83,219,0.3)] active:scale-95 transition-all duration-200 flex items-center justify-center gap-3">
+          <button className="w-full bg-gradient-to-r from-primary to-primary-dim text-on-primary py-5 rounded-xl font-bold text-lg shadow-[0_16px_32px_-8px_rgba(0,83,219,0.3)] active:scale-95 transition-all duration-200 flex items-center justify-center gap-3">
             <span className="material-symbols-outlined">add_circle</span>
             Add Questions
           </button>

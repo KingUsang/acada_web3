@@ -1,38 +1,27 @@
-import React, { useState } from "react";
-import Link from "next/link";
-import { useAuth } from "../../lib/auth/context";
+import React from "react";
 
 export default function WalletConnectionPage() {
-  const { user } = useAuth();
-  const [isConnected, setIsConnected] = useState(false);
-
-  const handleConnectPhantom = async () => {
-    setIsConnected(true);
-  };
-
-  const handleDisconnect = () => {
-    setIsConnected(false);
-  };
-
   return (
-    <div className="bg-background min-h-screen font-body text-on-surface">
-      {/* Header */}
-      <header className="sticky top-0 z-50 flex justify-between items-center px-6 h-16 bg-surface-container-low/80 backdrop-blur-xl shadow-[0_4px_16px_rgba(7,14,29,0.04)]">
-        <Link href="/student_home" className="material-symbols-outlined text-primary text-2xl active:scale-95">
-          arrow_back
-        </Link>
-        <span className="font-headline font-bold text-on-surface">Acada</span>
-        <div className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-primary-container">
-          <img
-            alt="Profile"
-            className="w-full h-full object-cover"
-            src={user?.profileImage || "https://lh3.googleusercontent.com/aida-public/AB6AXuD_H4UmM_92IJKrQdfw24pccczcx5JEp4iuBrkW5l0SZNjLiXM4ZVdQPnWaziT7D0AmHsGVCQoW8Z6YiegRA8Q_jXfTptMiQjNUA0xYkrY0hKCFv_FXDkaA9vdWmfzxNX17RS1Nr9Z-j-16Z2Ax0rfGVggRrg3SXkyF9oAARZTMF5Al1OEa2XwSdEiJe1QO5cRwB4JSGfqPC_89JStJZWCsD6gEfuOop2CFGZeDu7MKnluAFuolbfXGQThlOG3lpsszyUH-qL-e5A"}
-          />
+    <div className="bg-background text-on-background font-body min-h-screen flex flex-col">
+      {/* TopAppBar */}
+      <header className="fixed top-0 w-full z-50 bg-slate-50/60 dark:bg-slate-950/60 backdrop-blur-xl shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
+        <div className="flex justify-between items-center px-6 h-16 w-full max-w-7xl mx-auto">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-black tracking-tighter text-primary">Acada</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+              <img
+                alt="User"
+                className="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpu08dfQDaDBzYyCw3D-j2Mmuy7lCZSZyJ0yJRQRVmBUw7PgXYTBPC4m8kEwYZmDSGieP3VwQKvrp_8wdLxvNLgAQ7xalx6t8CTLkPSMgcP7UajYHucMRuJqoiuBRUb7iIvh6uHY3OgsujfeBVo1x2M5ojXH3hSEWIdMVTzesjBClYs1GjRpj9bBdpXLltzjtgB76HZFtPnZLRMuyXL6PU5ZKMfUgKSGare_obHizB-b_DYd3I8Jp30Mi8fyMx0Ezno5JpCVdl-g"
+              />
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="px-6 pt-6 pb-24">
+      <main className="flex-grow pt-24 pb-32 px-6 flex flex-col items-center justify-center max-w-4xl mx-auto w-full">
         {/* Hero Context */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-inverse-surface mb-4">
@@ -61,10 +50,10 @@ export default function WalletConnectionPage() {
                   account_balance_wallet
                 </span>
               </div>
-              <button className="w-full bg-linear-to-br from-primary to-primary-dim text-on-primary py-4 px-6 rounded-full font-bold flex items-center justify-center gap-3 active:scale-95 transition-all shadow-[0_4px_12px_rgba(0,83,219,0.2)]">
+              <button className="w-full bg-gradient-to-br from-primary to-primary-dim text-on-primary py-4 px-6 rounded-full font-bold flex items-center justify-center gap-3 active:scale-95 transition-all shadow-[0_4px_12px_rgba(0,83,219,0.2)]">
                 <img
                   alt="Phantom"
-                  className="w-6 h-6 rounded-md bg-surface-container-lowest p-1"
+                  className="w-6 h-6 rounded-md bg-white p-1"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZy2Jc8nnsbPKfVehCvslQXu0pSo5FrNpkfWojfHp8iy8URdIgQScxWWFW0xjgmC0WR7wGjjMMjH6mEKO7JCsXLbZfEvKJwmmT7GwP5Y05l8xQElppP4QMe6sQczmDANYTJtk9WSHNdp6bdCQQxEvqVN7n0l_e44tWWeBX4kmYHiHF5snGokdXtTGdraGCcqSRlBGnrIlbypRi4GwM02Ym5e8UQtNgkfs3V8vwTabnZxbD2nSoPBOgyOFe4M0FcQqLhYE9-l5BMw"
                 />
                 <span>Connect Phantom Wallet</span>
@@ -91,7 +80,7 @@ export default function WalletConnectionPage() {
                     check_circle
                   </span>
                 </div>
-                <div className="grow">
+                <div className="flex-grow">
                   <p className="text-xs font-label text-secondary uppercase tracking-tighter font-bold">
                     Verified Connection
                   </p>
@@ -120,7 +109,7 @@ export default function WalletConnectionPage() {
               </p>
             </div>
             {/* Info Card 2 */}
-            <div className="bg-surface-container-lowest/80 backdrop-blur-[20px] p-6 rounded-xl shadow-[0_8px_32px_-16px_rgba(7,14,29,0.08)]">
+            <div className="bg-surface-container-high/40 backdrop-blur-md p-6 rounded-xl border border-white/50">
               <span className="material-symbols-outlined text-primary mb-4 block">security</span>
               <h3 className="font-bold text-inverse-surface mb-2">Secure & Private</h3>
               <p className="text-sm text-on-surface-variant leading-relaxed">
@@ -134,7 +123,7 @@ export default function WalletConnectionPage() {
         {/* Educational Section */}
         <section className="mt-20 w-full">
           <div className="bg-surface-container-low rounded-xl p-8 flex flex-col md:flex-row items-center gap-8">
-            <div className="w-full md:w-1/3 aspect-video rounded-lg overflow-hidden bg-surface-container-lowest shadow-sm">
+            <div className="w-full md:w-1/3 aspect-video rounded-lg overflow-hidden bg-white shadow-sm">
               <img
                 alt="Certificate"
                 className="w-full h-full object-cover"
@@ -185,6 +174,38 @@ export default function WalletConnectionPage() {
         </div>
       </div>
 
+      {/* Bottom Navigation for Mobile */}
+      <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg shadow-[0_-8px_24px_-4px_rgba(7,14,29,0.04)] z-50 rounded-t-xl md:hidden">
+        <div className="flex flex-col items-center justify-center text-slate-400">
+          <span className="material-symbols-outlined">home</span>
+          <span className="font-label text-[10px] font-semibold uppercase tracking-widest mt-1">
+            Home
+          </span>
+        </div>
+        <div className="flex flex-col items-center justify-center text-slate-400">
+          <span className="material-symbols-outlined">school</span>
+          <span className="font-label text-[10px] font-semibold uppercase tracking-widest mt-1">
+            Courses
+          </span>
+        </div>
+        <div className="flex flex-col items-center justify-center text-primary after:content-[''] after:w-1 after:h-1 after:bg-primary after:rounded-full after:mt-1">
+          <span
+            className="material-symbols-outlined"
+            style={{ fontVariationSettings: "'FILL' 1" }}
+          >
+            account_balance_wallet
+          </span>
+          <span className="font-label text-[10px] font-semibold uppercase tracking-widest mt-1">
+            Wallet
+          </span>
+        </div>
+        <div className="flex flex-col items-center justify-center text-slate-400">
+          <span className="material-symbols-outlined">person</span>
+          <span className="font-label text-[10px] font-semibold uppercase tracking-widest mt-1">
+            Profile
+          </span>
+        </div>
+      </nav>
     </div>
   );
 }

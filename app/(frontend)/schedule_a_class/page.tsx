@@ -72,7 +72,7 @@ export default function ScheduleAClassPage() {
 
   return (
     <div className="bg-surface text-on-surface antialiased min-h-screen pb-32 font-body">
-      <nav className="fixed top-0 w-full z-50 bg-surface-container-lowest/80 backdrop-blur-xl flex justify-between items-center px-6 h-16 transition-all duration-300 ease-in-out shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
+      <nav className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl flex justify-between items-center px-6 h-16 transition-all duration-300 ease-in-out">
         <div className="flex items-center gap-4">
           <Link href="/tutor_home" className="material-symbols-outlined text-on-surface-variant cursor-pointer">
             close
@@ -209,7 +209,7 @@ export default function ScheduleAClassPage() {
             </section>
           </div>
 
-          <section className="bg-surface-container-lowest rounded-xl p-4 flex items-center justify-between shadow-sm">
+          <section className="bg-surface-container-low rounded-xl p-4 flex items-center justify-between">
             <div>
               <h3 className="font-bold text-on-surface">Tutor Scope</h3>
               <p className="text-xs text-on-surface-variant mt-0.5">
@@ -226,7 +226,7 @@ export default function ScheduleAClassPage() {
           </section>
 
           <div className="grid grid-cols-1 gap-4 mt-8">
-            <div className="bg-surface-container-highest/30 backdrop-blur-sm p-6 rounded-xl shadow-sm">
+            <div className="bg-surface-container-highest/30 backdrop-blur-sm p-6 rounded-xl border border-primary/5">
               <div className="flex items-start gap-4">
                 <div className="p-3 bg-primary/10 rounded-xl text-primary">
                   <span
@@ -249,7 +249,7 @@ export default function ScheduleAClassPage() {
           <footer className="pt-4">
             <button
               disabled={isSubmitting || tutorCourses.length === 0}
-              className="w-full bg-linear-to-br from-primary to-primary-dim text-on-primary font-bold py-4 rounded-full shadow-[0_12px_24px_-8px_rgba(0,83,219,0.3)] active:scale-95 transition-all text-sm uppercase tracking-widest font-label max-w-md mx-auto block disabled:opacity-50"
+              className="w-full bg-gradient-to-br from-primary to-primary-dim text-on-primary font-bold py-4 rounded-full shadow-[0_12px_24px_-8px_rgba(0,83,219,0.3)] active:scale-95 transition-all text-sm uppercase tracking-widest font-label max-w-md mx-auto block disabled:opacity-50"
             >
               {isSubmitting ? "Scheduling..." : "Schedule Session"}
             </button>

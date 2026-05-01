@@ -193,8 +193,8 @@ export default function LiveClassroomPage() {
 
   return (
     <div className="bg-background min-h-screen font-body text-on-background">
-      <header className="sticky top-0 z-50 flex justify-between items-center px-6 h-16 bg-surface-container-lowest/80 backdrop-blur-xl shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
-        <Link href={isTutorMode ? "/tutor_home" : "/student_home"} className="text-2xl font-black tracking-tighter text-primary">
+      <header className="sticky top-0 z-50 flex justify-between items-center px-6 h-16 glass-header shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
+        <Link href={isTutorMode ? "/tutor_home" : "/student_home"} className="text-2xl font-black tracking-tighter text-blue-600">
           Live Classroom
         </Link>
         <span className="text-xs uppercase tracking-widest text-on-surface-variant">
@@ -212,14 +212,14 @@ export default function LiveClassroomPage() {
         </section>
 
         {!sessionId ? (
-          <section className="bg-surface-container-lowest rounded-xl p-8 shadow-sm">
+          <section className="bg-surface-container-lowest rounded-xl p-8 shadow-xl">
             <p className="text-on-surface-variant">
               Open this page from a scheduled session to launch the classroom flow.
             </p>
           </section>
         ) : (
           <>
-            <section className="bg-surface-container-lowest rounded-xl p-8 shadow-sm space-y-4">
+            <section className="bg-surface-container-lowest rounded-xl p-8 shadow-xl space-y-4">
               <h2 className="font-headline text-2xl font-bold">Session Controls</h2>
               <p className="text-on-surface-variant">
                 Current status: <span className="font-semibold text-on-surface">{status}</span>
@@ -238,7 +238,7 @@ export default function LiveClassroomPage() {
                     <button
                       onClick={endClass}
                       disabled={isWorking || status === "ended"}
-                      className="px-5 py-3 rounded-xl bg-surface-container-highest text-on-surface font-bold disabled:opacity-50"
+                      className="px-5 py-3 rounded-xl bg-inverse-surface text-white font-bold disabled:opacity-50"
                     >
                       {isWorking && status === "started" ? "Ending..." : "End Class"}
                     </button>
@@ -264,7 +264,7 @@ export default function LiveClassroomPage() {
               </div>
             </section>
 
-            <section className="bg-surface-container-lowest rounded-xl p-8 shadow-sm space-y-3">
+            <section className="bg-surface-container-lowest rounded-xl p-8 shadow-xl space-y-3">
               <h2 className="font-headline text-2xl font-bold">Token & Room Details</h2>
               {tokenData ? (
                 <>
@@ -286,7 +286,7 @@ export default function LiveClassroomPage() {
             </section>
 
             {isTutorMode ? (
-              <section className="bg-surface-container-lowest rounded-xl p-8 shadow-sm space-y-4">
+              <section className="bg-surface-container-lowest rounded-xl p-8 shadow-xl space-y-4">
                 <div className="flex items-center justify-between">
                   <h2 className="font-headline text-2xl font-bold">Attendance</h2>
                   <button
@@ -320,6 +320,12 @@ export default function LiveClassroomPage() {
           </>
         )}
       </main>
+      <style jsx>{`
+        .glass-header {
+          background: rgba(249, 249, 255, 0.6);
+          backdrop-filter: blur(20px);
+        }
+      `}</style>
     </div>
   );
 }

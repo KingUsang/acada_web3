@@ -138,7 +138,7 @@ function QuizRunner({ idToken, quiz, quizId }: { idToken: string | null; quiz: Q
         <div className="h-full bg-primary transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
       </div>
 
-      <main className="grow flex flex-col px-6 py-8 max-w-3xl mx-auto w-full">
+      <main className="flex-grow flex flex-col px-6 py-8 max-w-3xl mx-auto w-full">
         {currentQuestion ? (
           <>
             <section className="mb-12">
@@ -152,55 +152,64 @@ function QuizRunner({ idToken, quiz, quizId }: { idToken: string | null; quiz: Q
 
             <div className="space-y-4 mb-24">
               {(currentQuestion.options ?? []).map((option, optionIndex) => {
-                  {quiz.title}
+                const isSelected = answers[currentIndex] === optionIndex;
                 return (
-                <h2 className="font-headline text-xl sm:text-2xl font-extrabold text-on-surface leading-relaxed tracking-tight">
+                  <label
                     key={`${currentQuestion.id}-${optionIndex}`}
                     className={`group relative flex items-center p-5 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
-                      <div className={`w-2 h-2 rounded-full bg-on-primary ${isSelected ? "opacity-100" : "opacity-0"}`}></div>
-                        isSelected ? "text-on-primary-container" : "text-on-surface group-hover:text-primary"
-              <div className="space-y-3">
-                        <header className="sticky top-0 z-50 flex justify-between items-center px-6 h-16 bg-surface-container-low/80 backdrop-blur-xl shadow-[0_4px_16px_rgba(7,14,29,0.04)]">
-                          <Link href="/student_home" className="material-symbols-outlined text-primary text-2xl active:scale-95">
-                            arrow_back
-                          </Link>
-                          <span className="font-headline font-bold text-on-surface text-sm uppercase tracking-widest">
-                      className={`group relative flex items-start p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
-                          </span>
-                          ? "bg-primary/10 border-primary shadow-md shadow-primary/10"
-                          : "bg-surface-container-low hover:bg-surface-container-highest border-outline-variant/30"
-                              timer
-                            </span>
-                            <span className="font-label text-xs font-bold text-primary uppercase tracking-widest">
-                              {secondsRemaining === null ? "∞" : formatTime(secondsRemaining)}
-                            </span>
-                          </div>
-                        </header>
+                      isSelected
+                        ? "bg-primary-container/30 border-primary/20"
+                        : "bg-surface-container-lowest hover:bg-surface-container-high border-transparent"
+                    }`}
+                  >
+                    <input
+                      checked={isSelected}
+                      className="hidden peer"
+                      name={`quiz-option-${currentIndex}`}
+                      type="radio"
+                      onChange={() =>
+                        setAnswers((current) => ({
+                          ...current,
+                          [currentIndex]: optionIndex,
+                        }))
+                      }
+                    />
+                    <div
+                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                        isSelected ? "border-primary bg-primary" : "border-outline-variant"
+                      }`}
                     >
-                        <div className="w-full h-1.5 bg-surface-container-lowest">
-                          <div className="h-full bg-gradient-to-r from-primary to-primary-dim transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
-                        </div>
+                      <div className={`w-2 h-2 rounded-full bg-white ${isSelected ? "opacity-100" : "opacity-0"}`}></div>
+                    </div>
+                    <span
+                      className={`ml-4 font-headline font-semibold transition-colors ${
+                        isSelected ? "text-on-primary-container" : "text-on-surface group-hover:text-primary"
+                      }`}
+                    >
                       {option}
-                        <main className="grow flex flex-col px-6 py-8 pb-32 overflow-y-auto">
                     </span>
                   </label>
                 );
               })}
             </div>
           </>
-                        {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-on-primary"></div>}
+        ) : (
           <div className="rounded-xl bg-surface-container-low p-5 text-on-surface-variant">
-                      <span
-                        className={`ml-3 font-label font-medium transition-colors text-sm sm:text-base ${
-                          isSelected ? "text-primary font-bold" : "text-on-surface group-hover:text-on-surface-variant"
+            This quiz has no questions yet.
+          </div>
+        )}
       </main>
 
-      <footer className="fixed bottom-0 left-0 right-0 p-6 bg-surface-container-lowest/80 backdrop-blur-xl z-40 shadow-[0_-8px_24px_-4px_rgba(7,14,29,0.04)]">
-        <div className="flex items-center justify-between gap-4 w-full">
+      <footer className="fixed bottom-0 left-0 right-0 p-6 bg-white/80 dark:bg-[#070e1d]/80 backdrop-blur-xl border-t border-blue-100/10 z-40">
+        <div className="max-w-3xl mx-auto flex items-center justify-between gap-6">
+          <button className="flex items-center gap-2 text-on-surface-variant font-label text-sm uppercase tracking-widest hover:text-primary transition-colors">
+            <span className="material-symbols-outlined text-lg">flag</span>
+            Review
+          </button>
           <button
             onClick={() => void handleNext()}
             disabled={isSubmitting || !hasAnsweredCurrent}
-            className="flex-1 bg-primary text-on-primary py-3 px-6 rounded-xl font-headline font-bold text-sm uppercase tracking-widest shadow-lg shadow-primary/20 active:scale-[0.98] transition-all disabled:opacity-50"
+            className="flex-grow md:flex-grow-0 md:min-w-[220px] bg-gradient-to-br from-primary to-primary-dim text-on-primary py-4 px-8 rounded-full font-headline font-bold text-lg shadow-[0_8px_24px_rgba(0,83,219,0.25)] active:scale-95 transition-all disabled:opacity-50"
           >
             {isSubmitting
               ? "Submitting..."
@@ -210,7 +219,7 @@ function QuizRunner({ idToken, quiz, quizId }: { idToken: string | null; quiz: Q
           </button>
         </div>
       </footer>
-    </div>
+    </>
   );
 }
 
@@ -224,13 +233,13 @@ export default function QuizInterfacePage() {
   return (
     <div className="bg-surface font-body text-on-surface min-h-screen flex flex-col">
       {error ? (
-        <main className="grow flex items-center justify-center p-6">
+        <main className="flex-grow flex items-center justify-center p-6">
           <div className="rounded-xl bg-destructive/10 p-5 text-destructive">
             Failed to load quiz.
           </div>
         </main>
       ) : isLoading || !quiz || !quizId ? (
-        <main className="grow flex flex-col px-6 py-8 max-w-3xl mx-auto w-full">
+        <main className="flex-grow flex flex-col px-6 py-8 max-w-3xl mx-auto w-full">
           <div className="space-y-6">
             <div className="h-6 w-40 bg-surface-container-low rounded animate-pulse"></div>
             <div className="h-24 w-full bg-surface-container-low rounded animate-pulse"></div>

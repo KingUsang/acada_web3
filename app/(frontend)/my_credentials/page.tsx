@@ -265,33 +265,33 @@ export default function MyCredentialsPage() {
                 <Link
                   key={certificate.id}
                   href={`/credential_detail?id=${certificate.id}`}
-                  className="block bg-surface-container-highest rounded-xl p-5 transition-transform active:scale-[0.98] relative overflow-hidden"
+                  className="block bg-inverse-surface rounded-xl p-5 transition-transform active:scale-[0.98] relative overflow-hidden"
                 >
                   <div className="absolute top-0 right-0 p-4 opacity-10">
-                    <span className="material-symbols-outlined text-on-surface text-6xl">shield</span>
+                    <span className="material-symbols-outlined text-white text-6xl">shield</span>
                   </div>
                   <div className="flex justify-between items-start mb-4 relative z-10">
-                    <div className="w-12 h-12 bg-surface-container-lowest rounded-lg flex items-center justify-center">
-                      <span className="material-symbols-outlined text-primary text-2xl">verified</span>
+                    <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
+                      <span className="material-symbols-outlined text-white text-2xl">verified</span>
                     </div>
-                    <div className="flex items-center gap-1.5 bg-primary px-3 py-1 rounded-full">
+                    <div className="flex items-center gap-1.5 bg-[#2563EB] px-3 py-1 rounded-full">
                       <span
-                        className="material-symbols-outlined text-on-primary text-xs"
+                        className="material-symbols-outlined text-white text-xs"
                         style={{ fontVariationSettings: "'FILL' 1" }}
                       >
                         verified
                       </span>
-                      <span className="font-label text-[10px] font-bold uppercase text-on-primary tracking-wider">
+                      <span className="font-label text-[10px] font-bold uppercase text-white tracking-wider">
                         Minted
                       </span>
                     </div>
                   </div>
-                  <h3 className="font-headline font-bold text-lg text-on-surface leading-tight mb-1 relative z-10">
+                  <h3 className="font-headline font-bold text-lg text-white leading-tight mb-1 relative z-10">
                     {certificate.course?.title || "Course Certificate"}
                   </h3>
-                  <div className="flex items-center gap-2 relative z-10 text-xs text-on-surface-variant uppercase tracking-widest">
+                  <div className="flex items-center gap-2 relative z-10 text-xs text-white/60 uppercase tracking-widest">
                     <span>Issued {formatDate(certificate.created_at)}</span>
-                    <span className="w-1 h-1 bg-on-surface-variant/30 rounded-full"></span>
+                    <span className="w-1 h-1 bg-white/20 rounded-full"></span>
                     <span>{certificate.mint_address || "Pending mint reference"}</span>
                   </div>
                 </Link>
@@ -305,6 +305,33 @@ export default function MyCredentialsPage() {
         </section>
       </main>
 
+      <nav className="fixed bottom-0 w-full z-50 rounded-t-xl bg-white/80 dark:bg-[#070e1d]/80 backdrop-blur-xl shadow-[0_-4px_32px_rgba(7,14,29,0.04)]">
+        <div className="flex justify-around items-center h-16 px-4 w-full">
+          <Link href="/student_home" className="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors">
+            <span className="material-symbols-outlined">school</span>
+            <span className="font-label text-[10px] uppercase tracking-widest mt-0.5">Learn</span>
+          </Link>
+          <Link href="/my_credentials" className="flex flex-col items-center justify-center text-[#2563EB] after:content-[''] after:w-1 after:h-1 after:bg-[#2563EB] after:rounded-full after:mt-1">
+            <span
+              className="material-symbols-outlined"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
+              verified_user
+            </span>
+            <span className="font-label text-[10px] uppercase tracking-widest mt-0.5">
+              Credentials
+            </span>
+          </Link>
+          <Link href="/acada_etheric" className="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors">
+            <span className="material-symbols-outlined">search</span>
+            <span className="font-label text-[10px] uppercase tracking-widest mt-0.5">Search</span>
+          </Link>
+          <Link href="/refined_student_dashboard" className="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors">
+            <span className="material-symbols-outlined">person</span>
+            <span className="font-label text-[10px] uppercase tracking-widest mt-0.5">Profile</span>
+          </Link>
+        </div>
+      </nav>
     </div>
   );
 }
