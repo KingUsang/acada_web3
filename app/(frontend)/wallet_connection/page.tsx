@@ -4,7 +4,7 @@ export default function WalletConnectionPage() {
   return (
     <div className="bg-background text-on-background font-body min-h-screen flex flex-col">
       {/* TopAppBar */}
-      <header className="fixed top-0 w-full z-50 bg-slate-50/60 dark:bg-slate-950/60 backdrop-blur-xl shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
+      <header className="fixed top-0 w-full z-50 bg-slate-50/60 backdrop-blur-xl shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
         <div className="flex justify-between items-center px-6 h-16 w-full max-w-7xl mx-auto">
           <div className="flex items-center gap-2">
             <span className="text-2xl font-black tracking-tighter text-primary">Acada</span>
@@ -175,7 +175,7 @@ export default function WalletConnectionPage() {
       </div>
 
       {/* Bottom Navigation for Mobile */}
-      <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg shadow-[0_-8px_24px_-4px_rgba(7,14,29,0.04)] z-50 rounded-t-xl md:hidden">
+      <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-white/80 backdrop-blur-lg shadow-[0_-8px_24px_-4px_rgba(7,14,29,0.04)] z-50 rounded-t-xl md:hidden">
         <div className="flex flex-col items-center justify-center text-slate-400">
           <span className="material-symbols-outlined">home</span>
           <span className="font-label text-[10px] font-semibold uppercase tracking-widest mt-1">
@@ -209,3 +209,4 @@ export default function WalletConnectionPage() {
     </div>
   );
 }
+

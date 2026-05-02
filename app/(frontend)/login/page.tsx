@@ -16,12 +16,16 @@ type RegisterResponse = {
 };
 
 export default function LoginPage() {
-  const { login, authenticateUser, refreshAppUser } = useAuth();
+  const { login, authenticateUser, refreshAppUser, isLoading } = useAuth();
   const router = useRouter();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading) {
+      toast.error("Authentication is still initializing. Please wait a moment.");
+      return;
+    }
     setIsLoggingIn(true);
     try {
       await login();
@@ -111,9 +115,9 @@ export default function LoginPage() {
             <button 
               className="w-full bg-gradient-to-br from-primary to-primary-dim text-on-primary font-headline font-bold py-4 px-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98] transition-all duration-200 flex justify-center items-center gap-2 disabled:opacity-50" 
               type="submit"
-              disabled={isLoggingIn}
+              disabled={isLoggingIn || isLoading}
             >
-              {isLoggingIn ? "Logging In..." : "Log In"}
+              {isLoading ? "Preparing Auth..." : isLoggingIn ? "Logging In..." : "Log In"}
               <span className="material-symbols-outlined text-xl">arrow_forward</span>
             </button>
           </form>
@@ -131,7 +135,7 @@ export default function LoginPage() {
             className="w-full flex items-center justify-center gap-3 bg-surface-container-low hover:bg-surface-container-high text-on-surface font-headline font-bold py-4 px-6 rounded-xl transition-all duration-200 group" 
             type="button"
             onClick={handleLogin}
-            disabled={isLoggingIn}
+            disabled={isLoggingIn || isLoading}
           >
             {/* Google SVG */}
             <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" viewBox="0 0 24 24">

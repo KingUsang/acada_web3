@@ -291,7 +291,7 @@ export default function StudentHomePage() {
         </section>
       </main>
 
-      <nav className="fixed bottom-0 w-full z-50 rounded-t-xl bg-white/80 dark:bg-[#070e1d]/80 backdrop-blur-xl shadow-[0_-4px_32px_rgba(7,14,29,0.04)] flex justify-around items-center h-16 px-4 max-w-2xl mx-auto left-1/2 -translate-x-1/2">
+      <nav className="fixed bottom-0 w-full z-50 rounded-t-xl bg-white/80 backdrop-blur-xl shadow-[0_-4px_32px_rgba(7,14,29,0.04)] flex justify-around items-center h-16 px-4 max-w-2xl mx-auto left-1/2 -translate-x-1/2">
         <Link href="/student_home" className="flex flex-col items-center justify-center text-primary after:content-[''] after:w-1 after:h-1 after:bg-primary after:rounded-full after:mt-1 hover:text-primary transition-colors">
           <span
             className="material-symbols-outlined"
@@ -304,10 +304,6 @@ export default function StudentHomePage() {
         <Link href="/my_credentials" className="flex flex-col items-center justify-center text-slate-400 hover:text-primary transition-colors">
           <span className="material-symbols-outlined">verified_user</span>
           <span className="font-label text-[10px] uppercase tracking-widest mt-0.5">Credentials</span>
-        </Link>
-        <Link href="/acada_etheric" className="flex flex-col items-center justify-center text-slate-400 hover:text-primary transition-colors">
-          <span className="material-symbols-outlined">search</span>
-          <span className="font-label text-[10px] uppercase tracking-widest mt-0.5">Search</span>
         </Link>
         <Link href="/refined_student_dashboard" className="flex flex-col items-center justify-center text-slate-400 hover:text-primary transition-colors">
           <span className="material-symbols-outlined">person</span>
@@ -327,3 +323,4 @@ export default function StudentHomePage() {
     </div>
   );
 }
+

@@ -16,7 +16,7 @@ export function GridBackground() {
 
       {/* Large grid — purple (left) */}
       <div
-        className="absolute inset-0 opacity-80 dark:opacity-60"
+        className="absolute inset-0 opacity-80"
         style={{
           backgroundImage: `
             linear-gradient(to right, rgba(153,69,255,0.18) 1px, transparent 1px),
@@ -31,7 +31,7 @@ export function GridBackground() {
 
       {/* Large grid — green (right) */}
       <div
-        className="absolute inset-0 opacity-80 dark:opacity-60"
+        className="absolute inset-0 opacity-80"
         style={{
           backgroundImage: `
             linear-gradient(to right, rgba(20,241,149,0.18) 1px, transparent 1px),
@@ -46,7 +46,7 @@ export function GridBackground() {
 
       {/* Small grid — purple (left) */}
       <div
-        className="absolute inset-0 opacity-80 dark:opacity-60"
+        className="absolute inset-0 opacity-80"
         style={{
           backgroundImage: `
             linear-gradient(to right, rgba(153,69,255,0.10) 1px, transparent 1px),
@@ -61,7 +61,7 @@ export function GridBackground() {
 
       {/* Small grid — green (right) */}
       <div
-        className="absolute inset-0 opacity-80 dark:opacity-60"
+        className="absolute inset-0 opacity-80"
         style={{
           backgroundImage: `
             linear-gradient(to right, rgba(20,241,149,0.10) 1px, transparent 1px),
@@ -76,3 +76,4 @@ export function GridBackground() {
     </div>
   );
 }
+

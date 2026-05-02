@@ -30,7 +30,7 @@ export default function TutorHomePage() {
 
   return (
     <div className="bg-background font-body text-on-surface selection:bg-primary-container min-h-screen">
-      <header className="fixed top-0 w-full z-50 bg-slate-50/60 dark:bg-slate-950/60 backdrop-blur-xl shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
+      <header className="fixed top-0 w-full z-50 bg-slate-50/60 backdrop-blur-xl shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
         <div className="flex justify-between items-center px-6 h-16 w-full max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
             <Link
@@ -47,7 +47,7 @@ export default function TutorHomePage() {
               />
             </Link>
             <Link href="/">
-              <h1 className="text-2xl font-black tracking-tighter text-primary dark:text-blue-400 font-headline">
+              <h1 className="text-2xl font-black tracking-tighter text-primary font-headline">
                 Acada
               </h1>
             </Link>
@@ -55,9 +55,9 @@ export default function TutorHomePage() {
           <div className="flex items-center gap-4">
             <Link
               href="/schedule_a_class"
-              className="p-2 rounded-full hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors active:scale-95 duration-200"
+              className="p-2 rounded-full hover:bg-slate-200/50 transition-colors active:scale-95 duration-200"
             >
-              <span className="material-symbols-outlined text-slate-500 dark:text-slate-400">
+              <span className="material-symbols-outlined text-slate-500">
                 event_available
               </span>
             </Link>
@@ -281,7 +281,7 @@ export default function TutorHomePage() {
         </div>
       </main>
 
-      <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg z-50 rounded-t-xl shadow-[0_-8px_24px_-4px_rgba(7,14,29,0.04)]">
+      <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-white/80 backdrop-blur-lg z-50 rounded-t-xl shadow-[0_-8px_24px_-4px_rgba(7,14,29,0.04)]">
         <Link
           href="/tutor_home"
           className="flex flex-col items-center justify-center text-primary after:content-[''] after:w-1 after:h-1 after:bg-primary after:rounded-full after:mt-1 transition-transform active:scale-90"
@@ -293,7 +293,7 @@ export default function TutorHomePage() {
         </Link>
         <Link
           href="/course_content_manager"
-          className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-primary transition-transform active:scale-90"
+          className="flex flex-col items-center justify-center text-slate-400 hover:text-primary transition-transform active:scale-90"
         >
           <span className="material-symbols-outlined">school</span>
           <span className="font-headline text-[10px] font-semibold uppercase tracking-widest mt-1">
@@ -302,7 +302,7 @@ export default function TutorHomePage() {
         </Link>
         <Link
           href="/wallet_connection"
-          className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-primary transition-transform active:scale-90"
+          className="flex flex-col items-center justify-center text-slate-400 hover:text-primary transition-transform active:scale-90"
         >
           <span className="material-symbols-outlined">account_balance_wallet</span>
           <span className="font-headline text-[10px] font-semibold uppercase tracking-widest mt-1">
@@ -311,7 +311,7 @@ export default function TutorHomePage() {
         </Link>
         <Link
           href="/refined_student_dashboard"
-          className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-primary transition-transform active:scale-90"
+          className="flex flex-col items-center justify-center text-slate-400 hover:text-primary transition-transform active:scale-90"
         >
           <span className="material-symbols-outlined">person</span>
           <span className="font-headline text-[10px] font-semibold uppercase tracking-widest mt-1">
@@ -322,3 +322,4 @@ export default function TutorHomePage() {
     </div>
   );
 }
+

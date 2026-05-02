@@ -7,13 +7,17 @@ import { useAuth } from "../../lib/auth/context";
 import { toast } from "sonner";
 
 export default function SignUpPage() {
-  const { login, authenticateUser, refreshAppUser } = useAuth();
+  const { login, authenticateUser, refreshAppUser, isLoading } = useAuth();
   const router = useRouter();
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [role, setRole] = useState<"STUDENT" | "TUTOR">("STUDENT");
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading) {
+      toast.error("Authentication is still initializing. Please wait a moment.");
+      return;
+    }
     setIsSigningUp(true);
     try {
       await login();
@@ -81,6 +85,7 @@ export default function SignUpPage() {
               <div className="flex p-1 bg-surface-container-high rounded-full w-full">
                 {/* Student Pill */}
                 <button 
+                  type="button"
                   onClick={() => setRole("STUDENT")}
                   className={`flex-1 py-3 px-6 rounded-full font-label font-semibold text-sm transition-all duration-200 ${role === "STUDENT" ? "bg-inverse-surface text-on-primary" : "text-on-surface-variant hover:text-on-surface"}`}
                 >
@@ -88,6 +93,7 @@ export default function SignUpPage() {
                 </button>
                 {/* Tutor Pill */}
                 <button 
+                  type="button"
                   onClick={() => setRole("TUTOR")}
                   className={`flex-1 py-3 px-6 rounded-full font-label font-semibold text-sm transition-all duration-200 ${role === "TUTOR" ? "bg-inverse-surface text-on-primary" : "text-on-surface-variant hover:text-on-surface"}`}
                 >
@@ -160,9 +166,9 @@ export default function SignUpPage() {
                 <button 
                   type="submit" 
                   className="w-full py-5 rounded-xl bg-gradient-to-br from-primary to-primary-dim text-on-primary font-headline font-extrabold text-lg tracking-tight shadow-lg shadow-primary/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center space-x-3 disabled:opacity-50"
-                  disabled={isSigningUp}
+                  disabled={isSigningUp || isLoading}
                 >
-                  <span>{isSigningUp ? "Creating Account..." : "Create Account"}</span>
+                  <span>{isLoading ? "Preparing Auth..." : isSigningUp ? "Creating Account..." : "Create Account"}</span>
                   <span className="material-symbols-outlined">arrow_forward</span>
                 </button>
                 <p className="mt-6 text-center font-body text-sm text-on-surface-variant">

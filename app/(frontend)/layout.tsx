@@ -9,7 +9,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
   return (
     <div className="bg-background text-foreground font-[family-name:var(--font-inter)] antialiased min-h-screen flex flex-col">
       {/* TopAppBar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white/60 backdrop-blur-xl shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)] dark:bg-black/60">
+      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white/60 backdrop-blur-xl shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-primary lg:hidden cursor-pointer mr-2" aria-hidden="true" title="Menu">menu</span>
           <Link href="/" className="text-2xl font-black tracking-tighter text-primary font-['Manrope']">
@@ -17,7 +17,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
           </Link>
         </div>
         <div className="flex items-center gap-4">
-          <button className="material-symbols-outlined text-slate-500 hover:bg-slate-200/50 p-2 rounded-full transition-colors active:scale-95 duration-200 dark:hover:bg-slate-800" title="Notifications">
+          <button className="material-symbols-outlined text-slate-500 hover:bg-slate-200/50 p-2 rounded-full transition-colors active:scale-95 duration-200" title="Notifications">
             notifications
           </button>
           <div 
@@ -41,3 +41,4 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
     </div>
   );
 }
+

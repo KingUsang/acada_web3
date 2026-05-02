@@ -1,8 +1,9 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
-import { Web3Auth } from "@web3auth/modal";
-import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
+import { Web3AuthNoModal } from "@web3auth/no-modal";
+import { AuthAdapter } from "@web3auth/auth-adapter";
+import { CHAIN_NAMESPACES, SafeEventEmitterProvider, WALLET_ADAPTERS } from "@web3auth/base";
 import { SolanaPrivateKeyProvider } from "@web3auth/solana-provider";
 import type { Database } from "../database.types";
 
@@ -46,7 +47,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
+  const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);
   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null);
   const [user, setUser] = useState<Web3AuthUserInfo | null>(null);
   const [appUser, setAppUser] = useState<AppUser | null>(null);
@@ -54,7 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [idToken, setIdToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const clientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID || "BPi5_7ay_9s_7ay_9s_7ay_9s_7ay_9s_7ay_9s_7ay_9s_7ay_9s_7ay_9s_7ay_9s_7ay_9s_7ay_9s"; // Placeholder
+  const clientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID;
 
   const refreshAppUser = useCallback(async (tokenOverride?: string | null) => {
     const token = tokenOverride ?? idToken;
@@ -100,9 +101,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const init = async () => {
       try {
+        if (!clientId) {
+          throw new Error("Missing NEXT_PUBLIC_WEB3AUTH_CLIENT_ID. Add it to .env.local and restart the dev server.");
+        }
+
         const chainConfig = {
           chainNamespace: CHAIN_NAMESPACES.SOLANA,
-          chainId: "0x3", // Devnet
+          chainId: "0x3",
           rpcTarget: "https://api.devnet.solana.com",
           displayName: "Solana Devnet",
           blockExplorer: "https://explorer.solana.com",
@@ -112,21 +117,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         const privateKeyProvider = new SolanaPrivateKeyProvider({ config: { chainConfig } });
 
-        const web3auth = new Web3Auth({
+        const web3authInstance = new Web3AuthNoModal({
           clientId,
           web3AuthNetwork: "sapphire_devnet",
           privateKeyProvider,
         });
 
-        setWeb3auth(web3auth);
+        const authAdapter = new AuthAdapter({
+          privateKeyProvider,
+          adapterSettings: {
+            uxMode: "popup",
+          },
+        });
 
-        await web3auth.initModal();
-        setProvider(web3auth.provider);
+        web3authInstance.configureAdapter(authAdapter);
+        await web3authInstance.init();
 
-        if (web3auth.connected) {
-          const nextUser = (await web3auth.getUserInfo()) as Web3AuthUserInfo;
+        setWeb3auth(web3authInstance);
+        setProvider(web3authInstance.provider as SafeEventEmitterProvider | null);
+
+        if (web3authInstance.connected) {
+          const nextUser = (await web3authInstance.getUserInfo()) as Web3AuthUserInfo;
           setUser(nextUser);
-          const userAuthRes = await web3auth.authenticateUser();
+          const userAuthRes = await web3authInstance.authenticateUser();
           setIdToken(userAuthRes.idToken);
           await refreshAppUser(userAuthRes.idToken);
         }
@@ -141,21 +154,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [clientId, refreshAppUser]);
 
   const login = async () => {
-    if (!web3auth) return;
-    const web3authProvider = await web3auth.connect();
-    setProvider(web3authProvider);
-    if (web3auth.connected) {
-      const nextUser = (await web3auth.getUserInfo()) as Web3AuthUserInfo;
-      setUser(nextUser);
-      const userAuthRes = await web3auth.authenticateUser();
-      setIdToken(userAuthRes.idToken);
-      await refreshAppUser(userAuthRes.idToken);
+    if (!web3auth) {
+      throw new Error("Authentication is still initializing. Please try again.");
     }
+
+    const web3authProvider = await web3auth.connectTo(WALLET_ADAPTERS.AUTH, {
+      loginProvider: "google",
+    });
+    if (!web3authProvider) {
+      throw new Error("Unable to connect to Web3Auth provider.");
+    }
+
+    setProvider(web3authProvider as SafeEventEmitterProvider | null);
+
+    if (!web3auth.connected) {
+      throw new Error("Web3Auth connection was not established.");
+    }
+
+    const nextUser = (await web3auth.getUserInfo()) as Web3AuthUserInfo;
+    setUser(nextUser);
+    const userAuthRes = await web3auth.authenticateUser();
+    if (!userAuthRes?.idToken) {
+      throw new Error("Web3Auth did not return an authentication token.");
+    }
+    setIdToken(userAuthRes.idToken);
+    await refreshAppUser(userAuthRes.idToken);
   };
 
   const logout = async () => {
     if (!web3auth) return;
-    await web3auth.logout();
+    await web3auth.logout({ cleanup: true });
     setProvider(null);
     setUser(null);
     setAppUser(null);
@@ -164,8 +192,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const authenticateUser = async () => {
-    if (!web3auth) return null;
+    if (!web3auth) {
+      throw new Error("Authentication is still initializing. Please try again.");
+    }
     const userAuthRes = await web3auth.authenticateUser();
+    if (!userAuthRes?.idToken) {
+      throw new Error("Web3Auth did not return an authentication token.");
+    }
     setIdToken(userAuthRes.idToken);
     await refreshAppUser(userAuthRes.idToken);
     return userAuthRes.idToken;

@@ -200,7 +200,7 @@ function QuizRunner({ idToken, quiz, quizId }: { idToken: string | null; quiz: Q
         )}
       </main>
 
-      <footer className="fixed bottom-0 left-0 right-0 p-6 bg-white/80 dark:bg-[#070e1d]/80 backdrop-blur-xl border-t border-blue-100/10 z-40">
+      <footer className="fixed bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-xl border-t border-blue-100/10 z-40">
         <div className="max-w-3xl mx-auto flex items-center justify-between gap-6">
           <button className="flex items-center gap-2 text-on-surface-variant font-label text-sm uppercase tracking-widest hover:text-primary transition-colors">
             <span className="material-symbols-outlined text-lg">flag</span>
@@ -254,3 +254,4 @@ export default function QuizInterfacePage() {
     </div>
   );
 }
+

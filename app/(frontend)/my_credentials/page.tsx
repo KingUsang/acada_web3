@@ -305,7 +305,7 @@ export default function MyCredentialsPage() {
         </section>
       </main>
 
-      <nav className="fixed bottom-0 w-full z-50 rounded-t-xl bg-white/80 dark:bg-[#070e1d]/80 backdrop-blur-xl shadow-[0_-4px_32px_rgba(7,14,29,0.04)]">
+      <nav className="fixed bottom-0 w-full z-50 rounded-t-xl bg-white/80 backdrop-blur-xl shadow-[0_-4px_32px_rgba(7,14,29,0.04)]">
         <div className="flex justify-around items-center h-16 px-4 w-full">
           <Link href="/student_home" className="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors">
             <span className="material-symbols-outlined">school</span>
@@ -322,10 +322,6 @@ export default function MyCredentialsPage() {
               Credentials
             </span>
           </Link>
-          <Link href="/acada_etheric" className="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors">
-            <span className="material-symbols-outlined">search</span>
-            <span className="font-label text-[10px] uppercase tracking-widest mt-0.5">Search</span>
-          </Link>
           <Link href="/refined_student_dashboard" className="flex flex-col items-center justify-center text-slate-400 hover:text-[#2563EB] transition-colors">
             <span className="material-symbols-outlined">person</span>
             <span className="font-label text-[10px] uppercase tracking-widest mt-0.5">Profile</span>
@@ -335,3 +331,4 @@ export default function MyCredentialsPage() {
     </div>
   );
 }
+

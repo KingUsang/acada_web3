@@ -4,7 +4,7 @@ export default function QuizBuilderPage() {
   return (
     <div className="bg-surface text-on-surface antialiased min-h-screen font-body">
       {/* TopAppBar */}
-      <header className="fixed top-0 w-full z-50 bg-white/60 dark:bg-slate-950/60 backdrop-blur-xl shadow-[0_16px_32px_-12px_rgba(7,14,29,0.04)]">
+      <header className="fixed top-0 w-full z-50 bg-white/60 backdrop-blur-xl shadow-[0_16px_32px_-12px_rgba(7,14,29,0.04)]">
         <div className="flex items-center justify-between px-6 h-16 w-full">
           <div className="flex items-center gap-4">
             <button className="p-2 hover:bg-slate-100/50 transition-colors active:scale-95 duration-200 rounded-full">
@@ -160,3 +160,4 @@ export default function QuizBuilderPage() {
     </div>
   );
 }
+

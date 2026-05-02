@@ -198,12 +198,6 @@ export default function RefinedStudentDashboardPage() {
             Credentials
           </span>
         </Link>
-        <Link href="/acada_etheric" className="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors group">
-          <span className="material-symbols-outlined text-2xl">search</span>
-          <span className="font-label text-[9px] font-bold uppercase tracking-widest mt-1">
-            Search
-          </span>
-        </Link>
         <Link href="/refined_student_dashboard" className="flex flex-col items-center justify-center text-primary group">
           <span
             className="material-symbols-outlined text-2xl"
