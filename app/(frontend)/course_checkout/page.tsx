@@ -23,10 +23,7 @@ function CheckoutContent() {
 
     setIsProcessing(true);
     try {
-      // For now, simulate a blockchain transaction reference
-      const fakeTxRef = `sol_${Math.random().toString(36).substring(7)}`;
-
-      const res = await fetch("/api/payments", {
+      const res = await fetch("/api/enrollments", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,22 +31,22 @@ function CheckoutContent() {
         },
         body: JSON.stringify({
           course_id: course.id,
-          amount: course.price_usdc,
-          currency: "USDC",
-          transaction_ref: fakeTxRef,
         }),
       });
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || "Failed to process payment");
+        throw new Error(err.error || "Failed to enroll");
       }
 
+      if (typeof window !== "undefined") {
+        window.sessionStorage.setItem("last_enrolled_course_id", course.id);
+      }
       toast.success("Enrollment successful!");
-      router.push("/enrolment_confirmation");
+      router.push(`/enrolment_confirmation?course_id=${course.id}`);
     } catch (error: any) {
       console.error("Checkout error:", error);
-      toast.error(error.message || "An error occurred during checkout");
+      toast.error(error.message || "An error occurred during enrollment");
     } finally {
       setIsProcessing(false);
     }
@@ -129,10 +126,10 @@ function CheckoutContent() {
               disabled={isProcessing}
               className="w-full py-4 rounded-xl bg-primary text-on-primary font-headline font-extrabold text-lg tracking-tight shadow-lg shadow-primary/20 active:scale-[0.98] transition-all disabled:opacity-50"
             >
-              {isProcessing ? "Processing..." : "Complete Purchase"}
+              {isProcessing ? "Enrolling..." : "Enroll Now"}
             </button>
             <p className="text-[10px] text-on-surface-variant mt-4 text-center leading-tight uppercase tracking-widest font-bold">
-              Secure on-chain transaction
+              Demo mode enrollment
             </p>
           </section>
         </div>

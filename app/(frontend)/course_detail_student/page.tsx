@@ -2,15 +2,32 @@
 
 import React, { Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useCourse } from "../../lib/api";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCourse, useCourseProgress, useCourseQuizzes, useEnrollments } from "../../lib/api";
+import { useAuth } from "../../lib/auth/context";
+import { toast } from "sonner";
 
 function CourseDetailContent() {
+  const { appUser, userId, idToken } = useAuth();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const effectiveUserId = appUser?.id ?? userId;
   const { data: courseData, error, isLoading } = useCourse(id || "");
+  const { data: progressData } = useCourseProgress(effectiveUserId, id);
+  const { data: quizzesData, isLoading: quizzesLoading, error: quizzesError } = useCourseQuizzes(id);
+  const { data: enrollmentsData } = useEnrollments(effectiveUserId);
 
   const course = courseData?.data;
+  const isEnrolled = Boolean(
+    id &&
+      (enrollmentsData?.data ?? []).some(
+        (enrollment) => enrollment.course_id === id
+      )
+  );
+  const progress = progressData?.data?.[0];
+  const progressPercent = progress?.progress_percent ?? 0;
+  const isCompleted = Boolean(progress?.completed || progressPercent >= 80);
 
   if (isLoading) {
     return (
@@ -34,6 +51,73 @@ function CourseDetailContent() {
     );
   }
 
+  const handleOpenLesson = (lessonId: string) => {
+    if (!isEnrolled) {
+      router.push(`/course_checkout?id=${course.id}`);
+      return;
+    }
+    router.push(`/lesson_room?id=${lessonId}&course_id=${course.id}`);
+  };
+
+  const handleMarkComplete = async () => {
+    if (!effectiveUserId || !idToken || !course.lessons?.length) return;
+    const completedLessons = course.lessons.length;
+    const progressPercent = 100;
+    try {
+      const res = await fetch("/api/progress", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          user_id: effectiveUserId,
+          course_id: course.id,
+          progress_percent: progressPercent,
+          completed: completedLessons > 0,
+        }),
+      });
+      if (!res.ok) {
+        const payload = await res.json().catch(() => ({}));
+        throw new Error(payload?.error || "Failed to update progress");
+      }
+      toast.success("Marked complete for demo judging flow");
+    } catch (err: any) {
+      toast.error(err?.message || "Could not mark complete");
+    }
+  };
+
+  const handleClaimCertificate = async () => {
+    if (!idToken || !course?.id) return;
+    try {
+      const eligibilityRes = await fetch("/api/milestones/check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ course_id: course.id }),
+      });
+      const eligibilityPayload = await eligibilityRes.json().catch(() => ({}));
+      if (!eligibilityRes.ok || !eligibilityPayload?.data?.eligible || !eligibilityPayload?.data?.milestone_id) {
+        throw new Error(eligibilityPayload?.error || "Not yet eligible for certificate");
+      }
+      const mintRes = await fetch("/api/certificates/mint", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ milestone_id: eligibilityPayload.data.milestone_id }),
+      });
+      const mintPayload = await mintRes.json().catch(() => ({}));
+      if (!mintRes.ok) throw new Error(mintPayload?.error || "Failed to claim certificate");
+      toast.success("Certificate claimed successfully");
+    } catch (err: any) {
+      toast.error(err?.message || "Could not claim certificate");
+    }
+  };
+
   return (
     <main className="max-w-3xl mx-auto px-6 py-16">
       <section className="mb-12">
@@ -53,9 +137,20 @@ function CourseDetailContent() {
             <span className="text-xl font-bold">{course.duration || "Self-paced"}</span>
           </div>
         </div>
-        <Link href={`/course_checkout?id=${course.id}`} className="inline-block bg-primary text-on-primary font-bold py-4 px-8 rounded-xl shadow-lg hover:bg-primary-dim transition-all">
-          Enroll Now
-        </Link>
+        {isEnrolled ? (
+          <span className="inline-block bg-primary/10 text-primary font-bold py-4 px-8 rounded-xl">
+            You are enrolled
+          </span>
+        ) : (
+          <Link href={`/course_checkout?id=${course.id}`} className="inline-block bg-primary text-on-primary font-bold py-4 px-8 rounded-xl shadow-lg hover:bg-primary-dim transition-all">
+            Enroll Now
+          </Link>
+        )}
+        {isEnrolled ? (
+          <div className="mt-4 text-sm text-on-surface-variant">
+            Progress: <strong>{progressPercent}%</strong> {isCompleted ? "(Completed)" : "(In progress)"}
+          </div>
+        ) : null}
       </section>
       {/* Course Modules */}
       <section className="bg-surface-container-lowest rounded-xl p-8 shadow-xl">
@@ -63,7 +158,11 @@ function CourseDetailContent() {
         {course.lessons && course.lessons.length > 0 ? (
           <div className="space-y-4">
             {course.lessons.map((lesson: any, index: number) => (
-              <div key={lesson.id} className="flex items-center gap-4 p-4 bg-surface-container-low rounded-lg">
+              <button
+                key={lesson.id}
+                onClick={() => handleOpenLesson(lesson.id)}
+                className="w-full text-left flex items-center gap-4 p-4 bg-surface-container-low rounded-lg hover:bg-surface-container-high transition-colors"
+              >
                 <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
                   {index + 1}
                 </div>
@@ -71,12 +170,75 @@ function CourseDetailContent() {
                   <h4 className="font-bold text-on-surface">{lesson.title}</h4>
                   <span className="text-xs text-on-surface-variant uppercase">{lesson.type}</span>
                 </div>
-                <span className="material-symbols-outlined text-outline">lock</span>
-              </div>
+                <span className="material-symbols-outlined text-outline">
+                  {isEnrolled ? "lock_open" : "lock"}
+                </span>
+              </button>
             ))}
           </div>
         ) : (
           <p className="text-on-surface-variant italic">No lessons listed for this course yet.</p>
+        )}
+        {isEnrolled ? (
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button
+              onClick={handleMarkComplete}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-outline-variant hover:bg-surface-container-high font-bold text-sm"
+            >
+              <span className="material-symbols-outlined text-base">task_alt</span>
+              Mark Course Complete (Demo)
+            </button>
+            <button
+              onClick={handleClaimCertificate}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-on-primary font-bold text-sm"
+            >
+              <span className="material-symbols-outlined text-base">workspace_premium</span>
+              Claim Certificate
+            </button>
+          </div>
+        ) : null}
+      </section>
+
+      <section className="bg-surface-container-lowest rounded-xl p-8 shadow-xl mt-8">
+        <h2 className="font-headline text-2xl font-bold mb-6">Course Quizzes</h2>
+        {quizzesError ? (
+          <p className="text-destructive">Failed to load quizzes.</p>
+        ) : quizzesLoading ? (
+          <div className="space-y-3">
+            {[1, 2].map((item) => (
+              <div key={item} className="h-16 bg-surface-container-low rounded-lg animate-pulse"></div>
+            ))}
+          </div>
+        ) : (quizzesData?.data?.length ?? 0) > 0 ? (
+          <div className="space-y-4">
+            {quizzesData?.data?.map((quiz) => (
+              <div key={quiz.id} className="flex items-center justify-between gap-4 p-4 bg-surface-container-low rounded-lg">
+                <div className="min-w-0">
+                  <h4 className="font-bold text-on-surface truncate">{quiz.title}</h4>
+                  <p className="text-xs text-on-surface-variant uppercase tracking-wider">
+                    Passing Score: {quiz.passing_score ?? "N/A"}%
+                  </p>
+                </div>
+                {isEnrolled ? (
+                  <Link
+                    href={`/quiz_interface?id=${quiz.id}`}
+                    className="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-primary text-on-primary font-bold text-sm"
+                  >
+                    Take Quiz
+                  </Link>
+                ) : (
+                  <Link
+                    href={`/course_checkout?id=${course.id}`}
+                    className="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-outline-variant font-bold text-sm"
+                  >
+                    Enroll to Access
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-on-surface-variant italic">No quizzes published for this course yet.</p>
         )}
       </section>
     </main>

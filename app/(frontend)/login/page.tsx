@@ -16,12 +16,12 @@ type RegisterResponse = {
 };
 
 export default function LoginPage() {
-  const { login, authenticateUser, refreshAppUser, isLoading } = useAuth();
+  const { login, logout, authenticateUser, refreshAppUser, setResolvedUserId, isLoading } = useAuth();
   const router = useRouter();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (e?: React.SyntheticEvent) => {
+    if (e) e.preventDefault();
     if (isLoading) {
       toast.error("Authentication is still initializing. Please wait a moment.");
       return;
@@ -42,15 +42,32 @@ export default function LoginPage() {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${idToken}`,
         },
+        body: JSON.stringify({ is_login_only: true }),
       });
 
       if (!res.ok) {
+        if (res.status === 404) {
+          toast.error("Account not found. Please sign up.");
+          await logout();
+          router.push("/sign_up");
+          return;
+        }
         const err = await res.json();
         throw new Error(err.error || "Failed to register/login");
       }
 
       const payload = (await res.json()) as RegisterResponse;
+      setResolvedUserId(payload.data.id);
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("acada_resolved_user_id", payload.data.id);
+      }
       await refreshAppUser(idToken);
+      await fetch(`/api/users/${payload.data.id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+      });
 
       toast.success("Successfully logged in!");
       router.push(payload.data.role === "TUTOR" || payload.data.role === "ORG_ADMIN" ? "/tutor_home" : "/student_home");
@@ -79,60 +96,17 @@ export default function LoginPage() {
           <h1 className="font-headline font-extrabold text-4xl tracking-tighter text-inverse-surface mb-2">Acada</h1>
           <p className="text-on-surface-variant font-medium">Curation for the modern learner.</p>
         </div>
+        
         {/* Login Card */}
         <div className="bg-surface-container-lowest rounded-xl p-8 shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
-          <form className="space-y-6" onSubmit={handleLogin}>
-            {/* Input Group: Email */}
-            <div className="space-y-2">
-              <label className="font-label text-sm font-bold uppercase tracking-wider text-on-surface-variant ml-1" htmlFor="email">
-                Email Address
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <span className="material-symbols-outlined text-outline text-lg">alternate_email</span>
-                </div>
-                <input className="block w-full pl-11 pr-4 py-4 bg-surface-container-low border-none rounded-xl text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary focus:bg-surface-container-highest transition-all duration-200 font-body" id="email" name="email" placeholder="name@example.com" required type="email" />
-              </div>
-            </div>
-            {/* Input Group: Password */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-center px-1">
-                <label className="font-label text-sm font-bold uppercase tracking-wider text-on-surface-variant" htmlFor="password">
-                  Password
-                </label>
-                <a className="font-label text-xs font-bold text-primary hover:text-primary-dim transition-colors uppercase tracking-widest" href="#">
-                  Forgot Password?
-                </a>
-              </div>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <span className="material-symbols-outlined text-outline text-lg">lock</span>
-                </div>
-                <input className="block w-full pl-11 pr-4 py-4 bg-surface-container-low border-none rounded-xl text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary focus:bg-surface-container-highest transition-all duration-200 font-body" id="password" name="password" placeholder="••••••••" required type="password" />
-              </div>
-            </div>
-            {/* Primary Action Button */}
-            <button 
-              className="w-full bg-gradient-to-br from-primary to-primary-dim text-on-primary font-headline font-bold py-4 px-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98] transition-all duration-200 flex justify-center items-center gap-2 disabled:opacity-50" 
-              type="submit"
-              disabled={isLoggingIn || isLoading}
-            >
-              {isLoading ? "Preparing Auth..." : isLoggingIn ? "Logging In..." : "Log In"}
-              <span className="material-symbols-outlined text-xl">arrow_forward</span>
-            </button>
-          </form>
-          {/* Divider */}
-          <div className="relative my-8">
-            <div aria-hidden="true" className="absolute inset-0 flex items-center">
-              <div className="w-full h-px bg-surface-container-high"></div>
-            </div>
-            <div className="relative flex justify-center text-xs uppercase tracking-widest font-label font-bold">
-              <span className="bg-surface-container-lowest px-4 text-outline">or continue with</span>
-            </div>
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-inverse-surface mb-2">Welcome Back</h2>
+            <p className="text-sm text-on-surface-variant leading-relaxed">Securely log in using your Google account or email via our Web3Auth integration.</p>
           </div>
+          
           {/* Social Sign-in */}
           <button 
-            className="w-full flex items-center justify-center gap-3 bg-surface-container-low hover:bg-surface-container-high text-on-surface font-headline font-bold py-4 px-6 rounded-xl transition-all duration-200 group" 
+            className="w-full flex items-center justify-center gap-3 bg-surface-container-low hover:bg-surface-container-high border border-outline-variant/30 text-on-surface font-headline font-bold py-4 px-6 rounded-xl shadow-sm transition-all duration-200 active:scale-[0.98] disabled:opacity-50 group" 
             type="button"
             onClick={handleLogin}
             disabled={isLoggingIn || isLoading}
@@ -144,9 +118,10 @@ export default function LoginPage() {
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path>
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
             </svg>
-            Continue with Web3Auth
+            {isLoading ? "Preparing Auth..." : isLoggingIn ? "Logging In..." : "Continue with Web3Auth"}
           </button>
         </div>
+        
         {/* Secondary Navigation */}
         <p className="mt-8 text-center text-on-surface-variant font-medium">
           Don&apos;t have an account?{" "}

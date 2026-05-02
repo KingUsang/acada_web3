@@ -2,8 +2,12 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useAuth } from "../../lib/auth/context";
+import { toast } from "sonner";
 
 export default function QuizResultPage() {
+  const { idToken, appUser, userId } = useAuth();
   const searchParams = useSearchParams();
   const score = Number(searchParams.get("score") || 0);
   const total = Number(searchParams.get("total") || 0);
@@ -12,6 +16,29 @@ export default function QuizResultPage() {
   const quizId = searchParams.get("quizId");
   const title = searchParams.get("title") || "Quiz";
   const courseId = searchParams.get("courseId");
+  const [claimingReward, setClaimingReward] = useState(false);
+
+  const handleClaimReward = async () => {
+    if (!idToken || !courseId || !passed) return;
+    setClaimingReward(true);
+    try {
+      const res = await fetch("/api/web3/claim", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ course_id: courseId, user_id: appUser?.id ?? userId ?? null }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(payload?.error || "Reward claim failed");
+      toast.success("Reward claim prepared. Token reward flow is ready.");
+    } catch (err: any) {
+      toast.error(err?.message || "Could not claim reward");
+    } finally {
+      setClaimingReward(false);
+    }
+  };
 
   const strokeOffset = 552.92 - (552.92 * Math.min(score, 100)) / 100;
 
@@ -127,6 +154,15 @@ export default function QuizResultPage() {
         </div>
 
         <div className="w-full flex flex-col gap-4 mt-auto">
+          {passed ? (
+            <button
+              onClick={handleClaimReward}
+              disabled={claimingReward}
+              className="w-full h-14 bg-inverse-surface text-white font-headline font-bold rounded-xl flex items-center justify-center active:scale-95 transition-transform disabled:opacity-60"
+            >
+              {claimingReward ? "Claiming Reward..." : "Claim ACADA Reward"}
+            </button>
+          ) : null}
           <Link
             href={courseId ? `/course_detail_student?id=${courseId}` : "/student_home"}
             className="w-full h-14 bg-primary text-on-primary font-headline font-bold rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 active:scale-95 transition-transform"

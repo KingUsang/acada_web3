@@ -24,6 +24,16 @@ export async function POST(req: NextRequest) {
     if (!course_id) return Response.json({ error: "course_id is required" }, { status: 400 })
 
     const supabase = createAdminClient()
+    let resolvedUserId = web3User.sub
+    if (!resolvedUserId && web3User.email) {
+      const { data: byEmail } = await supabase
+        .from("users")
+        .select("id")
+        .eq("email", web3User.email)
+        .maybeSingle()
+      resolvedUserId = byEmail?.id
+    }
+    if (!resolvedUserId) return Response.json({ error: "Unable to resolve user identity" }, { status: 401 })
 
     // ── 1. ATTENDANCE CHECK ──────────────────────────────────────────────────
     const { data: liveLessons } = await supabase
@@ -47,7 +57,7 @@ export async function POST(req: NextRequest) {
         const { data: attended } = await supabase
           .from("attendance_logs")
           .select("session_id")
-          .eq("user_id", web3User.sub)
+          .eq("user_id", resolvedUserId)
           .in("session_id", sessionIds)
           .not("leave_time", "is", null)
 
@@ -79,7 +89,7 @@ export async function POST(req: NextRequest) {
       const { data: bestAttempt } = await supabase
         .from("quiz_attempts")
         .select("score, is_passed")
-        .eq("user_id", web3User.sub)
+        .eq("user_id", resolvedUserId)
         .in("quiz_id", quizIds)
         .order("score", { ascending: false })
         .limit(1)
@@ -100,7 +110,7 @@ export async function POST(req: NextRequest) {
         .from("milestones")
         .upsert(
           {
-            user_id: web3User.sub,
+            user_id: resolvedUserId,
             course_id,
             type: "COURSE_COMPLETE",
             status: "PENDING",

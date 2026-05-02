@@ -107,6 +107,17 @@ export interface QuizDetails {
   };
 }
 
+export interface QuizSummary {
+  id: string;
+  title: string;
+  passing_score: number | null;
+  time_limit_minutes?: number | null;
+  max_attempts?: number | null;
+  course_id: string | null;
+  lesson_id: string | null;
+  created_at?: string | null;
+}
+
 interface ApiResponse<T> {
   data: T;
 }
@@ -191,8 +202,24 @@ export function useQuiz(quizId: string | null) {
   return useSWR<ApiResponse<QuizDetails>>(quizId ? `/api/quizzes/${quizId}` : null, fetcher);
 }
 
+export function useCourseQuizzes(courseId: string | null) {
+  const fetcher = useApiFetcher();
+  return useSWR<ApiResponse<QuizSummary[]>>(
+    courseId ? `/api/quizzes?course_id=${courseId}` : null,
+    fetcher
+  );
+}
+
 export function useSessions(lessonId?: string | null) {
   const fetcher = useApiFetcher();
   const url = lessonId ? `/api/sessions?lesson_id=${lessonId}` : "/api/sessions";
   return useSWR<ApiResponse<DashboardSession[]>>(url, fetcher);
+}
+
+export function useCourseProgress(userId: string | null, courseId: string | null) {
+  const fetcher = useApiFetcher();
+  return useSWR<ApiResponse<CourseProgress[]>>(
+    userId && courseId ? `/api/progress?user_id=${userId}&course_id=${courseId}` : null,
+    fetcher
+  );
 }

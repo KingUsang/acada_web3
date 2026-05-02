@@ -1,12 +1,12 @@
 [package]
-name = "vault"
+name = "acada_certificates"
 version = "0.1.0"
-description = "A simple SOL vault program"
+description = "On-chain certificate issuance program"
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "vault"
+name = "acada_certificates"
 
 [features]
 default = []
@@ -17,8 +17,4 @@ no-log-ix-name = []
 idl-build = ["anchor-lang/idl-build"]
 
 [dependencies]
-anchor-lang = "0.32.1"
-
-[dev-dependencies]
-litesvm = "=0.7.1"
-solana-sdk = "2.3"
+anchor-lang = "0.30.1"

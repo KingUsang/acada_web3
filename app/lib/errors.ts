@@ -2,17 +2,6 @@ import {
   isSolanaError,
   SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
 } from "@solana/kit";
-import {
-  getVaultErrorMessage,
-  VAULT_ERROR__VAULT_ALREADY_EXISTS,
-  VAULT_ERROR__INVALID_AMOUNT,
-  type VaultError,
-} from "../generated/vault";
-
-const VAULT_ERROR_CODES: Record<number, VaultError> = {
-  [VAULT_ERROR__VAULT_ALREADY_EXISTS]: VAULT_ERROR__VAULT_ALREADY_EXISTS,
-  [VAULT_ERROR__INVALID_AMOUNT]: VAULT_ERROR__INVALID_AMOUNT,
-};
 
 export function parseTransactionError(err: unknown): string {
   // Wallet rejection (comes from wallet-standard, not a SolanaError)
@@ -20,15 +9,10 @@ export function parseTransactionError(err: unknown): string {
     return "Transaction was rejected by the wallet.";
   }
 
-  // Anchor custom program errors — use the Codama-generated error messages
-  if (
-    isSolanaError(err, SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM) &&
-    typeof err.context?.code === "number"
-  ) {
-    const vaultError = VAULT_ERROR_CODES[err.context.code];
-    if (vaultError !== undefined) {
-      return getVaultErrorMessage(vaultError);
-    }
+  // Custom program errors can be surfaced as numeric codes here.
+  if (isSolanaError(err, SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM)) {
+    const code = err.context?.code;
+    if (typeof code === "number") return `Program error code: ${code}`;
   }
 
   // For all other errors, kit's SolanaError already has readable messages.

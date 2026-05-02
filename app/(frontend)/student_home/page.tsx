@@ -16,8 +16,18 @@ function formatClock(dateString: string | null) {
 
 export default function StudentHomePage() {
   const { user, appUser, userId, isLoading: authLoading } = useAuth();
-  const { data: dashboardData, isLoading: dashboardLoading, error: dashboardError } = useUserDashboard(userId);
+  const effectiveUserId = appUser?.id ?? userId;
+  const { data: dashboardData, isLoading: dashboardLoading, error: dashboardError } = useUserDashboard(effectiveUserId);
   const { data: coursesData, isLoading: coursesLoading } = useCourses();
+  console.info("student_home.state", {
+    userId,
+    effectiveUserId,
+    authLoading,
+    dashboardLoading,
+    hasDashboard: Boolean(dashboardData),
+    dashboardError: dashboardError ? String(dashboardError) : null,
+    dashboardEnrollments: dashboardData?.data?.enrollments?.length ?? null,
+  });
 
   const dashboard = dashboardData?.data;
   const progressMap = new Map(

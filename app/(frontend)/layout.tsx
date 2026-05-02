@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from "../lib/auth/context";
+import { AuthGuard } from "../components/auth-guard";
 
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
   const { user, login, logout } = useAuth();
@@ -36,7 +37,9 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
 
       {/* Main Content */}
       <main className="relative pt-16 flex-1 flex flex-col w-full h-full">
-        {children}
+        <AuthGuard>
+          {children}
+        </AuthGuard>
       </main>
     </div>
   );

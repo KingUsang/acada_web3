@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback, useRef } from "react";
 import { Web3AuthNoModal } from "@web3auth/no-modal";
 import { AuthAdapter } from "@web3auth/auth-adapter";
 import { CHAIN_NAMESPACES, SafeEventEmitterProvider, WALLET_ADAPTERS } from "@web3auth/base";
@@ -41,6 +41,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   authenticateUser: () => Promise<string | null>;
   refreshAppUser: (tokenOverride?: string | null) => Promise<AppUser | null>;
+  setResolvedUserId: (resolvedUserId: string | null) => void;
   provider: SafeEventEmitterProvider | null;
 }
 
@@ -54,27 +55,44 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [idToken, setIdToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const resolvedUserIdRef = useRef<string | null>(null);
 
   const clientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID;
 
   const refreshAppUser = useCallback(async (tokenOverride?: string | null) => {
     const token = tokenOverride ?? idToken;
+    console.info("auth.refresh.start", {
+      tokenPresent: Boolean(token),
+      currentUserId: userId,
+    });
     if (!token) {
       setAppUser(null);
       setUserId(null);
+      console.info("auth.refresh.no_token");
       return null;
     }
 
     const payload = parseIdTokenPayload(token);
-    const nextUserId = payload?.sub ?? null;
-    setUserId(nextUserId);
+    const storedUserId =
+      typeof window !== "undefined" ? window.localStorage.getItem("acada_resolved_user_id") : null;
+    const nextUserId = payload?.sub ?? userId ?? resolvedUserIdRef.current ?? storedUserId ?? null;
+    console.info("auth.refresh.parsed", {
+      parsedSub: payload?.sub ?? null,
+      fallbackUserId: userId,
+      nextUserId,
+    });
+    if (payload?.sub) {
+      setUserId(payload.sub);
+    }
 
     if (!nextUserId) {
       setAppUser(null);
+      console.info("auth.refresh.no_user_id");
       return null;
     }
 
     try {
+      console.info("auth.refresh.fetch_user.start", { userId: nextUserId });
       const res = await fetch(`/api/users/${nextUserId}`, {
         headers: {
           "Content-Type": "application/json",
@@ -83,6 +101,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (!res.ok) {
+        console.info("auth.refresh.fetch_user.failed", { status: res.status, userId: nextUserId });
         setAppUser(null);
         return null;
       }
@@ -90,13 +109,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const json = (await res.json()) as { data?: AppUser };
       const nextAppUser = json.data ?? null;
       setAppUser(nextAppUser);
+      if (nextAppUser?.id) {
+        // Keep frontend identity stable even when token payload lacks `sub`.
+        setUserId(nextAppUser.id);
+      }
+      console.info("auth.refresh.success", {
+        userId: nextUserId,
+        appUserId: nextAppUser?.id ?? null,
+      });
       return nextAppUser;
     } catch (error) {
       console.error("Failed to refresh app user:", error);
       setAppUser(null);
       return null;
     }
-  }, [idToken]);
+  }, [idToken, userId]);
 
   useEffect(() => {
     const init = async () => {
@@ -178,6 +205,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw new Error("Web3Auth did not return an authentication token.");
     }
     setIdToken(userAuthRes.idToken);
+    console.info("auth.login.authenticated");
     await refreshAppUser(userAuthRes.idToken);
   };
 
@@ -200,13 +228,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw new Error("Web3Auth did not return an authentication token.");
     }
     setIdToken(userAuthRes.idToken);
+    console.info("auth.authenticate_user.success");
     await refreshAppUser(userAuthRes.idToken);
     return userAuthRes.idToken;
   };
 
+    const setResolvedUserId = useCallback((resolvedUserId: string | null) => {
+    resolvedUserIdRef.current = resolvedUserId;
+    if (typeof window !== "undefined") {
+      if (resolvedUserId) {
+        window.localStorage.setItem("acada_resolved_user_id", resolvedUserId);
+      } else {
+        window.localStorage.removeItem("acada_resolved_user_id");
+      }
+    }
+    setUserId(resolvedUserId);
+  }, []);
+
   return (
     <AuthContext.Provider
-      value={{ user, appUser, userId, idToken, isLoading, login, logout, authenticateUser, refreshAppUser, provider }}
+      value={{
+        user,
+        appUser,
+        userId,
+        idToken,
+        isLoading,
+        login,
+        logout,
+        authenticateUser,
+        refreshAppUser,
+        setResolvedUserId,
+        provider,
+      }}
     >
       {children}
     </AuthContext.Provider>

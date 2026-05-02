@@ -13,14 +13,24 @@ import { verifyWeb3AuthToken, unauthorized } from "@/app/lib/auth/verify-web3aut
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await verifyWeb3AuthToken(req)
+    const web3User = await verifyWeb3AuthToken(req)
     const { id } = await params
     const supabase = createAdminClient()
+
+    let dbUserId = id
+    if (web3User.email) {
+      const { data: byEmail } = await supabase.from("users").select("id").eq("email", web3User.email).maybeSingle()
+      if (byEmail) dbUserId = byEmail.id
+    }
+
+    if (id !== dbUserId && id !== web3User.sub) {
+      return Response.json({ error: "Forbidden" }, { status: 403 })
+    }
 
     const { data, error } = await supabase
       .from("users")
       .select("id, email, full_name, role, solana_wallet_address, created_at")
-      .eq("id", id)
+      .eq("id", dbUserId)
       .single()
 
     if (error) return Response.json({ error: "User not found" }, { status: 404 })
@@ -35,19 +45,25 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const web3User = await verifyWeb3AuthToken(req)
     const { id } = await params
 
+    const supabase = createAdminClient()
+    let dbUserId = id
+    if (web3User.email) {
+      const { data: byEmail } = await supabase.from("users").select("id").eq("email", web3User.email).maybeSingle()
+      if (byEmail) dbUserId = byEmail.id
+    }
+
     // Users can only update their own profile
-    if (web3User.sub !== id) {
+    if (id !== dbUserId && id !== web3User.sub) {
       return Response.json({ error: "Forbidden" }, { status: 403 })
     }
 
     const body = await req.json()
     const { full_name, solana_wallet_address } = body
 
-    const supabase = createAdminClient()
     const { data, error } = await supabase
       .from("users")
       .update({ full_name, solana_wallet_address })
-      .eq("id", id)
+      .eq("id", dbUserId)
       .select()
       .single()
 

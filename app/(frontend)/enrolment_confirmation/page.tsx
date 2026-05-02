@@ -1,6 +1,17 @@
+"use client";
+
 import React from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function EnrolmentConfirmationPage() {
+  const searchParams = useSearchParams();
+  const queryCourseId = searchParams.get("course_id");
+  const storedCourseId =
+    typeof window !== "undefined" ? window.sessionStorage.getItem("last_enrolled_course_id") : null;
+  const courseId = queryCourseId || storedCourseId;
+  const courseHref = courseId ? `/course_detail_student?id=${courseId}` : "/student_home";
+
   return (
     <div className="bg-background min-h-screen font-body text-on-background">
       <header className="sticky top-0 z-50 flex justify-between items-center px-6 h-16 glass-header shadow-[0_16px_32px_-4px_rgba(7,14,29,0.04)]">
@@ -18,7 +29,21 @@ export default function EnrolmentConfirmationPage() {
         {/* Placeholder for enrolment confirmation details */}
         <section className="bg-surface-container-lowest rounded-xl p-8 shadow-xl">
           <h2 className="font-headline text-2xl font-bold mb-2">Course Details</h2>
-          <p className="text-on-surface-variant">Information about the enrolled course will appear here.</p>
+          <p className="text-on-surface-variant">You now have access to your course and can start learning immediately.</p>
+          <div className="mt-6 flex flex-col sm:flex-row gap-3">
+            <Link
+              href={courseHref}
+              className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-primary text-on-primary font-bold"
+            >
+              Go to Course
+            </Link>
+            <Link
+              href="/student_home"
+              className="inline-flex items-center justify-center px-5 py-3 rounded-xl border border-outline-variant font-bold"
+            >
+              View My Learning
+            </Link>
+          </div>
         </section>
       </main>
       <style jsx>{`

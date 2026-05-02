@@ -6,9 +6,10 @@ import { useCertificates, useEnrollments, useUserDashboard } from "../../lib/api
 
 export default function RefinedStudentDashboardPage() {
   const { user, appUser, userId, isLoading: authLoading } = useAuth();
-  const { data: dashboardData, isLoading: dashboardLoading } = useUserDashboard(userId);
-  const { data: enrollmentsData } = useEnrollments(userId);
-  const { data: certificatesData } = useCertificates(userId);
+  const effectiveUserId = appUser?.id ?? userId;
+  const { data: dashboardData, isLoading: dashboardLoading } = useUserDashboard(effectiveUserId);
+  const { data: enrollmentsData } = useEnrollments(effectiveUserId);
+  const { data: certificatesData } = useCertificates(effectiveUserId);
 
   const dashboard = dashboardData?.data;
   const enrollments = enrollmentsData?.data ?? [];

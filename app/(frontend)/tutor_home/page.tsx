@@ -21,7 +21,8 @@ function formatSessionDate(dateString: string | null) {
 
 export default function TutorHomePage() {
   const { user, appUser, userId, isLoading: authLoading } = useAuth();
-  const { data, isLoading, error } = useTutorStats(userId);
+  const effectiveUserId = appUser?.id ?? userId;
+  const { data, isLoading, error } = useTutorStats(effectiveUserId);
 
   const stats = data?.data;
   const upcomingSessions = stats?.upcomingSessions ?? [];
@@ -34,7 +35,7 @@ export default function TutorHomePage() {
         <div className="flex justify-between items-center px-6 h-16 w-full max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
             <Link
-              href="/refined_student_dashboard"
+              href="/tutor_home"
               className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden"
             >
               <img
@@ -310,7 +311,7 @@ export default function TutorHomePage() {
           </span>
         </Link>
         <Link
-          href="/refined_student_dashboard"
+          href="/tutor_home"
           className="flex flex-col items-center justify-center text-slate-400 hover:text-primary transition-transform active:scale-90"
         >
           <span className="material-symbols-outlined">person</span>

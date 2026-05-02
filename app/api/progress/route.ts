@@ -32,10 +32,11 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    await verifyWeb3AuthToken(req)
+    const web3User = await verifyWeb3AuthToken(req)
     const { user_id, course_id, progress_percent, completed } = await req.json()
+    const resolvedUserId = user_id || web3User.sub
 
-    if (!user_id || !course_id) {
+    if (!resolvedUserId || !course_id) {
       return Response.json({ error: "user_id and course_id are required" }, { status: 400 })
     }
 
@@ -43,7 +44,7 @@ export async function PATCH(req: NextRequest) {
     const { data, error } = await supabase
       .from("course_progress")
       .upsert({
-        user_id,
+        user_id: resolvedUserId,
         course_id,
         progress_percent,
         completed: completed ?? false,

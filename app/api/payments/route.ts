@@ -1,86 +1,30 @@
-import { NextRequest } from "next/server"
-import { createAdminClient } from "@/app/lib/supabase/admin"
-import { verifyWeb3AuthToken, unauthorized } from "@/app/lib/auth/verify-web3auth"
+import { NextRequest } from "next/server";
+import { verifyWeb3AuthToken, unauthorized } from "@/app/lib/auth/verify-web3auth";
 
 /**
  * POST /api/payments
- * Record a payment for course enrollment.
- * Body: { course_id, amount, currency, transaction_ref }
- *
- * currency: "USDC" | "SOL" | "FIAT"
- * After payment recorded, enrollment is automatically created.
- *
- * GET /api/payments?user_id=...
- * Payment history for a user.
+ * Backward-compatible endpoint that now returns canonical web3 quote payload.
  */
-
 export async function POST(req: NextRequest) {
   try {
-    const web3User = await verifyWeb3AuthToken(req)
-    const { course_id, amount, currency, transaction_ref } = await req.json()
+    const token = req.headers.get("Authorization") ?? "";
+    await verifyWeb3AuthToken(req);
+    const body = await req.json();
 
-    if (!course_id || !amount || !currency) {
-      return Response.json({ error: "course_id, amount, and currency are required" }, { status: 400 })
-    }
+    const quoteRes = await fetch(new URL("/api/web3/quote", req.url), {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: token },
+      body: JSON.stringify({ course_id: body.course_id, rewardTokensToBurn: body.rewardTokensToBurn ?? 0 }),
+    });
 
-    const supabase = createAdminClient()
-
-    // Record the payment
-    const { data: payment, error } = await supabase
-      .from("payments")
-      .insert({
-        user_id: web3User.sub,
-        course_id,
-        amount,
-        currency,
-        transaction_ref: transaction_ref || null,
-        status: "completed",
-      })
-      .select()
-      .single()
-
-    if (error) return Response.json({ error: error.message }, { status: 500 })
-
-    // Auto-enroll the student after successful payment
-    const { data: existing } = await supabase
-      .from("enrollments")
-      .select("id")
-      .eq("user_id", web3User.sub)
-      .eq("course_id", course_id)
-      .single()
-
-    if (!existing) {
-      await supabase
-        .from("enrollments")
-        .insert({ user_id: web3User.sub, course_id, status: "active" })
-
-      await supabase
-        .from("course_progress")
-        .upsert({ user_id: web3User.sub, course_id, progress_percent: 0, completed: false })
-    }
-
-    return Response.json({ data: payment }, { status: 201 })
+    const quote = await quoteRes.json();
+    if (!quoteRes.ok) return Response.json(quote, { status: quoteRes.status });
+    return Response.json({ data: quote }, { status: 201 });
   } catch {
-    return unauthorized()
+    return unauthorized();
   }
 }
 
 export async function GET(req: NextRequest) {
-  try {
-    const web3User = await verifyWeb3AuthToken(req)
-    const { searchParams } = new URL(req.url)
-    const userId = searchParams.get("user_id") || web3User.sub
-
-    const supabase = createAdminClient()
-    const { data, error } = await supabase
-      .from("payments")
-      .select("*, course:courses(id, title)")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false })
-
-    if (error) return Response.json({ error: error.message }, { status: 500 })
-    return Response.json({ data })
-  } catch {
-    return unauthorized()
-  }
+  return Response.json({ message: "Use /api/web3/quote for canonical purchase pricing." }, { status: 200 });
 }

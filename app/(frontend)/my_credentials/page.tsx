@@ -25,9 +25,10 @@ function formatDate(dateString: string | null) {
 }
 
 export default function MyCredentialsPage() {
-  const { idToken, user, userId } = useAuth();
-  const { data: certificatesData, isLoading: certificatesLoading, mutate: mutateCertificates } = useCertificates(userId);
-  const { data: enrollmentsData, isLoading: enrollmentsLoading } = useEnrollments(userId);
+  const { idToken, user, appUser, userId } = useAuth();
+  const effectiveUserId = appUser?.id ?? userId;
+  const { data: certificatesData, isLoading: certificatesLoading, mutate: mutateCertificates } = useCertificates(effectiveUserId);
+  const { data: enrollmentsData, isLoading: enrollmentsLoading } = useEnrollments(effectiveUserId);
   const [eligibilityByCourse, setEligibilityByCourse] = useState<Record<string, EligibilityResult>>({});
   const [checkingCourseId, setCheckingCourseId] = useState<string | null>(null);
   const [mintingMilestoneId, setMintingMilestoneId] = useState<string | null>(null);

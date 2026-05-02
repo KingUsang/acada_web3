@@ -36,6 +36,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@metaplex-foundation/mpl-core": "^1.4.0",
+    "@metaplex-foundation/umi": "^1.1.1",
+    "@metaplex-foundation/umi-bundle-defaults": "^1.1.1",
+    "@metaplex-foundation/umi-web3js-adapters": "^1.1.1",
     "@solana/kit": "^6.3.0",
     "@solana/kit-client-rpc": "^0.7.0",
     "@solana/kit-plugin-rpc": "^0.7.0",
