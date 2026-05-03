@@ -1,4 +1,4 @@
-﻿export type Json =
+export type Json =
   | string
   | number
   | boolean
@@ -589,6 +589,7 @@ export type Database = {
           livekit_room_name: string | null
           recording_url: string | null
           scheduled_at: string | null
+          started_at: string | null
           title: string | null
         }
         Insert: {
@@ -599,6 +600,7 @@ export type Database = {
           livekit_room_name?: string | null
           recording_url?: string | null
           scheduled_at?: string | null
+          started_at?: string | null
           title?: string | null
         }
         Update: {
@@ -609,6 +611,7 @@ export type Database = {
           livekit_room_name?: string | null
           recording_url?: string | null
           scheduled_at?: string | null
+          started_at?: string | null
           title?: string | null
         }
         Relationships: [
