@@ -18,18 +18,30 @@ export async function POST(req: NextRequest) {
     if (!milestone_id) return Response.json({ error: "milestone_id is required" }, { status: 400 });
 
     const supabase = createAdminClient();
+    
+    // Resolve user identity to DB UUID
+    let resolvedUserId = web3User.sub;
+    if (web3User.email) {
+      const { data: byEmail } = await supabase
+        .from("users")
+        .select("id")
+        .eq("email", web3User.email)
+        .maybeSingle();
+      if (byEmail) resolvedUserId = byEmail.id;
+    }
+
     const { data: milestone } = await supabase
       .from("milestones")
       .select("id, course_id, status, type")
       .eq("id", milestone_id)
-      .eq("user_id", web3User.sub)
+      .eq("user_id", resolvedUserId)
       .single();
     if (!milestone) return Response.json({ error: "Milestone not found" }, { status: 404 });
 
     const { data: user } = await supabase
       .from("users")
       .select("solana_wallet_address, full_name")
-      .eq("id", web3User.sub)
+      .eq("id", resolvedUserId)
       .single();
     if (!user?.solana_wallet_address) return Response.json({ error: "No Solana wallet on user profile" }, { status: 400 });
 
@@ -73,7 +85,7 @@ export async function POST(req: NextRequest) {
     const { data: cert, error: certError } = await supabase
       .from("certificates")
       .insert({
-        user_id: web3User.sub,
+        user_id: resolvedUserId,
         course_id: milestone.course_id,
         milestone_id: milestone.id,
         mint_address: mintAddress,
@@ -86,7 +98,7 @@ export async function POST(req: NextRequest) {
     await supabase.from("milestones").update({ status: "MINTED", transaction_hash: mintAddress }).eq("id", milestone.id);
 
     console.info("certificate.issue", {
-      userId: web3User.sub,
+      userId: resolvedUserId,
       milestone_id: milestone.id,
       mint: mintAddress,
       mode: enoughFunds ? "on-chain" : "mock",

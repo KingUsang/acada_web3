@@ -63,9 +63,9 @@ ON CONFLICT (id) DO NOTHING;
 -- 8. Enrollments (Emmanuel is enrolled in Physics and Calculus)
 INSERT INTO public.enrollments (id, user_id, course_id, status)
 VALUES 
-  ('77777777-7777-7777-7777-777777777771', '62cee7dc-d053-4dcf-87f2-5339af5ee604', '33333333-3333-3333-3333-333333333331', 'ACTIVE'),
-  ('77777777-7777-7777-7777-777777777772', '62cee7dc-d053-4dcf-87f2-5339af5ee604', '33333333-3333-3333-3333-333333333333', 'ACTIVE')
-ON CONFLICT (id) DO NOTHING;
+  ('77777777-7777-7777-7777-777777777771', '62cee7dc-d053-4dcf-87f2-5339af5ee604', '33333333-3333-3333-3333-333333333331', 'active'),
+  ('77777777-7777-7777-7777-777777777772', '62cee7dc-d053-4dcf-87f2-5339af5ee604', '33333333-3333-3333-3333-333333333333', 'active')
+ON CONFLICT (id) DO UPDATE SET status = 'active';
 
 -- 9. Payments (Realistic Solana Devnet transaction hashes)
 INSERT INTO public.payments (id, user_id, course_id, amount, currency, status, transaction_ref)

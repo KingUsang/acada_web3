@@ -18,10 +18,10 @@ export async function POST(req: NextRequest) {
     if (!course_id) return Response.json({ error: "course_id is required" }, { status: 400 });
 
     const supabase = createAdminClient();
-    let resolvedUserId = web3User.sub;
+    let resolvedUserId: string | undefined = web3User.sub;
     if (!resolvedUserId && web3User.email) {
       const { data: byEmail } = await supabase.from("users").select("id").eq("email", web3User.email).maybeSingle();
-      resolvedUserId = byEmail?.id as string | undefined;
+      resolvedUserId = byEmail?.id;
     }
     if (!resolvedUserId && user_id) {
       resolvedUserId = String(user_id);
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
 
     const message = buildRewardMessage(student, 1, rewardAmount, claimId, expiresAt, getProgramId());
     const oracle = getOracleKeypair();
-    const ed25519Instruction = buildEd25519Instruction(oracle.secretKey.slice(0, 32), message);
+    const ed25519Instruction = buildEd25519Instruction(oracle.secretKey, message);
 
     console.info("reward.claim.prepare", { userId: resolvedUserId, course_id, claimId });
 

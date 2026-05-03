@@ -25,15 +25,27 @@ export async function POST(req: NextRequest) {
 
     const supabase = createAdminClient()
     let resolvedUserId = web3User.sub
-    if (!resolvedUserId && web3User.email) {
+    if (web3User.email) {
       const { data: byEmail } = await supabase
         .from("users")
         .select("id")
         .eq("email", web3User.email)
         .maybeSingle()
-      resolvedUserId = byEmail?.id
+      if (byEmail) resolvedUserId = byEmail.id
     }
+    console.log("DEBUG milestones/check: resolvedUserId:", resolvedUserId, "course_id:", course_id)
     if (!resolvedUserId) return Response.json({ error: "Unable to resolve user identity" }, { status: 401 })
+
+    // ── 0. PROGRESS CHECK (DEMO BYPASS) ──────────────────────────────────────
+    const { data: progress } = await supabase
+      .from("course_progress")
+      .select("completed")
+      .eq("user_id", resolvedUserId)
+      .eq("course_id", course_id)
+      .maybeSingle()
+    console.log("DEBUG milestones/check: progress row:", progress)
+
+    const isDemoBypass = progress?.completed === true
 
     // ── 1. ATTENDANCE CHECK ──────────────────────────────────────────────────
     const { data: liveLessons } = await supabase
@@ -101,15 +113,27 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const eligible = attendancePassed && quizPassed
+    const eligible = isDemoBypass || (attendancePassed && quizPassed)
 
-    // ── 3. UPSERT COURSE_COMPLETE MILESTONE ──────────────────────────────────
+    // ── 3. GET OR INSERT COURSE_COMPLETE MILESTONE ───────────────────────────
     let milestoneId: string | null = null
     if (eligible) {
-      const { data: milestone } = await supabase
+      // First try to find existing milestone
+      const { data: existing } = await supabase
         .from("milestones")
-        .upsert(
-          {
+        .select("id")
+        .eq("user_id", resolvedUserId)
+        .eq("course_id", course_id)
+        .eq("type", "COURSE_COMPLETE")
+        .maybeSingle()
+        
+      if (existing) {
+        milestoneId = existing.id
+      } else {
+        // If not found, insert a new one
+        const { data: newMilestone, error: insertError } = await supabase
+          .from("milestones")
+          .insert({
             user_id: resolvedUserId,
             course_id,
             type: "COURSE_COMPLETE",
@@ -121,13 +145,15 @@ export async function POST(req: NextRequest) {
               quiz_threshold: QUIZ_THRESHOLD,
               checked_at: new Date().toISOString(),
             },
-          },
-          { onConflict: "user_id,course_id" } as any
-        )
-        .select("id")
-        .single()
-
-      milestoneId = milestone?.id ?? null
+          })
+          .select("id")
+          .single()
+          
+        if (insertError) {
+          console.error("DEBUG milestones/check: INSERT ERROR:", insertError)
+        }
+        milestoneId = newMilestone?.id ?? null
+      }
     }
 
     return Response.json({

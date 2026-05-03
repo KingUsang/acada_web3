@@ -1,22 +1,31 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCourse, useCourseProgress, useCourseQuizzes, useEnrollments } from "../../lib/api";
+import { useCourse, useCourseProgress, useCourseQuizzes, useEnrollments, useCertificates } from "../../lib/api";
 import { useAuth } from "../../lib/auth/context";
 import { toast } from "sonner";
+import { useSWRConfig } from "swr";
 
 function CourseDetailContent() {
   const { appUser, userId, idToken } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isMarkingComplete, setIsMarkingComplete] = useState(false);
+  const [isClaiming, setIsClaiming] = useState(false);
+  const { mutate } = useSWRConfig();
   const id = searchParams.get("id");
   const effectiveUserId = appUser?.id ?? userId;
   const { data: courseData, error, isLoading } = useCourse(id || "");
   const { data: progressData } = useCourseProgress(effectiveUserId, id);
   const { data: quizzesData, isLoading: quizzesLoading, error: quizzesError } = useCourseQuizzes(id);
   const { data: enrollmentsData } = useEnrollments(effectiveUserId);
+  const { data: certificatesData } = useCertificates(effectiveUserId);
+
+  const existingCertificate = (certificatesData?.data ?? []).find(
+    (cert) => cert.course_id === id
+  );
 
   const course = courseData?.data;
   const isEnrolled = Boolean(
@@ -28,6 +37,17 @@ function CourseDetailContent() {
   const progress = progressData?.data?.[0];
   const progressPercent = progress?.progress_percent ?? 0;
   const isCompleted = Boolean(progress?.completed || progressPercent >= 80);
+
+  // Debug — open browser console to see these values
+  console.info("course_detail.debug", {
+    courseId: id,
+    effectiveUserId,
+    appUserId: appUser?.id,
+    rawUserId: userId,
+    isEnrolled,
+    enrollmentCount: enrollmentsData?.data?.length ?? "loading",
+    enrolledCourseIds: (enrollmentsData?.data ?? []).map((e) => e.course_id),
+  });
 
   if (isLoading) {
     return (
@@ -61,6 +81,7 @@ function CourseDetailContent() {
 
   const handleMarkComplete = async () => {
     if (!effectiveUserId || !idToken || !course.lessons?.length) return;
+    setIsMarkingComplete(true);
     const completedLessons = course.lessons.length;
     const progressPercent = 100;
     try {
@@ -82,13 +103,17 @@ function CourseDetailContent() {
         throw new Error(payload?.error || "Failed to update progress");
       }
       toast.success("Marked complete for demo judging flow");
+      mutate(`/api/progress?user_id=${effectiveUserId}&course_id=${course.id}`);
     } catch (err: any) {
       toast.error(err?.message || "Could not mark complete");
+    } finally {
+      setIsMarkingComplete(false);
     }
   };
 
   const handleClaimCertificate = async () => {
     if (!idToken || !course?.id) return;
+    setIsClaiming(true);
     try {
       const eligibilityRes = await fetch("/api/milestones/check", {
         method: "POST",
@@ -115,6 +140,8 @@ function CourseDetailContent() {
       toast.success("Certificate claimed successfully");
     } catch (err: any) {
       toast.error(err?.message || "Could not claim certificate");
+    } finally {
+      setIsClaiming(false);
     }
   };
 
@@ -183,18 +210,43 @@ function CourseDetailContent() {
           <div className="mt-6 flex flex-wrap gap-3">
             <button
               onClick={handleMarkComplete}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-outline-variant hover:bg-surface-container-high font-bold text-sm"
+              disabled={isMarkingComplete}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-outline-variant hover:bg-surface-container-high font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span className="material-symbols-outlined text-base">task_alt</span>
-              Mark Course Complete (Demo)
+              {isMarkingComplete ? (
+                <span className="material-symbols-outlined animate-spin text-base">sync</span>
+              ) : (
+                <span className="material-symbols-outlined text-base">task_alt</span>
+              )}
+              {isMarkingComplete ? "Marking..." : "Mark Course Complete (Demo)"}
             </button>
-            <button
-              onClick={handleClaimCertificate}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-on-primary font-bold text-sm"
-            >
-              <span className="material-symbols-outlined text-base">workspace_premium</span>
-              Claim Certificate
-            </button>
+            {existingCertificate ? (
+              <Link
+                href={`/credential_detail?id=${existingCertificate.id}`}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-dim font-bold text-sm shadow-md transition-all"
+              >
+                <span className="material-symbols-outlined text-base">visibility</span>
+                View Certificate
+              </Link>
+            ) : (
+              <button
+                onClick={handleClaimCertificate}
+                disabled={!isCompleted || isClaiming}
+                title={!isCompleted ? "Complete the course to claim your certificate" : "Claim your certificate"}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-all ${
+                  isCompleted && !isClaiming
+                    ? "bg-primary text-on-primary hover:bg-primary-dim shadow-md cursor-pointer"
+                    : "bg-surface-container-high text-on-surface-variant opacity-60 cursor-not-allowed"
+                }`}
+              >
+                {isClaiming ? (
+                  <span className="material-symbols-outlined animate-spin text-base">sync</span>
+                ) : (
+                  <span className="material-symbols-outlined text-base">workspace_premium</span>
+                )}
+                {isClaiming ? "Claiming..." : "Claim Certificate"}
+              </button>
+            )}
           </div>
         ) : null}
       </section>

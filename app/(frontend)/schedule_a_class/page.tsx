@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useAuth } from "../../lib/auth/context";
 import { useCourses } from "../../lib/api";
@@ -14,10 +14,12 @@ function toIsoDateTime(date: string, time: string) {
 export default function ScheduleAClassPage() {
   const { idToken, userId, appUser } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const defaultCourseId = searchParams.get("courseId") ?? "";
   const { data, isLoading } = useCourses();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
-    courseId: "",
+    courseId: defaultCourseId,
     lessonId: "",
     title: "",
     date: "",

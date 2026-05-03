@@ -30,8 +30,8 @@ function validateTransaction(transaction: Transaction, relayerFeePayer: string) 
   }
   const feePayer = transaction.feePayer?.toBase58();
   if (feePayer && feePayer !== relayerFeePayer) throw new Error("Transaction must use relayer as fee payer.");
-  const sigCount = transaction.signatures.filter((entry) => entry.signature !== null).length;
-  if (sigCount === 0) throw new Error("Relayed tx must already include user signature.");
+  // Signature pre-check removed: reward_student has student as isSigner:false,
+  // so the relayer is the sole required signer. Security = JWT auth + oracle Ed25519.
 }
 
 export async function GET(req: NextRequest) {

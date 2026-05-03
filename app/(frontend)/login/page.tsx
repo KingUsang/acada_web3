@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../lib/auth/context";
@@ -16,9 +16,15 @@ type RegisterResponse = {
 };
 
 export default function LoginPage() {
-  const { login, logout, authenticateUser, refreshAppUser, setResolvedUserId, isLoading } = useAuth();
+  const { login, logout, authenticateUser, refreshAppUser, setResolvedUserId, isLoading, appUser } = useAuth();
   const router = useRouter();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && appUser) {
+      router.replace(appUser.role === "TUTOR" || appUser.role === "ORG_ADMIN" ? "/tutor_home" : "/student_home");
+    }
+  }, [appUser, isLoading, router]);
 
   const handleLogin = async (e?: React.SyntheticEvent) => {
     if (e) e.preventDefault();

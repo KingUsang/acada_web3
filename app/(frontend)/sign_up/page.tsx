@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../lib/auth/context";
@@ -8,11 +8,17 @@ import { toast } from "sonner";
 import { SolanaWallet } from "@web3auth/solana-provider";
 
 export default function SignUpPage() {
-  const { login, authenticateUser, refreshAppUser, isLoading, provider } = useAuth();
+  const { login, authenticateUser, refreshAppUser, isLoading, provider, appUser } = useAuth();
   const router = useRouter();
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [role, setRole] = useState<"STUDENT" | "TUTOR">("STUDENT");
   const [fullName, setFullName] = useState("");
+
+  useEffect(() => {
+    if (!isLoading && appUser) {
+      router.replace(appUser.role === "TUTOR" || appUser.role === "ORG_ADMIN" ? "/tutor_home" : "/student_home");
+    }
+  }, [appUser, isLoading, router]);
 
   const handleSignUp = async (e?: React.SyntheticEvent) => {
     if (e) e.preventDefault();

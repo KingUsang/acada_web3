@@ -1,11 +1,14 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Connection, PublicKey } from "@solana/web3.js";
+import { getRewardMintPda } from "../../lib/web3/acada";
 import { useAuth } from "../../lib/auth/context";
 import { useCertificates, useEnrollments, useUserDashboard } from "../../lib/api";
 
 export default function RefinedStudentDashboardPage() {
-  const { user, appUser, userId, isLoading: authLoading } = useAuth();
+  const { user, appUser, userId, isLoading: authLoading, logout } = useAuth();
   const effectiveUserId = appUser?.id ?? userId;
   const { data: dashboardData, isLoading: dashboardLoading } = useUserDashboard(effectiveUserId);
   const { data: enrollmentsData } = useEnrollments(effectiveUserId);
@@ -24,6 +27,57 @@ export default function RefinedStudentDashboardPage() {
   const firstName =
     appUser?.full_name?.split(" ")[0] ?? user?.name?.split(" ")[0] ?? "Learner";
 
+  const [acadaTokens, setAcadaTokens] = useState<number | null>(null);
+
+  useEffect(() => {
+    async function fetchTokens() {
+      if (!appUser?.solana_wallet_address) return;
+      try {
+        const connection = new Connection(
+          process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com",
+          "confirmed"
+        );
+        const walletPubkey = new PublicKey(appUser.solana_wallet_address);
+        const mintPda = getRewardMintPda();
+
+        // Pre-validate: check if the mint account exists on-chain before querying.
+        // If the Acada program hasn't been deployed/initialized yet, the mint PDA
+        // won't exist and getParsedTokenAccountsByOwner will throw "could not find mint".
+        const mintAccountInfo = await connection.getAccountInfo(mintPda);
+        if (!mintAccountInfo) {
+          // Mint not deployed yet — silently default to 0
+          setAcadaTokens(0);
+          return;
+        }
+
+        const tokenAccounts = await connection.getParsedTokenAccountsByOwner(walletPubkey, {
+          mint: mintPda,
+        });
+
+        if (tokenAccounts.value.length > 0) {
+          const balance = tokenAccounts.value[0].account.data.parsed.info.tokenAmount.uiAmount;
+          setAcadaTokens(balance);
+        } else {
+          setAcadaTokens(0);
+        }
+      } catch (err: any) {
+        // Silently handle any RPC errors related to an uninitialized mint
+        const msg: string = err?.message ?? "";
+        if (
+          msg.includes("could not find mint") ||
+          msg.includes("Invalid param") ||
+          msg.includes("AccountNotFound")
+        ) {
+          setAcadaTokens(0);
+        } else {
+          console.error("Failed to fetch Acada token balance:", err);
+          setAcadaTokens(0);
+        }
+      }
+    }
+    fetchTokens();
+  }, [appUser?.solana_wallet_address]);
+
   return (
     <div className="bg-surface text-on-surface min-h-screen font-body">
       <header className="w-full top-0 sticky z-50 bg-surface/80 backdrop-blur-md flex justify-between items-center px-6 py-4 border-b border-outline">
@@ -33,15 +87,20 @@ export default function RefinedStudentDashboardPage() {
           </Link>
           <h1 className="text-xl font-black text-primary tracking-tighter font-headline">Acada</h1>
         </div>
-        <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-primary/20">
-          <img
-            alt="Student Profile"
-            className="w-full h-full object-cover"
-            src={
-              user?.profileImage ||
-              "https://lh3.googleusercontent.com/aida-public/AB6AXuDMYwWXB0-lRQMpUMnwnboX1hC7-stYxccg5VuIFEzoCc7r7bMQhH_CNkD-nVWKsfMbmhGeY6Ml1qwPs9T-OkEt8fWHC12VTULGhlxU_u0YJ-W4QxMWgtSqns94d8S35l-nvHS_AhgtX-rftdbSwOX2Do8kZhoBNmPzh1BLSs1JJpNRt2zVEMMDElwkGE2cjTUm_1fMSBxr6Bkd3_czUSy92wjDANXhZEAFgAyuvwCOUqSgSqtnAn1lgAfPUeOd7OapEIsU9jXMFw"
-            }
-          />
+        <div className="flex items-center gap-4">
+          <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-primary/20">
+            <img
+              alt="Student Profile"
+              className="w-full h-full object-cover"
+              src={
+                user?.profileImage ||
+                "https://lh3.googleusercontent.com/aida-public/AB6AXuDMYwWXB0-lRQMpUMnwnboX1hC7-stYxccg5VuIFEzoCc7r7bMQhH_CNkD-nVWKsfMbmhGeY6Ml1qwPs9T-OkEt8fWHC12VTULGhlxU_u0YJ-W4QxMWgtSqns94d8S35l-nvHS_AhgtX-rftdbSwOX2Do8kZhoBNmPzh1BLSs1JJpNRt2zVEMMDElwkGE2cjTUm_1fMSBxr6Bkd3_czUSy92wjDANXhZEAFgAyuvwCOUqSgSqtnAn1lgAfPUeOd7OapEIsU9jXMFw"
+              }
+            />
+          </div>
+          <button onClick={logout} className="material-symbols-outlined text-slate-400 hover:text-destructive active:scale-95 duration-200 transition-colors" title="Logout">
+            logout
+          </button>
         </div>
       </header>
 
@@ -95,6 +154,20 @@ export default function RefinedStudentDashboardPage() {
                 </div>
                 <div className="font-headline font-black text-xl text-on-surface">{certificates.length}</div>
               </div>
+            </div>
+          </div>
+          
+          <div className="bg-gradient-to-r from-primary/10 to-transparent border border-primary/20 p-5 rounded-2xl flex justify-between items-center shadow-sm mt-3">
+            <div>
+              <div className="font-label text-[10px] uppercase tracking-wider font-bold text-primary">
+                Acada Reward Balance
+              </div>
+              <div className="font-headline font-black text-2xl text-on-surface mt-1">
+                {acadaTokens !== null ? acadaTokens : "..."} <span className="text-lg font-normal text-on-surface-variant">ACADA</span>
+              </div>
+            </div>
+            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm border border-primary/20">
+              <span className="material-symbols-outlined text-primary text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>toll</span>
             </div>
           </div>
         </section>
