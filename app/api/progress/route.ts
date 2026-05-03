@@ -35,8 +35,9 @@ export async function GET(req: NextRequest) {
 
     // Auto-heal orphaned progress
     const orphans = (data ?? []).filter(p => p.user_id !== dbUuid)
-    if (orphans.length > 0) {
+    if (orphans.length > 0 && dbUuid) {
       for (const p of orphans) {
+        if (!p.user_id || !p.course_id) continue;
         await supabase
           .from("course_progress")
           .update({ user_id: dbUuid })

@@ -21,6 +21,7 @@ export type Database = {
           leave_time: string | null
           session_id: string | null
           user_id: string | null
+          attended: boolean | null
         }
         Insert: {
           id?: string
@@ -28,6 +29,7 @@ export type Database = {
           leave_time?: string | null
           session_id?: string | null
           user_id?: string | null
+          attended?: boolean | null
         }
         Update: {
           id?: string
@@ -35,6 +37,7 @@ export type Database = {
           leave_time?: string | null
           session_id?: string | null
           user_id?: string | null
+          attended?: boolean | null
         }
         Relationships: [
           {
@@ -527,6 +530,8 @@ export type Database = {
           passing_score: number | null
           quiz_data: Json
           title: string
+          time_limit_minutes: number | null
+          max_attempts: number | null
         }
         Insert: {
           course_id?: string | null
@@ -536,6 +541,8 @@ export type Database = {
           passing_score?: number | null
           quiz_data: Json
           title: string
+          time_limit_minutes?: number | null
+          max_attempts?: number | null
         }
         Update: {
           course_id?: string | null
@@ -545,6 +552,8 @@ export type Database = {
           passing_score?: number | null
           quiz_data?: Json
           title?: string
+          time_limit_minutes?: number | null
+          max_attempts?: number | null
         }
         Relationships: [
           {

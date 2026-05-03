@@ -23,7 +23,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         .select("id")
         .eq("email", web3User.email)
         .maybeSingle()
-      resolvedUserId = byEmail?.id
+      if (byEmail) resolvedUserId = byEmail.id
     }
 
     if (!resolvedUserId || resolvedUserId !== id) {

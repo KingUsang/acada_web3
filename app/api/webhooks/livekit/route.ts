@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     
     // When the recording finishes successfully
     if (event.event === "egress_ended" && event.egressInfo) {
-      const { egressInfo } = event
+      const egressInfo = event.egressInfo as any
       const roomName = egressInfo.roomName
 
       // Depending on the exact LiveKit version and configuration, the URL can be in file or fileResults
