@@ -1,165 +1,123 @@
-# nextjs-anchor
+# Acada Web3 Platform 🎓
 
-Next.js starter with Tailwind CSS, `@solana/kit`, and an Anchor vault program example.
+Acada is a decentralized learning management system (LMS) that incentivizes academic excellence through on-chain rewards and verifiable credentials. Built for the modern student and tutor, it leverages the Solana blockchain to provide gasless interactions, instant rewards, and tamper-proof certifications.
 
-## Getting Started
+## 🚀 Vision
+To bridge the gap between traditional learning and Web3 by rewarding students for their achievements with liquid tokens and professional-grade NFT certificates.
 
-```shell
-npx -y create-solana-dapp@latest -t solana-foundation/templates/kit/nextjs-anchor
+## ✨ Core Features
+- **Incentivized Learning**: Earn ACADA tokens automatically upon passing quizzes and completing courses.
+- **Gasless Experience**: Students interact with the blockchain without needing SOL, thanks to our custom Relayer infrastructure.
+- **Verifiable Credentials**: Mint professional NFT diplomas via Metaplex MPL Core.
+- **Live Interactive Classes**: Integrated LiveKit sessions with automated attendance tracking and real-time video.
+- **Academic Marketplace**: Browse and enroll in courses (currently set to free for demo purposes).
+- **Secure Oracle System**: Rewards are signed by a backend oracle to prevent unauthorized minting.
+
+## 🛠 Tech Stack
+- **Frontend**: Next.js 16 (Turbopack), Tailwind CSS, Framer Motion.
+- **Authentication**: Web3Auth (Social Login via Google to a Solana Wallet).
+- **Blockchain**: Solana (Anchor Framework).
+- **Smart Contracts**: 
+  - `acada_rewards`: Token distribution and claim logic.
+  - `acada_certificates`: Verification and metadata management.
+- **Backend/DB**: Supabase (Postgres, Auth, Storage).
+- **Media**: LiveKit for real-time video classrooms.
+
+## ⚙️ Installation & Setup
+
+### 1. Clone and Install
+```bash
+git clone <repository-url>
+cd acada_web3
+npm install
 ```
 
-```shell
-npm install
-npm run setup   # Builds the Anchor program and generates the TypeScript client
+### 2. Environment Variables
+Create a `.env.local` file in the root and populate it with the following:
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+# Web3Auth
+NEXT_PUBLIC_WEB3AUTH_CLIENT_ID=your_client_id
+
+# Solana
+NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
+ORACLE_SECRET_KEY=[...your_oracle_key_array...]
+RELAYER_SECRET_KEY=[...your_relayer_key_array...]
+CERTIFICATE_ISSUER_SECRET_KEY=[...your_issuer_key_array...]
+
+# LiveKit
+LIVEKIT_API_KEY=your_key
+LIVEKIT_API_SECRET=your_secret
+NEXT_PUBLIC_LIVEKIT_URL=wss://your-host.livekit.cloud
+```
+
+### 3. Deploy Smart Contracts
+```bash
+cd anchor
+anchor build
+anchor deploy --provider.cluster devnet
+```
+
+### 4. Initialize the Reward Mint
+One-time setup to create the on-chain configuration and the ACADA token mint PDA:
+```bash
+node scripts/initialize_rewards.mjs
+```
+
+### 5. Run the App
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000), connect your wallet, and interact with the vault.
+---
 
-## What's Included
+## 🏆 Judge's Walkthrough (Step-by-Step)
 
-- **Wallet connection** via wallet-standard with auto-discovery and dropdown UI
-- **Cluster switching** — devnet, testnet, mainnet, and localnet from the header
-- **Wallet balance** display with airdrop button (devnet/testnet/localnet)
-- **SOL Vault program** — deposit and withdraw SOL from a personal PDA vault
-- **Toast notifications** with explorer links for every transaction
-- **Error handling** — human-readable messages for common Solana and program errors
-- **Codama-generated client** — type-safe program interactions using `@solana/kit`
-- **Tailwind CSS v4** with light/dark mode toggle
+To experience the full Acada ecosystem, follow this flow:
 
-## Stack
+### 1. Authentication
+- Click **"Sign In"** or **"Get Started"**.
+- Choose **"Sign in with Google"**. Web3Auth will automatically generate a non-custodial Solana wallet for you.
+- Complete the onboarding to land on your dashboard.
 
-| Layer          | Technology                       |
-| -------------- | -------------------------------- |
-| Frontend       | Next.js 16, React 19, TypeScript |
-| Styling        | Tailwind CSS v4                  |
-| Solana Client  | `@solana/kit`, wallet-standard   |
-| Program Client | Codama-generated, `@solana/kit`  |
-| Program        | Anchor (Rust)                    |
+### 2. The Student Journey (Earning Rewards)
+1. **Browse Courses**: Navigate to the course marketplace. For this demo, all courses are free to enroll.
+2. **Enroll**: Click "Enroll Now" on a course (e.g., "Web3 Development 101").
+3. **Learn**: Go to the **Course Detail** page. You can view the syllabus and lessons.
+4. **Fast-Track Progress (Demo Feature)**: Click the **"Mark Course Complete (Demo)"** button to instantly move your progress to 100%.
+5. **Take the Quiz**: With the course complete, take the final quiz.
+6. **Claim ACADA Tokens**: After passing the quiz, click **"Claim Reward"**. 
+   - Observe the **Gasless Transaction**: You will NOT be asked to pay SOL. Our relayer handles the gas fee.
+   - You will receive 10 ACADA tokens directly to your wallet.
+7. **Verify Balance**: Go to your **Profile** or **Student Dashboard** to see your updated ACADA token balance.
 
-## Project Structure
+### 3. Verifiable Certification
+1. **Mint Certificate**: Once the course is 100% complete, click **"Claim Certificate"**.
+2. **View NFT**: Navigate to your **Credentials** page.
+3. **Verify**: Click on your new certificate to see the on-chain metadata, minted via Metaplex MPL Core.
 
-```
-├── app/
-│   ├── components/
-│   │   ├── cluster-context.tsx  # Cluster state (React context + localStorage)
-│   │   ├── cluster-select.tsx   # Cluster switcher dropdown
-│   │   ├── grid-background.tsx  # Solana-branded decorative grid
-│   │   ├── providers.tsx        # Wallet + theme providers
-│   │   ├── theme-toggle.tsx     # Light/dark mode toggle
-│   │   ├── vault-card.tsx       # Vault deposit/withdraw UI
-│   │   └── wallet-button.tsx    # Wallet connect/disconnect dropdown
-│   ├── generated/vault/        # Codama-generated program client
-│   ├── lib/
-│   │   ├── wallet/             # Wallet-standard connection layer
-│   │   │   ├── types.ts        # Wallet types
-│   │   │   ├── standard.ts     # Wallet discovery + session creation
-│   │   │   ├── signer.ts       # WalletSession → TransactionSigner
-│   │   │   └── context.tsx     # WalletProvider + useWallet() hook
-│   │   ├── hooks/
-│   │   │   ├── use-balance.ts  # SWR-based balance fetching
-│   │   │   └── use-send-transaction.ts  # Transaction send with loading state
-│   │   ├── cluster.ts          # Cluster endpoints + RPC factory
-│   │   ├── lamports.ts         # SOL/lamports conversion
-│   │   ├── send-transaction.ts # Transaction build + sign + send pipeline
-│   │   ├── errors.ts           # Transaction error parsing
-│   │   └── explorer.ts         # Explorer URL builder + address helpers
-│   └── page.tsx                # Main page
-├── anchor/                     # Anchor workspace
-│   └── programs/vault/         # Vault program (Rust)
-└── codama.json                 # Codama client generation config
-```
+### 4. The Tutor Experience (Live Sessions)
+1. **Create Course**: Navigate to the Tutor Dashboard (`/tutor_home`) and create a new course.
+2. **Go Live**: Start a **Live Session**. This uses LiveKit to create a real-time video classroom.
+3. **Attendance**: As students join, the system automatically tracks attendance on-chain.
 
-## Local Development
+---
 
-To test against a local validator instead of devnet:
+## 🏗 Architecture Detail
 
-1. **Start a local validator**
+### The Gasless Relay
+Acada uses a "Server-Authorized, Client-Submitted" model. When a student earns a reward:
+1. The **Oracle** signs an Ed25519 message validating the claim.
+2. The **Client** builds a transaction including the Ed25519 proof.
+3. The **Relayer** co-signs the transaction and pays the gas fee (SOL).
+4. The transaction is submitted to Solana, minting tokens directly to the student.
 
-   ```bash
-   solana-test-validator
-   ```
+### Identity Resolution
+The platform seamlessly maps social identities (emails) to Solana wallet addresses, ensuring a consistent experience across Web3Auth logins and Supabase user records.
 
-2. **Deploy the program locally**
-
-   ```bash
-   solana config set --url localhost
-   cd anchor
-   anchor build
-   anchor deploy
-   cd ..
-   npm run codama:js   # Regenerate client with local program ID
-   ```
-
-3. **Switch to localnet** in the app using the cluster selector in the header.
-
-## Deploy Your Own Vault
-
-The included vault program is already deployed to devnet. To deploy your own:
-
-### Prerequisites
-
-- [Rust](https://rustup.rs/)
-- [Solana CLI](https://solana.com/docs/intro/installation)
-- [Anchor](https://www.anchor-lang.com/docs/installation)
-
-### Steps
-
-1. **Configure Solana CLI for devnet**
-
-   ```bash
-   solana config set --url devnet
-   ```
-
-2. **Create a wallet (if needed) and fund it**
-
-   ```bash
-   solana-keygen new
-   solana airdrop 2
-   ```
-
-3. **Build and deploy the program**
-
-   ```bash
-   cd anchor
-   anchor build
-   anchor keys sync    # Updates program ID in source
-   anchor build        # Rebuild with new ID
-   anchor deploy
-   cd ..
-   ```
-
-4. **Regenerate the client and restart**
-   ```bash
-   npm run setup   # Rebuilds program and regenerates client
-   npm run dev
-   ```
-
-## Testing
-
-Tests use [LiteSVM](https://github.com/LiteSVM/litesvm), a fast lightweight Solana VM for testing.
-
-```bash
-npm run anchor-build   # Build the program first
-npm run anchor-test    # Run tests
-```
-
-The tests are in `anchor/programs/vault/src/tests.rs` and automatically use the program ID from `declare_id!`.
-
-## Regenerating the Client
-
-If you modify the program, regenerate the TypeScript client:
-
-```bash
-npm run setup   # Or: npm run anchor-build && npm run codama:js
-```
-
-This uses [Codama](https://github.com/codama-idl/codama) to generate a type-safe client from the Anchor IDL.
-
-## Learn More
-
-- [Solana Docs](https://solana.com/docs) — core concepts and guides
-- [Anchor Docs](https://www.anchor-lang.com/docs/introduction) — program development framework
-- [Deploying Programs](https://solana.com/docs/programs/deploying) — deployment guide
-- [@solana/kit](https://github.com/anza-xyz/kit) — Solana JavaScript SDK
-- [Codama](https://github.com/codama-idl/codama) — client generation from IDL
+---
+Built with ❤️ for the Solana Hackathon.

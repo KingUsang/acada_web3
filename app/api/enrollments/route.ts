@@ -5,15 +5,11 @@ import { verifyWeb3AuthToken, unauthorized } from "@/app/lib/auth/verify-web3aut
 /**
  * GET /api/enrollments?user_id=...
  * Returns all course enrollments for a user.
- *
- * POST /api/enrollments
- * Enroll a student in a course.
- * Body: { course_id: string }
  */
-
-/** Resolves all possible user IDs for the current token (DB UUID + raw JWT sub) */
 async function resolveUserIds(web3User: { sub: string; email?: string }, supabase: ReturnType<typeof createAdminClient>) {
-  let dbUuid = web3User.sub
+  // Defensive: ensure sub is not the string "undefined"
+  let dbUuid = web3User.sub === "undefined" ? null : web3User.sub
+  
   if (web3User.email) {
     const { data: byEmail } = await supabase
       .from("users")
@@ -22,9 +18,9 @@ async function resolveUserIds(web3User: { sub: string; email?: string }, supabas
       .maybeSingle()
     if (byEmail) dbUuid = byEmail.id
   }
-  // Return unique IDs — sub may equal dbUuid if sub IS the DB UUID
-  const ids = [...new Set([dbUuid, web3User.sub])]
-  return { dbUuid, ids }
+  
+  const ids = [...new Set([dbUuid, web3User.sub].filter(id => id && id !== "undefined"))] as string[]
+  return { dbUuid: dbUuid as string, ids }
 }
 
 export async function GET(req: NextRequest) {
@@ -34,10 +30,18 @@ export async function GET(req: NextRequest) {
     const supabase = createAdminClient()
 
     const { dbUuid, ids } = await resolveUserIds(web3User, supabase)
-    // If a specific user_id was requested (e.g. from dashboard), honour it but also
-    // include the resolved IDs so orphaned rows are still visible.
     const requestedId = searchParams.get("user_id")
-    const queryIds = requestedId ? [...new Set([requestedId, ...ids])] : ids
+    
+    // Defensive: filter out "undefined" or null from queryIds
+    const queryIds = [
+      ...new Set(
+        [requestedId, ...ids].filter(id => id && id !== "undefined" && id !== "null")
+      )
+    ] as string[]
+
+    if (queryIds.length === 0) {
+      return Response.json({ data: [] })
+    }
 
     const { data, error } = await supabase
       .from("enrollments")
@@ -45,27 +49,51 @@ export async function GET(req: NextRequest) {
       .in("user_id", queryIds)
       .order("created_at", { ascending: false })
 
-    if (error) return Response.json({ error: error.message }, { status: 500 })
-
-    // Auto-heal: re-associate any orphaned rows to the canonical DB UUID
-    const orphans = (data ?? []).filter((e) => e.user_id !== dbUuid)
-    if (orphans.length > 0) {
-      await supabase
-        .from("enrollments")
-        .update({ user_id: dbUuid })
-        .in("id", orphans.map((e) => e.id))
-      // Also heal course_progress
-      await supabase
-        .from("course_progress")
-        .update({ user_id: dbUuid })
-        .in("user_id", orphans.map((e) => e.user_id).filter((id) => id !== dbUuid))
+    if (error) {
+      console.error("[Enrollments GET] Database error:", error)
+      return Response.json({ error: error.message }, { status: 500 })
     }
 
-    // Return with canonical user_id so the UI sees consistent data
+    // Auto-heal logic
+    const orphans = (data ?? []).filter((e) => e.user_id !== dbUuid)
+    if (orphans.length > 0 && dbUuid) {
+      try {
+        for (const orphan of orphans) {
+          if (!orphan.course_id || !orphan.user_id) continue;
+          
+          await supabase.from("enrollments").update({ user_id: dbUuid }).eq("id", orphan.id)
+          
+          const { data: existingProgress } = await supabase
+            .from("course_progress")
+            .select("id")
+            .eq("user_id", dbUuid)
+            .eq("course_id", orphan.course_id)
+            .maybeSingle()
+          
+          if (!existingProgress) {
+            await supabase
+              .from("course_progress")
+              .update({ user_id: dbUuid })
+              .eq("user_id", orphan.user_id)
+              .eq("course_id", orphan.course_id)
+          } else {
+            await supabase
+              .from("course_progress")
+              .delete()
+              .eq("user_id", orphan.user_id)
+              .eq("course_id", orphan.course_id)
+          }
+        }
+      } catch (healError) {
+        console.warn("[Enrollments GET] Auto-heal warning:", healError)
+      }
+    }
+
     const healed = (data ?? []).map((e) => ({ ...e, user_id: dbUuid }))
     return Response.json({ data: healed })
-  } catch {
-    return unauthorized()
+  } catch (err: any) {
+    console.error("[Enrollments GET] Runtime error:", err)
+    return Response.json({ error: err.message || "Internal Server Error" }, { status: 500 })
   }
 }
 
@@ -81,7 +109,6 @@ export async function POST(req: NextRequest) {
     const supabase = createAdminClient()
     const { dbUuid, ids } = await resolveUserIds(web3User, supabase)
 
-    // Check across ALL possible user IDs — catches orphans stored under old sub
     const { data: existing } = await supabase
       .from("enrollments")
       .select("id, user_id, status")
@@ -90,17 +117,8 @@ export async function POST(req: NextRequest) {
       .maybeSingle()
 
     if (existing) {
-      // Auto-heal: move orphaned enrollment to canonical DB UUID
-      if (existing.user_id !== dbUuid) {
-        await supabase
-          .from("enrollments")
-          .update({ user_id: dbUuid })
-          .eq("id", existing.id)
-        await supabase
-          .from("course_progress")
-          .update({ user_id: dbUuid })
-          .eq("user_id", existing.user_id)
-          .eq("course_id", course_id)
+      if (existing.user_id !== dbUuid && dbUuid) {
+        await supabase.from("enrollments").update({ user_id: dbUuid }).eq("id", existing.id)
         return Response.json({ data: { ...existing, user_id: dbUuid }, healed: true }, { status: 200 })
       }
       return Response.json({ error: "Already enrolled in this course" }, { status: 409 })
@@ -112,15 +130,18 @@ export async function POST(req: NextRequest) {
       .select()
       .single()
 
-    if (error) return Response.json({ error: error.message }, { status: 500 })
+    if (error) {
+      console.error("[Enrollments POST] Insert error:", error)
+      return Response.json({ error: error.message }, { status: 500 })
+    }
 
-    // Initialize course progress under the canonical DB UUID
     await supabase
       .from("course_progress")
-      .upsert({ user_id: dbUuid, course_id, progress_percent: 0, completed: false })
+      .upsert({ user_id: dbUuid, course_id, progress_percent: 0, completed: false }, { onConflict: "user_id,course_id" })
 
     return Response.json({ data }, { status: 201 })
-  } catch {
-    return unauthorized()
+  } catch (err: any) {
+    console.error("[Enrollments POST] Runtime error:", err)
+    return Response.json({ error: err.message || "Internal Server Error" }, { status: 500 })
   }
 }

@@ -1,49 +1,38 @@
-# Acada Web3 Project Overview
+# Acada Web3 Platform Overview
 
-## 1. Purpose & Stack
-- **Purpose:** Solana-based dApp starter with a vault program and a full-stack learning platform (Acada).
-- **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS v4, wallet-standard, @solana/kit.
-- **Backend:** Next.js API routes, Supabase, Web3Auth, LiveKit.
-- **Solana Program:** Anchor (Rust) vault program, Codama-generated TypeScript client.
+## 1. Vision & Purpose
+Acada is a next-generation Learning Management System (LMS) built on Solana. It incentivizes student success by rewarding milestone completions with liquid **ACADA tokens** and verifiable **NFT Certificates** (Metaplex MPL Core).
 
-## 2. Project Structure
-- `/app/(frontend)`: Frontend pages, layouts, UI components (student, tutor, auth, shared).
-- `/app/api`: Backend API routes (RESTful, mapped to users, courses, enrollments, payments, sessions, attendance, quizzes, progress, certificates).
-- `/app/lib`: Shared backend/util code (Supabase, Web3Auth, DB types, wallet, Solana client, hooks).
-- `/app/components`: UI components (wallet, cluster switch, theme toggle, vault card, etc.).
-- `/app/generated/vault`: Codama-generated client for Anchor vault program.
-- `/anchor`: Anchor (Rust) program for the vault.
-- `/stitch_acada_mobile_learning_app`: HTML code for mobile app screens (not integrated).
+## 2. Core Demo Flow
+- **Onboarding**: Social login via Web3Auth (Google).
+- **Course Lifecycle**: Free enrollment -> Content consumption -> Manual "Mark Complete" (for demo).
+- **Rewards**: Quiz passing triggers an Oracle-signed reward. Tokens are minted via a gasless relayer.
+- **Credentials**: Completed courses allow students to mint permanent on-chain diplomas.
+- **Tutor Tools**: Course creation and real-time video classrooms via LiveKit.
 
-## 3. Key Features Implemented
-- Wallet connection, cluster switching, balance display.
-- Vault program: deposit/withdraw SOL to PDA vault.
-- Web3Auth JWT authentication, user registration, protected API routes.
-- RESTful backend API for all main resources.
-- Supabase integration (admin/client SDKs, types).
-- LiveKit integration for live sessions.
-- Modern UI with Tailwind, theme toggle, toasts, grid backgrounds.
+## 3. Technology Stack
+- **Framework**: Next.js 16 (App Router), React 19.
+- **Auth**: Web3Auth (Social-to-Wallet) + JWT validation.
+- **Blockchain**: 
+  - **Anchor (Rust)**: Custom reward and configuration programs.
+  - **Metaplex**: MPL Core for lightweight, professional certificates.
+  - **Relayer**: Node.js backend for co-signing and gas sponsorship.
+- **Database**: Supabase (Postgres, Row Level Security, Auth).
+- **Real-time**: LiveKit for interactive live sessions.
 
-## 4. What’s Missing / Needs Attention
-- **.env file:** Must set up with Supabase and LiveKit credentials.
-- **Database:** Supabase schema must match `database.types.ts`.
-- **Mobile app:** HTML files are not integrated.
-- **Testing:** No explicit frontend/backend test setup.
-- **Docs:** No detailed onboarding or contribution guide.
-- **Deployment:** No production deployment scripts.
-- **Anchor program:** Deploy your own if needed (see `anchor/README.md`).
+## 4. Key Directory Structure
+- `/app/(frontend)`: High-fidelity student/tutor interfaces.
+- `/app/api`: Backend logic (Identity resolution, Relay, Oracle).
+- `/app/lib/web3`: Solana instruction builders and PDA derivation.
+- `/anchor`: Rust smart contracts for the rewards system.
+- `/scripts`: Setup and maintenance utilities (e.g., `initialize_rewards.mjs`).
 
-## 5. How to Run
-1. Install Node.js 18+, npm, Rust, Solana CLI, Anchor.
-2. `npm install`
-3. `npm run setup` (build Anchor, generate TS client)
-4. Create `.env` with required variables (see backend README)
-5. `npm run dev` (start Next.js app)
-
-**For Anchor:**
-- Install Rust, Solana CLI, Anchor
-- Deploy program if needed (see `anchor/README.md`)
+## 5. Setup Summary
+1.  `npm install`
+2.  Setup `.env.local` with Supabase, Web3Auth, and Solana keys.
+3.  `anchor deploy` on devnet.
+4.  `node scripts/initialize_rewards.mjs` to set up the config PDA.
+5.  `npm run dev` to launch the dashboard.
 
 ---
-
-**Review this file for a high-level understanding of the project, stack, and setup requirements.**
+**This document serves as a high-level roadmap for the Acada Web3 ecosystem.**

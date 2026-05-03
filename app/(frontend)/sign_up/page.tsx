@@ -43,7 +43,7 @@ export default function SignUpPage() {
 
       let solana_wallet_address = null;
       if (provider) {
-        const solanaWallet = new SolanaWallet(provider);
+        const solanaWallet = new SolanaWallet(provider as any);
         const accounts = await solanaWallet.requestAccounts();
         solana_wallet_address = accounts[0];
       }

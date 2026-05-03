@@ -28,26 +28,20 @@ function CourseDetailContent() {
   );
 
   const course = courseData?.data;
+
+  // Enrollment check with explicit loading state
+  const isEnrollmentLoading = !enrollmentsData && !error;
   const isEnrolled = Boolean(
     id &&
       (enrollmentsData?.data ?? []).some(
-        (enrollment) => enrollment.course_id === id
+        (enrollment) =>
+          enrollment.course_id?.toLowerCase() === id.toLowerCase()
       )
   );
+
   const progress = progressData?.data?.[0];
   const progressPercent = progress?.progress_percent ?? 0;
   const isCompleted = Boolean(progress?.completed || progressPercent >= 80);
-
-  // Debug — open browser console to see these values
-  console.info("course_detail.debug", {
-    courseId: id,
-    effectiveUserId,
-    appUserId: appUser?.id,
-    rawUserId: userId,
-    isEnrolled,
-    enrollmentCount: enrollmentsData?.data?.length ?? "loading",
-    enrolledCourseIds: (enrollmentsData?.data ?? []).map((e) => e.course_id),
-  });
 
   if (isLoading) {
     return (
@@ -164,7 +158,10 @@ function CourseDetailContent() {
             <span className="text-xl font-bold">{course.duration || "Self-paced"}</span>
           </div>
         </div>
-        {isEnrolled ? (
+        
+        {isEnrollmentLoading ? (
+          <div className="h-12 w-40 bg-surface-container-high animate-pulse rounded-xl"></div>
+        ) : isEnrolled ? (
           <span className="inline-block bg-primary/10 text-primary font-bold py-4 px-8 rounded-xl">
             You are enrolled
           </span>
@@ -173,7 +170,8 @@ function CourseDetailContent() {
             Enroll Now
           </Link>
         )}
-        {isEnrolled ? (
+        
+        {isEnrolled && !isEnrollmentLoading ? (
           <div className="mt-4 text-sm text-on-surface-variant">
             Progress: <strong>{progressPercent}%</strong> {isCompleted ? "(Completed)" : "(In progress)"}
           </div>
@@ -198,7 +196,7 @@ function CourseDetailContent() {
                   <span className="text-xs text-on-surface-variant uppercase">{lesson.type}</span>
                 </div>
                 <span className="material-symbols-outlined text-outline">
-                  {isEnrolled ? "lock_open" : "lock"}
+                  {isEnrollmentLoading ? "sync" : isEnrolled ? "lock_open" : "lock"}
                 </span>
               </button>
             ))}

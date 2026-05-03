@@ -93,7 +93,7 @@ export default function CredentialDetailPage() {
                 </div>
                 
                 <div className="text-right">
-                  <p className="font-mono text-xs text-slate-600 font-bold max-w-[120px] truncate" title={certificate.mint_address}>
+                  <p className="font-mono text-xs text-slate-600 font-bold max-w-[120px] truncate" title={certificate.mint_address || undefined}>
                     {certificate.mint_address ? `${certificate.mint_address.substring(0, 8)}...` : "Pending"}
                   </p>
                   <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-1 font-bold">Mint Address</p>

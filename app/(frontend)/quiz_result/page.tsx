@@ -10,6 +10,7 @@ import {
   buildRewardStudentInstruction,
   decodeEd25519Instruction,
   getAssociatedTokenAddress,
+  getClaimRecordPda,
   getRewardMintPda,
   TOKEN_PROGRAM_ID,
   ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -86,12 +87,24 @@ export default function QuizResultPage() {
       // Step 3: Decode the oracle Ed25519 signature instruction
       const ed25519Ix = decodeEd25519Instruction(claim.ed25519InstructionData);
 
-      // Step 4: Check if student's ATA exists — create it if not
+      // Step 4: Check if reward was already claimed (ClaimRecord exists)
+      const claimRecordPda = getClaimRecordPda(student, claim.milestoneId, claim.claimId);
       const connection = new Connection(
         process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com",
         "confirmed"
       );
-      const ataInfo = await connection.getAccountInfo(studentTokenAccount);
+      
+      const [claimRecordInfo, ataInfo] = await Promise.all([
+        connection.getAccountInfo(claimRecordPda),
+        connection.getAccountInfo(studentTokenAccount)
+      ]);
+
+      if (claimRecordInfo) {
+        setRewardClaimed(true);
+        toast.info("Tokens already awarded for this quiz.");
+        return;
+      }
+
       const needsAta = !ataInfo;
 
       // Step 5: Build the reward_student instruction.
@@ -145,8 +158,16 @@ export default function QuizResultPage() {
       setRewardClaimed(true);
       toast.success(`🎉 ${claim.amount} ACADA tokens rewarded! Tx: ${relayData.signature?.slice(0, 8)}...`);
     } catch (err: any) {
-      console.error("reward.claim.frontend", err);
-      toast.error(err?.message || "Could not claim reward");
+      console.error("Reward claim error:", err);
+      let errorMessage = err?.message || "An error occurred";
+      
+      // Handle simulation errors with specific user-friendly messages
+      if (errorMessage.includes("0x0") || errorMessage.includes("already in use")) {
+        errorMessage = "This reward has already been claimed.";
+        setRewardClaimed(true);
+      }
+      
+      toast.error(errorMessage);
     } finally {
       setClaimingReward(false);
     }
