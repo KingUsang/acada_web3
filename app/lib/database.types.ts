@@ -188,6 +188,11 @@ export type Database = {
           organization_id: string | null
           price_usdc: number | null
           title: string
+          category: string | null
+          duration: string | null
+          price_ngn: number | null
+          status: string | null
+          thumbnail_url: string | null
         }
         Insert: {
           created_at?: string | null
@@ -196,6 +201,11 @@ export type Database = {
           organization_id?: string | null
           price_usdc?: number | null
           title: string
+          category?: string | null
+          duration?: string | null
+          price_ngn?: number | null
+          status?: string | null
+          thumbnail_url?: string | null
         }
         Update: {
           created_at?: string | null
@@ -204,6 +214,11 @@ export type Database = {
           organization_id?: string | null
           price_usdc?: number | null
           title?: string
+          category?: string | null
+          duration?: string | null
+          price_ngn?: number | null
+          status?: string | null
+          thumbnail_url?: string | null
         }
         Relationships: [
           {
